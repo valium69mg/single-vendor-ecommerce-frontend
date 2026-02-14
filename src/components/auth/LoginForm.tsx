@@ -7,24 +7,22 @@ function LoginFormContent() {
   const { t } = useTranslation();
 
   return (
-    <form>
-      <div className="flex flex-col gap-6">
-        <FormField
-          labelKey="email"
-          inputId="email"
-          inputType="email"
-          inputPlaceholder="m@example.com"
-          inputRequired
-        />
-        <FormField
-          labelKey="password"
-          inputId="password"
-          inputType="password"
-          inputRequired
-          anchorElement={<a href="#">{t("forgotYourPassword")}</a>}
-        />
-      </div>
-    </form>
+    <div className="flex flex-col gap-6">
+      <FormField
+        labelKey="email"
+        inputId="email"
+        inputType="email"
+        inputPlaceholder="m@example.com"
+        inputRequired
+      />
+      <FormField
+        labelKey="password"
+        inputId="password"
+        inputType="password"
+        inputRequired
+        anchorElement={<a href="#">{t("forgotYourPassword")}</a>}
+      />
+    </div>
   );
 }
 
@@ -37,13 +35,13 @@ export default function LoginForm() {
   const { t } = useTranslation();
 
   return (
-    <>
+    <form>
       <Form
         title={t("welcome")}
         description={t("loginFormDescription")}
         content={<LoginFormContent />}
         footerContent={<LoginFormFooterContent />}
       ></Form>
-    </>
+    </form>
   );
 }
