@@ -1,21 +1,15 @@
-import { Button } from "@/components/ui/button";
 import {
   Card,
-  CardAction,
   CardContent,
   CardDescription,
   CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { useTranslation } from "react-i18next";
-
-function Header() {
-  return <h1>{t("welcome")}</h1>;
-}
 
 interface FormProps {
-  headerContent?: React.ReactNode;
+  title: string;
+  description?: string;
   content?: React.ReactNode;
   footerContent?: React.ReactNode;
 }
@@ -23,18 +17,21 @@ interface FormProps {
 interface FormContentProps {
   children: React.ReactNode;
 }
-function FormHeader() {
-  const { t } = useTranslation();
 
+interface FormHeaderProps {
+  title: string;
+  description?: string;
+}
+
+interface FormFooterContentProps {
+  children: React.ReactNode;
+}
+
+function FormHeader({ title, description }: FormHeaderProps) {
   return (
     <CardHeader>
-      <CardTitle> {t("welcome")}, Login to your account</CardTitle>
-      <CardDescription>
-        Enter your email below to login to your account
-      </CardDescription>
-      <CardAction>
-        <Button variant="link">Sign Up</Button>
-      </CardAction>
+      <CardTitle> {title} </CardTitle>
+      {description ? <CardDescription>{description}</CardDescription> : <></>}
     </CardHeader>
   );
 }
@@ -43,22 +40,21 @@ function FormContent({ children }: FormContentProps) {
   return <CardContent>{children}</CardContent>;
 }
 
-function FormFooter() {
-  return (
-    <CardFooter className="flex-col gap-2">
-      <Button type="submit" className="w-full">
-        Login
-      </Button>
-    </CardFooter>
-  );
+function FormFooter({ children }: FormFooterContentProps) {
+  return <CardFooter className="flex-col gap-2">{children}</CardFooter>;
 }
 
-export function Form({ headerContent, content, footerContent }: FormProps) {
+export function Form({
+  title,
+  description,
+  content,
+  footerContent,
+}: FormProps) {
   return (
     <Card className="w-full max-w-sm">
-      <FormHeader></FormHeader>
+      <FormHeader title={title} description={description} />
       <FormContent>{content}</FormContent>
-      <FormFooter></FormFooter>
+      <FormFooter>{footerContent}</FormFooter>
     </Card>
   );
 }
