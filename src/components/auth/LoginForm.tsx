@@ -10,10 +10,16 @@ import type { LoginFormValues } from "./login.schema";
 import { useMutation } from "@tanstack/react-query";
 import { loginRequest } from "../../api/api";
 import type { LoginResponse } from "../../api/api";
+import type { UseMutationResult } from "@tanstack/react-query";
 
 interface LoginFormContentProps {
   register: UseFormRegister<LoginFormValues>;
   errors: FieldErrors<LoginFormValues>;
+}
+
+interface LoginFormFooterContentProps {
+  mutation: UseMutationResult<LoginResponse, Error, LoginFormValues>;
+  isSubmitting: boolean;
 }
 
 function LoginFormContent({ register, errors }: LoginFormContentProps) {
@@ -38,6 +44,28 @@ function LoginFormContent({ register, errors }: LoginFormContentProps) {
         error={errors.password?.message}
       />
     </div>
+  );
+}
+
+function LoginFormFooterContent({
+  mutation,
+  isSubmitting,
+}: LoginFormFooterContentProps) {
+  const { t } = useTranslation();
+
+  return (
+    <>
+      {mutation.isError && (
+        <p className="text-sm text-red-500 text-center">
+          {t((mutation.error as Error).message)}
+        </p>
+      )}
+      <GenericButton
+        label={t("login")}
+        type="submit"
+        isLoading={isSubmitting || mutation.isPending}
+      />
+    </>
   );
 }
 
@@ -67,20 +95,16 @@ export default function LoginForm() {
       <Form
         title={t("welcome")}
         description={t("loginFormDescription")}
-        content={<LoginFormContent register={register} errors={errors} />}
+        content={
+          <LoginFormContent 
+            register={register} 
+            errors={errors} 
+          />}
         footerContent={
-          <>
-            {mutation.isError && (
-              <p className="text-sm text-red-500 text-center">
-                {t((mutation.error as Error).message)}
-              </p>
-            )}
-            <GenericButton
-              label={t("login")}
-              type="submit"
-              isLoading={isSubmitting || mutation.isPending}
-            />
-          </>
+          <LoginFormFooterContent
+            mutation={mutation}
+            isSubmitting={isSubmitting}
+          />
         }
       />
     </form>
