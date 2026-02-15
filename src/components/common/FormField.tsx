@@ -1,6 +1,7 @@
 import { Label } from "@radix-ui/react-label";
 import { Input } from "../ui/input";
 import { useTranslation } from "react-i18next";
+import type { UseFormRegisterReturn } from "react-hook-form";
 
 interface FormFieldProps {
   labelKey: string;
@@ -9,6 +10,8 @@ interface FormFieldProps {
   inputPlaceholder?: string;
   inputRequired?: boolean;
   anchorElement?: React.ReactNode;
+  register?: UseFormRegisterReturn;
+  error?: string;
 }
 
 export default function FormField({
@@ -18,6 +21,8 @@ export default function FormField({
   inputPlaceholder,
   inputRequired = false,
   anchorElement,
+  register,
+  error,
 }: FormFieldProps) {
   const { t } = useTranslation();
 
@@ -36,7 +41,9 @@ export default function FormField({
         type={inputType}
         placeholder={inputPlaceholder}
         required={inputRequired}
+        {...(register ?? {})}
       />
+      {error && <p className="text-sm text-red-500">{t(error)}</p>}
     </div>
   );
 }
