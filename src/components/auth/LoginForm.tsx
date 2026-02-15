@@ -26,7 +26,6 @@ function LoginFormContent({ register, errors }: LoginFormContentProps) {
         inputId="email"
         inputType="email"
         inputPlaceholder="m@example.com"
-        inputRequired
         register={register("email")}
         error={errors.email?.message}
       />
@@ -34,9 +33,9 @@ function LoginFormContent({ register, errors }: LoginFormContentProps) {
         labelKey="password"
         inputId="password"
         inputType="password"
-        inputRequired
         register={register("password")}
         anchorElement={<a href="#">{t("forgotYourPassword")}</a>}
+        error={errors.password?.message}
       />
     </div>
   );
