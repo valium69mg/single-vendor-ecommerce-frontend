@@ -56,7 +56,7 @@ export default function LoginForm() {
   const mutation = useMutation<LoginResponse, Error, LoginFormValues>({
     mutationFn: loginRequest,
     onSuccess: (data) => {
-      localStorage.setItem("loginDate", JSON.stringify(data));
+      localStorage.setItem("loginData", JSON.stringify(data));
       // redirigir a otra accion
     },
   });
