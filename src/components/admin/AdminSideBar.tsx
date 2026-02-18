@@ -1,7 +1,5 @@
 import {
   Sidebar,
-  SidebarMenuItem,
-  SidebarMenuButton,
   SidebarGroup,
   SidebarGroupContent,
 } from "@/components/ui/sidebar";
@@ -10,24 +8,39 @@ import AdminSideBarHeader from "../admin/AdminSideBarHeader";
 import AdminSideBarFooter from "./AdminSideBarFooter";
 
 import {
-  DropdownMenu,
-  DropdownMenuTrigger,
-  DropdownMenuContent,
-  DropdownMenuItem,
-} from "@/components/ui/dropdown-menu";
-
-import {
   LayoutDashboard,
   Package,
   ShoppingCart,
   Users,
-  ChevronDown,
+  Box,
   Tags,
   Layers,
-  Box,
 } from "lucide-react";
 import SideBarItem from "../common/SideBarItem";
+import SideBarAccordion from "../common/SideBarAccordion";
 
+const productOptions = [
+  {
+    id: "products",
+    name: "Products",
+    icon: <Box className="h-4 w-4 mr-2" />,
+  },
+  {
+    id: "categories",
+    name: "Categories",
+    icon: <Tags className="h-4 w-4 mr-2" />,
+  },
+  {
+    id: "brands",
+    name: "Brands",
+    icon: <Layers className="h-4 w-4 mr-2" />,
+  },
+  {
+    id: "materials",
+    name: "Materials",
+    icon: <Package className="h-4 w-4 mr-2" />,
+  },
+];
 export default function AdminSideBar() {
   return (
     <Sidebar className="flex flex-col h-full">
@@ -37,48 +50,31 @@ export default function AdminSideBar() {
 
       <SidebarGroup>
         <SidebarGroupContent>
+          {/* Dashboard */}
           <SideBarItem
             title="Dashboard"
-            href="/admin"
+            href="/admin/dashboard"
             icon={<LayoutDashboard className="h-4 w-4" />}
           />
 
           {/* Products Accordion */}
-          <SidebarMenuItem>
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <SidebarMenuButton className="flex items-center gap-2">
-                  <Package className="h-4 w-4" />
-                  <span>Products</span>
-                  <ChevronDown className="ml-auto h-4 w-4" />
-                </SidebarMenuButton>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent className="w-[--radix-popper-anchor-width]">
-                <DropdownMenuItem>
-                  <Box className="h-4 w-4 mr-2" /> Products
-                </DropdownMenuItem>
-                <DropdownMenuItem>
-                  <Tags className="h-4 w-4 mr-2" /> Categories
-                </DropdownMenuItem>
-                <DropdownMenuItem>
-                  <Layers className="h-4 w-4 mr-2" /> Brands
-                </DropdownMenuItem>
-                <DropdownMenuItem>
-                  <Package className="h-4 w-4 mr-2" /> Materials
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
-          </SidebarMenuItem>
+          <SideBarAccordion
+            title="Products"
+            icon={<Package className="h-4 w-4" />}
+            options={productOptions}
+          />
 
+          {/* Orders */}
           <SideBarItem
             title="Orders"
-            href="/admin"
+            href="/admin/orders"
             icon={<ShoppingCart className="h-4 w-4" />}
           />
 
+          {/* Users */}
           <SideBarItem
             title="Users"
-            href="/admin"
+            href="/admin/users"
             icon={<Users className="h-4 w-4" />}
           />
         </SidebarGroupContent>
