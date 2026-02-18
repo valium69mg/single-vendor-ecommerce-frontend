@@ -12,7 +12,8 @@ i18n.use(initReactI18next).init({
         forgotYourPassword: "Forgot your password?",
         email: "Email",
         password: "Password",
-
+        adminPanel: "Admin Panel",
+        administrator: "Administrator",
         validation: {
           required: "This field is required",
           invalidEmail: "Invalid email address",
@@ -33,7 +34,8 @@ i18n.use(initReactI18next).init({
         forgotYourPassword: "¿Olvidó su contraseña?",
         email: "Correo electrónico",
         password: "Contraseña",
-
+        adminPanel: "Panel de Administrador",
+        administrator: "Administrador",
         validation: {
           required: "Este campo es obligatorio",
           invalidEmail: "Correo electrónico inválido",
