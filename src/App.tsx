@@ -1,9 +1,11 @@
 import LoginPage from "./pages/LoginPage";
-
+import { UserProvider } from "./providers/UserProvider";
 function App() {
   return (
     <>
-      <LoginPage/>
+      <UserProvider>
+        <LoginPage />
+      </UserProvider>
     </>
   );
 }
