@@ -26,6 +26,7 @@ import {
   Layers,
   Box,
 } from "lucide-react";
+import SideBarItem from "../common/SideBarItem";
 
 export default function AdminSideBar() {
   return (
@@ -36,15 +37,11 @@ export default function AdminSideBar() {
 
       <SidebarGroup>
         <SidebarGroupContent>
-          {/* Dashboard */}
-          <SidebarMenuItem>
-            <SidebarMenuButton asChild>
-              <a href="/admin/dashboard" className="flex items-center gap-2">
-                <LayoutDashboard className="h-4 w-4" />
-                <span>Dashboard</span>
-              </a>
-            </SidebarMenuButton>
-          </SidebarMenuItem>
+          <SideBarItem
+            title="Dashboard"
+            href="/admin"
+            icon={<LayoutDashboard className="h-4 w-4" />}
+          />
 
           {/* Products Accordion */}
           <SidebarMenuItem>
@@ -73,30 +70,22 @@ export default function AdminSideBar() {
             </DropdownMenu>
           </SidebarMenuItem>
 
-          {/* Orders */}
-          <SidebarMenuItem>
-            <SidebarMenuButton asChild>
-              <a href="/admin/orders" className="flex items-center gap-2">
-                <ShoppingCart className="h-4 w-4" />
-                <span>Orders</span>
-              </a>
-            </SidebarMenuButton>
-          </SidebarMenuItem>
+          <SideBarItem
+            title="Orders"
+            href="/admin"
+            icon={<ShoppingCart className="h-4 w-4" />}
+          />
 
-          {/* Users */}
-          <SidebarMenuItem>
-            <SidebarMenuButton asChild>
-              <a href="/admin/users" className="flex items-center gap-2">
-                <Users className="h-4 w-4" />
-                <span>Users</span>
-              </a>
-            </SidebarMenuButton>
-          </SidebarMenuItem>
+          <SideBarItem
+            title="Users"
+            href="/admin"
+            icon={<Users className="h-4 w-4" />}
+          />
         </SidebarGroupContent>
       </SidebarGroup>
 
       {/* Footer (sticks to bottom) */}
-    <AdminSideBarFooter />
+      <AdminSideBarFooter />
     </Sidebar>
   );
 }
