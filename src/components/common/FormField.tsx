@@ -2,6 +2,8 @@ import { Label } from "@radix-ui/react-label";
 import { Input } from "../ui/input";
 import { useTranslation } from "react-i18next";
 import type { UseFormRegisterReturn } from "react-hook-form";
+import { FiEye, FiEyeOff } from "react-icons/fi";
+import { useState } from "react";
 
 interface FormFieldProps {
   labelKey: string;
@@ -25,6 +27,9 @@ export default function FormField({
   error,
 }: FormFieldProps) {
   const { t } = useTranslation();
+  const [showPassword, setShowPassword] = useState(false);
+  const isPasswordField = inputType === "password";
+  const effectiveType = isPasswordField && showPassword ? "text" : inputType;
 
   return (
     <div className="grid gap-2">
@@ -36,13 +41,24 @@ export default function FormField({
           </div>
         )}
       </div>
-      <Input
-        id={inputId}
-        type={inputType}
-        placeholder={inputPlaceholder}
-        required={inputRequired}
-        {...(register ?? {})}
-      />
+      <div className="relative">
+        <Input
+          id={inputId}
+          type={effectiveType}
+          placeholder={inputPlaceholder}
+          required={inputRequired}
+          {...(register ?? {})}
+        />
+        {isPasswordField && (
+          <button
+            type="button"
+            onClick={() => setShowPassword((prev) => !prev)}
+            className="absolute right-2 top-2 text-gray-500"
+          >
+            {showPassword ? <FiEyeOff /> : <FiEye />}
+          </button>
+        )}
+      </div>
       {error && <p className="text-sm text-red-500">{t(error)}</p>}
     </div>
   );
