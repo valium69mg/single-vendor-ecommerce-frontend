@@ -1,5 +1,5 @@
 import LoginForm from "@/components/auth/LoginForm";
-import { useUser } from "../hooks/UseUser";
+import { useUser } from "../hooks/useUser";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { ROLES } from "../constants/roles";

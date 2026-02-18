@@ -11,7 +11,7 @@ import { useMutation } from "@tanstack/react-query";
 import { loginRequest } from "../../api/api";
 import type { LoginResponse } from "../../api/api";
 import type { UseMutationResult } from "@tanstack/react-query";
-import { useUser } from "@/hooks/UseUser";
+import { useUser } from "@/hooks/useUser";
 interface LoginFormContentProps {
   register: UseFormRegister<LoginFormValues>;
   errors: FieldErrors<LoginFormValues>;

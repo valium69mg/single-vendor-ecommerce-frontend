@@ -1,5 +1,5 @@
 import { Navigate } from "react-router-dom";
-import { useUser } from "../../hooks/UseUser";
+import { useUser } from "../../hooks/useUser";
 import type { ReactNode } from "react";
 import type { Role } from "../../constants/roles";
 
