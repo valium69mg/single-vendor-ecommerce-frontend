@@ -7,7 +7,7 @@ export default function AdminSideBarHeader() {
   return (
     <SidebarHeader>
       <div className="flex items-center">
-        <MdAdminPanelSettings className="w-8 h-8" />
+        <MdAdminPanelSettings className="w-6 h-6" />
         <h1 className="text-md"> {t("adminPanel")} </h1>
       </div>
     </SidebarHeader>
