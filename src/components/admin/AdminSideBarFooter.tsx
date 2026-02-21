@@ -1,24 +1,18 @@
+// AdminSideBarFooter.tsx
 import {
   SidebarFooter,
   SidebarMenu,
   SidebarMenuItem,
-  SidebarMenuButton,
 } from "@/components/ui/sidebar";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import {
-  DropdownMenu,
-  DropdownMenuTrigger,
-  DropdownMenuContent,
-  DropdownMenuItem,
-} from "@/components/ui/dropdown-menu";
-import { LogOut, MoreVertical } from "lucide-react";
+import { LogOut } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { UserContext } from "../../context/UserContext";
 import { useContext } from "react";
+import GenericDropdownMenu from "../common/GenericDropdownMenu";
 
-type AdminSideBarFooterProps = {
+interface AdminSideBarFooterProps {
   side?: "top" | "bottom" | "left" | "right";
-};
+}
 
 export default function AdminSideBarFooter({
   side = "right",
@@ -32,36 +26,25 @@ export default function AdminSideBarFooter({
 
   const { logout } = userCtx;
 
+  const items = [
+    {
+      name: t("logout"),
+      icon: <LogOut className="h-4 w-4 mr-2 text-muted-foreground" />,
+      onClick: logout,
+    },
+  ];
+
   return (
     <div className="mt-auto mb-3">
       <SidebarFooter>
         <SidebarMenu>
           <SidebarMenuItem>
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <SidebarMenuButton className="flex items-center gap-2 rounded-md hover:bg-muted">
-                  {/* Avatar */}
-                  <Avatar className="h-6 w-6">
-                    <AvatarImage src="" alt="Admin avatar" />
-                    <AvatarFallback>AD</AvatarFallback>
-                  </Avatar>
-                  {/* Username */}
-                  <span className="text-sm font-medium">
-                    {t("administrator")}
-                  </span>
-                  {/* Trigger icon */}
-                  <MoreVertical className="ml-auto h-4 w-4 text-muted-foreground" />
-                </SidebarMenuButton>
-              </DropdownMenuTrigger>
-
-              {/* Menu content */}
-              <DropdownMenuContent side={side} className="w-40">
-                <DropdownMenuItem onClick={logout}>
-                  <LogOut className="h-4 w-4 mr-2 text-muted-foreground" />
-                  <span>{t("logout")}</span>
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
+            <GenericDropdownMenu
+              side={side}
+              title={t("administrator")}
+              avatarSrc={"default"}
+              items={items}
+            />
           </SidebarMenuItem>
         </SidebarMenu>
       </SidebarFooter>
