@@ -48,10 +48,11 @@ export async function getCategories(
   page: number,
   size: number,
   token: string,
+  term: string,
   logout: () => void
 ): Promise<Category[]> {
   return apiFetch<Category[]>(
-    `${API_BASE_URL}/products/categories?page=${page}&size=${size}`,
+    `${API_BASE_URL}/products/categories?page=${page}&size=${size}&term=${term}`,
     {
       method: "GET",
       headers: {

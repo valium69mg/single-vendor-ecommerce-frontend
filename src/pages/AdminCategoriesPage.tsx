@@ -11,11 +11,10 @@ import { useCategoryColumns } from "@/hooks/useCategoryColumns";
 export default function AdminCategoriesPage() {
   const { t } = useTranslation();
   const { user, logout } = useUser();
-
   const [categories, setCategories] = useState<Category[]>([]);
   const [page, setPage] = useState(0);
   const [loading, setLoading] = useState(false);
-
+  const [term, setTerm] = useState("");
   const size = 20;
   const [hasNextPage, setHasNextPage] = useState(false);
 
@@ -29,7 +28,7 @@ export default function AdminCategoriesPage() {
       }
 
       try {
-        const data = await getCategories(page, size, user.token, logout);
+        const data = await getCategories(page, size, user.token, term, logout);
         setCategories(data);
         setHasNextPage(data.length === size);
       } finally {
@@ -38,7 +37,7 @@ export default function AdminCategoriesPage() {
     };
 
     loadCategories();
-  }, [page, user?.token, logout]);
+  }, [page, user?.token, logout, term]);
 
   const handleEdit = (category: Category) => {
     console.log("edit", category);
@@ -59,10 +58,8 @@ export default function AdminCategoriesPage() {
       </div>
 
       <SearchBar
-        query=""
-        setQuery={() => {
-          console.log("Searching");
-        }}
+        query={term}
+        setQuery={setTerm}
       />
 
       <DataTable
