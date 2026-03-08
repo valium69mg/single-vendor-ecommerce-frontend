@@ -4,124 +4,67 @@ import { Button } from "@/components/ui/button";
 import { DataTable } from "@/components/common/DataTable";
 import type { Category } from "@/api/api";
 import { getCategories } from "@/api/api";
-import type { ColumnDef } from "@tanstack/react-table";
 import { useUser } from "@/hooks/useUser";
 import SearchBar from "@/components/common/SearchBar";
-import { API_FILE_URL } from "@/api/api";
-import ImageWithFallback from "@/components/common/ImageWithFallback";
+import { useCategoryColumns } from "@/hooks/useCategoryColumns";
 
 export default function AdminCategoriesPage() {
   const { t } = useTranslation();
   const { user, logout } = useUser();
+
   const [categories, setCategories] = useState<Category[]>([]);
   const [page, setPage] = useState(0);
   const [loading, setLoading] = useState(false);
-  const size = 20;
 
+  const size = 20;
   const [hasNextPage, setHasNextPage] = useState(false);
 
   useEffect(() => {
     const loadCategories = async () => {
       setLoading(true);
-      if (!user?.token) return;
-      const data = await getCategories(page, size, user.token, logout);
 
-      setCategories(data);
-      setHasNextPage(data.length === size);
+      if (!user?.token) {
+        setLoading(false);
+        return;
+      }
 
-      setLoading(false);
+      try {
+        const data = await getCategories(page, size, user.token, logout);
+        setCategories(data);
+        setHasNextPage(data.length === size);
+      } finally {
+        setLoading(false);
+      }
     };
 
     loadCategories();
-  }, [page, user?.token, user, logout]);
-  const columns: ColumnDef<Category>[] = [
-    {
-      accessorKey: "categoryId",
-      header: "ID",
-    },
-    {
-      accessorKey: "fileUrl",
-      header: "Image",
-      cell: ({ row }) => {
-        const key = row.original.smallThumbnailUrl;
+  }, [page, user?.token, logout]);
 
-        return (
-          <ImageWithFallback
-            src={API_FILE_URL + key}
-            alt={row.original.name}
-            className="w-12 h-12 object-cover rounded"
-          />
-        );
-      },
-    },
-    {
-      accessorKey: "name",
-      header: t("categories"),
-    },
-    {
-      accessorKey: "products",
-      header: t("products"),
-    },
-    {
-      accessorKey: "unitsSold",
-      header: t("unitsSold"),
-    },
-    {
-      accessorKey: "revenue",
-      header: t("revenue"),
-    },
-    {
-      accessorKey: "averagePrice",
-      header: t("averagePrice"),
-    },
-    {
-      accessorKey: "stock",
-      header: t("stock"),
-    },
-    {
-      id: "actions",
-      header: t("actions"),
-      cell: ({ row }) => {
-        const category = row.original;
+  const handleEdit = (category: Category) => {
+    console.log("edit", category);
+  };
 
-        return (
-          <div className="flex gap-2 justify-start">
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => console.log("edit", category)}
-            >
-              {t("edit")}
-            </Button>
+  const handleDelete = (category: Category) => {
+    console.log("delete", category);
+  };
 
-            <Button
-              variant="destructive"
-              size="sm"
-              onClick={() => console.log("delete", category)}
-            >
-              {t("delete")}
-            </Button>
-          </div>
-        );
-      },
-    },
-  ];
+  const columns = useCategoryColumns(handleEdit, handleDelete);
 
   return (
     <div className="space-y-6">
-      {/* Header */}
-
       <div className="flex items-center justify-between">
         <h1 className="text-2xl font-bold">{t("categories")}</h1>
 
         <Button>+ {t("categories")}</Button>
       </div>
+
       <SearchBar
         query=""
         setQuery={() => {
           console.log("Searching");
         }}
       />
+
       <DataTable
         columns={columns}
         data={categories}
