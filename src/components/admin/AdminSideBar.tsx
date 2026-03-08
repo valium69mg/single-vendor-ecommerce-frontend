@@ -28,21 +28,25 @@ export default function AdminSideBar() {
       id: "products",
       name: t("products"),
       icon: <Box className="h-4 w-4 mr-2" />,
+      url: "/admin/products"
     },
     {
       id: "categories",
       name: t("categories"),
       icon: <Tags className="h-4 w-4 mr-2" />,
+      url: "/admin/products"
     },
     {
       id: "brands",
       name: t("brands"),
       icon: <Layers className="h-4 w-4 mr-2" />,
+      url: "/admin/products"
     },
     {
       id: "materials",
       name: t("materials"),
       icon: <Package className="h-4 w-4 mr-2" />,
+      url: "/admin/products"
     },
   ];
 

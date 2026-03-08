@@ -1,16 +1,17 @@
-import {
-  SidebarProvider,
-} from "@/components/ui/sidebar";
+import { SidebarProvider } from "@/components/ui/sidebar";
 import AdminSideBar from "@/components/admin/AdminSideBar";
+import { Outlet } from "react-router-dom";
 
 export default function AdminHomePage() {
   return (
     <SidebarProvider>
       <div className="flex h-screen">
-        <AdminSideBar/>
+        <AdminSideBar />
+
         <main className="flex-1 p-6">
-          <p>ADMIN HOME PAGE CONTENT </p>
+          <Outlet />
         </main>
+
       </div>
     </SidebarProvider>
   );

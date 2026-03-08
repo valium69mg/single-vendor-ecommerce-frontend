@@ -3,6 +3,7 @@ import { UserProvider } from "./providers/UserProvider";
 import LoginPage from "./pages/LoginPage";
 import HomePage from "./pages/HomePage";
 import AdminHomePage from "./pages/AdminHomePage";
+import AdminProductsPage from "./pages/AdminProductsPage";
 import ProtectedRoute from "./components/auth/ProtectedRoute";
 import { ROLES } from "@/constants/roles";
 
@@ -12,6 +13,7 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route path="/login" element={<LoginPage />} />
+
           <Route
             path="/"
             element={
@@ -28,7 +30,9 @@ function App() {
                 <AdminHomePage />
               </ProtectedRoute>
             }
-          />
+          >
+            <Route path="products" element={<AdminProductsPage />} />
+          </Route>
         </Routes>
       </BrowserRouter>
     </UserProvider>

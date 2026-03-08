@@ -7,15 +7,23 @@ import {
 import { SidebarMenuItem, SidebarMenuButton } from "@/components/ui/sidebar";
 import { ChevronDown } from "lucide-react";
 import type { ReactNode } from "react";
+import { useNavigate } from "react-router-dom";
 
 interface AccordionItemProps {
   name: string;
   icon: ReactNode;
+  url: string;
 }
 
-function AccordionItem({ name, icon }: AccordionItemProps) {
+function AccordionItem({ name, icon, url }: AccordionItemProps) {
+  const navigate = useNavigate();
+  
+  const redirect = () => {
+    navigate(url);
+  }
+
   return (
-    <DropdownMenuItem>
+    <DropdownMenuItem onClick={redirect}>
       {icon} {name}
     </DropdownMenuItem>
   );
@@ -25,6 +33,7 @@ interface SideBarOption {
   id: string;
   name: string;
   icon: ReactNode;
+  url: string;
 }
 
 interface SideBarAccordionProps {
@@ -54,6 +63,7 @@ export default function SideBarAccordion({
               key={option.id}
               name={option.name}
               icon={option.icon}
+              url={option.url}
             />
           ))}
         </DropdownMenuContent>
