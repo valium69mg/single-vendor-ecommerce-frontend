@@ -5,6 +5,7 @@ import {
   type ColumnDef,
   type Table as TableType,
 } from "@tanstack/react-table";
+
 import {
   Table,
   TableBody,
@@ -13,6 +14,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+
 import { Button } from "@/components/ui/button";
 import { Spinner } from "../ui/spinner";
 
@@ -42,7 +44,7 @@ function DataTableHeader<TData>({ table }: { table: TableType<TData> }) {
                 ? null
                 : flexRender(
                     header.column.columnDef.header,
-                    header.getContext(),
+                    header.getContext()
                   )}
             </TableHead>
           ))}
@@ -63,6 +65,7 @@ function DataTableBody<TData>({
   noResultsLabel: string;
   loading: boolean;
 }) {
+
   if (loading) {
     return (
       <TableBody>
@@ -76,10 +79,13 @@ function DataTableBody<TData>({
       </TableBody>
     );
   }
+
+  const rows = table.getRowModel().rows;
+
   return (
     <TableBody>
-      {table.getRowModel().rows.length ? (
-        table.getRowModel().rows.map((row) => (
+      {rows.length ? (
+        rows.map((row) => (
           <TableRow key={row.id}>
             {row.getVisibleCells().map((cell) => (
               <TableCell key={cell.id}>
@@ -117,6 +123,7 @@ function DataTablePagination({
 }) {
   return (
     <div className="flex justify-end gap-3">
+
       <Button
         variant="outline"
         disabled={page === 0}
@@ -136,6 +143,7 @@ function DataTablePagination({
       >
         {labels.next}
       </Button>
+
     </div>
   );
 }
@@ -149,6 +157,7 @@ export function DataTable<TData>({
   loading,
   labels,
 }: DataTableProps<TData>) {
+
   const table = useReactTable({
     data,
     columns,
@@ -157,21 +166,25 @@ export function DataTable<TData>({
 
   return (
     <div className="space-y-4">
+
       <Table>
         <DataTableHeader table={table} />
+
         <DataTableBody
           table={table}
           columns={columns}
-          noResultsLabel={labels.noResults}
           loading={loading}
+          noResultsLabel={labels.noResults}
         />
       </Table>
+
       <DataTablePagination
         page={page}
         setPage={setPage}
         hasNextPage={hasNextPage}
         labels={labels}
       />
+
     </div>
   );
 }

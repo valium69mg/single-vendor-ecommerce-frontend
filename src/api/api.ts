@@ -3,8 +3,8 @@ import { apiFetch } from "./apiFetch";
 export const API_BASE_URL =
   import.meta.env.VITE_API_URL || "http://localhost:8080/api/v1";
 
-export const API_FILE_URL = 
-  import.meta.env.API_FILE_URL || "http://localhost:8080/api/v1/file?key="
+export const API_FILE_URL =
+  import.meta.env.API_FILE_URL || "http://localhost:8080/api/v1/file?key=";
 
 export interface LoginResponse {
   userId: string;
@@ -31,6 +31,15 @@ export async function loginRequest(data: {
   return res.json();
 }
 
+export interface PageResponse<T> {
+  content: T[];
+  page: number;
+  size: number;
+  totalElements: number;
+  totalPages: number;
+  last: boolean;
+}
+
 export interface Category {
   categoryId: number;
   name: string;
@@ -49,17 +58,17 @@ export async function getCategories(
   size: number,
   token: string,
   term: string,
-  logout: () => void
-): Promise<Category[]> {
-  return apiFetch<Category[]>(
+  logout: () => void,
+): Promise<PageResponse<Category>> {
+  return apiFetch<PageResponse<Category>>(
     `${API_BASE_URL}/products/categories?page=${page}&size=${size}&term=${term}`,
     {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
-        "Authorization": `Bearer ${token}`,
+        Authorization: `Bearer ${token}`,
       },
     },
-    logout
+    logout,
   );
 }
