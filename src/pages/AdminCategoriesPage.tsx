@@ -6,6 +6,9 @@ import type { Category } from "@/api/api";
 import { getCategories } from "@/api/api";
 import type { ColumnDef } from "@tanstack/react-table";
 import { useUser } from "@/hooks/useUser";
+import SearchBar from "@/components/common/SearchBar";
+import { API_FILE_URL } from "@/api/api";
+import ImageWithFallback from "@/components/common/ImageWithFallback";
 
 export default function AdminCategoriesPage() {
   const { t } = useTranslation();
@@ -13,7 +16,6 @@ export default function AdminCategoriesPage() {
   const [categories, setCategories] = useState<Category[]>([]);
   const [page, setPage] = useState(0);
   const [loading, setLoading] = useState(false);
-
   const size = 20;
 
   const [hasNextPage, setHasNextPage] = useState(false);
@@ -36,6 +38,21 @@ export default function AdminCategoriesPage() {
     {
       accessorKey: "categoryId",
       header: "ID",
+    },
+    {
+      accessorKey: "fileUrl",
+      header: "Image",
+      cell: ({ row }) => {
+        const key = row.original.smallThumbnailUrl;
+
+        return (
+          <ImageWithFallback
+            src={API_FILE_URL + key}
+            alt={row.original.name}
+            className="w-12 h-12 object-cover rounded"
+          />
+        );
+      },
     },
     {
       accessorKey: "name",
@@ -99,7 +116,12 @@ export default function AdminCategoriesPage() {
 
         <Button>+ {t("categories")}</Button>
       </div>
-
+      <SearchBar
+        query=""
+        setQuery={() => {
+          console.log("Searching");
+        }}
+      />
       <DataTable
         columns={columns}
         data={categories}

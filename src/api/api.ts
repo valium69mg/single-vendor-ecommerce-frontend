@@ -3,6 +3,9 @@ import { apiFetch } from "./apiFetch";
 export const API_BASE_URL =
   import.meta.env.VITE_API_URL || "http://localhost:8080/api/v1";
 
+export const API_FILE_URL = 
+  import.meta.env.API_FILE_URL || "http://localhost:8080/api/v1/file?key="
+
 export interface LoginResponse {
   userId: string;
   email: string;
@@ -36,6 +39,9 @@ export interface Category {
   revenue: number;
   averagePrice: number;
   stock: number;
+  imageUrl: string;
+  mediumThumbnailUrl: string;
+  smallThumbnailUrl: string;
 }
 
 export async function getCategories(

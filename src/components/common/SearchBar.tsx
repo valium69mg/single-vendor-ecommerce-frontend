@@ -23,7 +23,7 @@ export default function SearchBar({ query, setQuery }: SearchBarProps) {
   return (
     <Input
       type="text"
-      placeholder="..."
+      placeholder=""
       value={inputValue}
       onChange={(e) => setInputValue(e.target.value)}
       className="w-full max-w-md"
