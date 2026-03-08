@@ -6,6 +6,7 @@ import AdminHomePage from "./pages/AdminHomePage";
 import AdminProductsPage from "./pages/AdminProductsPage";
 import ProtectedRoute from "./components/auth/ProtectedRoute";
 import { ROLES } from "@/constants/roles";
+import AdminCategoriesPage from "./pages/AdminCategoriesPage";
 
 function App() {
   return (
@@ -32,6 +33,7 @@ function App() {
             }
           >
             <Route path="products" element={<AdminProductsPage />} />
+            <Route path="categories" element={<AdminCategoriesPage />} />
           </Route>
         </Routes>
       </BrowserRouter>

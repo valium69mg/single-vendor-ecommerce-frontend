@@ -34,7 +34,7 @@ export default function AdminSideBar() {
       id: "categories",
       name: t("categories"),
       icon: <Tags className="h-4 w-4 mr-2" />,
-      url: "/admin/products"
+      url: "/admin/categories"
     },
     {
       id: "brands",

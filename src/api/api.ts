@@ -1,4 +1,7 @@
-export const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:8080/api/v1";
+import { apiFetch } from "./apiFetch";
+
+export const API_BASE_URL =
+  import.meta.env.VITE_API_URL || "http://localhost:8080/api/v1";
 
 export interface LoginResponse {
   userId: string;
@@ -7,7 +10,10 @@ export interface LoginResponse {
   role: string;
 }
 
-export async function loginRequest(data: { email: string; password: string }): Promise<LoginResponse> {
+export async function loginRequest(data: {
+  email: string;
+  password: string;
+}): Promise<LoginResponse> {
   const res = await fetch(`${API_BASE_URL}/auth/login`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -16,8 +22,37 @@ export async function loginRequest(data: { email: string; password: string }): P
 
   if (!res.ok) {
     const errorData = await res.json().catch(() => null);
-    throw new Error(errorData?.error);
+    throw new Error(errorData?.error || "Login failed");
   }
 
   return res.json();
+}
+
+export interface Category {
+  categoryId: number;
+  name: string;
+  products: number;
+  unitsSold: number;
+  revenue: number;
+  averagePrice: number;
+  stock: number;
+}
+
+export async function getCategories(
+  page: number,
+  size: number,
+  token: string,
+  logout: () => void
+): Promise<Category[]> {
+  return apiFetch<Category[]>(
+    `${API_BASE_URL}/products/categories?page=${page}&size=${size}`,
+    {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`,
+      },
+    },
+    logout
+  );
 }
