@@ -14,6 +14,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
+import { Spinner } from "../ui/spinner";
 
 interface DataTableProps<TData> {
   columns: ColumnDef<TData>[];
@@ -55,11 +56,26 @@ function DataTableBody<TData>({
   table,
   columns,
   noResultsLabel,
+  loading,
 }: {
   table: TableType<TData>;
   columns: ColumnDef<TData>[];
   noResultsLabel: string;
+  loading: boolean;
 }) {
+  if (loading) {
+    return (
+      <TableBody>
+        <TableRow>
+          <TableCell colSpan={columns.length}>
+            <div className="flex items-center justify-center h-32">
+              <Spinner />
+            </div>
+          </TableCell>
+        </TableRow>
+      </TableBody>
+    );
+  }
   return (
     <TableBody>
       {table.getRowModel().rows.length ? (
@@ -130,6 +146,7 @@ export function DataTable<TData>({
   page,
   setPage,
   hasNextPage,
+  loading,
   labels,
 }: DataTableProps<TData>) {
   const table = useReactTable({
@@ -146,6 +163,7 @@ export function DataTable<TData>({
           table={table}
           columns={columns}
           noResultsLabel={labels.noResults}
+          loading={loading}
         />
       </Table>
       <DataTablePagination
