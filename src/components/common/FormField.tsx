@@ -32,11 +32,11 @@ export default function FormField({
   const effectiveType = isPasswordField && showPassword ? "text" : inputType;
 
   return (
-    <div className="grid gap-2">
-      <div className="flex items-center">
+    <div className="grid gap-2 sm:gap-3">
+      <div className="flex flex-col gap-1 sm:flex-row sm:items-center">
         <Label htmlFor={inputId}>{t(labelKey)}</Label>
         {anchorElement && (
-          <div className="ml-auto inline-block text-sm underline-offset-4 hover:underline">
+          <div className="sm:ml-auto inline-block text-xs sm:text-sm underline-offset-4 hover:underline">
             {anchorElement}
           </div>
         )}
@@ -53,13 +53,13 @@ export default function FormField({
           <button
             type="button"
             onClick={() => setShowPassword((prev) => !prev)}
-            className="absolute right-2 top-2 text-gray-500"
+            className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-500 text-lg sm:text-xl"
           >
             {showPassword ? <FiEyeOff /> : <FiEye />}
           </button>
         )}
       </div>
-      {error && <p className="text-sm text-red-500">{t(error)}</p>}
+      {error && <p className="text-xs sm:text-sm text-red-500">{t(error)}</p>}
     </div>
   );
 }
