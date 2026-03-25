@@ -17,10 +17,10 @@ interface AccordionItemProps {
 
 function AccordionItem({ name, icon, url }: AccordionItemProps) {
   const navigate = useNavigate();
-  
+
   const redirect = () => {
     navigate(url);
-  }
+  };
 
   return (
     <DropdownMenuItem onClick={redirect}>
@@ -51,7 +51,7 @@ export default function SideBarAccordion({
     <SidebarMenuItem>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <SidebarMenuButton className="flex items-center gap-2">
+          <SidebarMenuButton className="flex items-center gap-2 text-sm lg:text-base">
             {icon}
             <span>{title}</span>
             <ChevronDown className="ml-auto h-4 w-4" />

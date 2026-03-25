@@ -6,9 +6,9 @@ export default function AdminSideBarHeader() {
   const { t } = useTranslation();
   return (
     <SidebarHeader>
-      <div className="flex items-center">
-        <MdAdminPanelSettings className="w-6 h-6" />
-        <h1 className="text-md"> {t("adminPanel")} </h1>
+      <div className="flex items-center gap-2 px-2">
+        <MdAdminPanelSettings className="w-5 h-5 lg:w-6 lg:h-6" />
+        <h1 className="text-sm lg:text-md font-semibold">{t("adminPanel")}</h1>
       </div>
     </SidebarHeader>
   );

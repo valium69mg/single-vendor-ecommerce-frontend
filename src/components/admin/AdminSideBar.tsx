@@ -28,30 +28,30 @@ export default function AdminSideBar() {
       id: "products",
       name: t("products"),
       icon: <Box className="h-4 w-4 mr-2" />,
-      url: "/admin/products"
+      url: "/admin/products",
     },
     {
       id: "categories",
       name: t("categories"),
       icon: <Tags className="h-4 w-4 mr-2" />,
-      url: "/admin/categories"
+      url: "/admin/categories",
     },
     {
       id: "brands",
       name: t("brands"),
       icon: <Layers className="h-4 w-4 mr-2" />,
-      url: "/admin/products"
+      url: "/admin/products",
     },
     {
       id: "materials",
       name: t("materials"),
       icon: <Package className="h-4 w-4 mr-2" />,
-      url: "/admin/products"
+      url: "/admin/products",
     },
   ];
 
   return (
-    <Sidebar className="flex flex-col h-full">
+    <Sidebar className="hidden sm:flex flex-col h-full w-64 lg:w-68">
       {/* Header */}
       <AdminSideBarHeader />
       <Separator />

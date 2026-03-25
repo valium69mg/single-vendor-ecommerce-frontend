@@ -25,10 +25,10 @@ export default function GenericDropdownMenu({
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <SidebarMenuButton className="flex items-center gap-2 rounded-md hover:bg-muted">
+        <SidebarMenuButton className="flex items-center gap-2 rounded-md hover:bg-muted text-sm lg:text-base">
           {/* Avatar (optional) */}
           {avatarSrc && (
-            <Avatar className="h-8 w-8">
+            <Avatar className="h-7 w-7 lg:h-8 lg:w-8">
               <AvatarImage src={avatarSrc} alt={`${title} avatar`} />
               <AvatarFallback>{title.charAt(0).toUpperCase()}</AvatarFallback>
             </Avatar>

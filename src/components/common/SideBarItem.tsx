@@ -11,7 +11,7 @@ export default function SideBarItem({ title, href, icon }: SideBarItemProps) {
   return (
     <SidebarMenuItem>
       <SidebarMenuButton asChild>
-        <a href={href} className="flex items-center gap-2">
+        <a href={href} className="flex items-center gap-2 text-sm lg:text-base">
           {icon}
           <span>{title}</span>
         </a>
