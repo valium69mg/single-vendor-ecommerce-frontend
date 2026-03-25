@@ -19,7 +19,7 @@ export default function LoginPage() {
   }, [user, navigate]);
 
   return (
-    <div className="w-screen h-screen bg-primary flex justify-center items-center">
+    <div className="min-h-screen w-full bg-primary flex items-center justify-center px-4 sm:px-6">
       <LoginForm />
     </div>
   );

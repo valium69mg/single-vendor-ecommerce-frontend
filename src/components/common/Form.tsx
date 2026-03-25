@@ -30,18 +30,20 @@ interface FormFooterContentProps {
 function FormHeader({ title, description }: FormHeaderProps) {
   return (
     <CardHeader>
-      <CardTitle> {title} </CardTitle>
+      <CardTitle className="text-xl sm:text-2xl"> {title} </CardTitle>
       {description ? <CardDescription>{description}</CardDescription> : <></>}
     </CardHeader>
   );
 }
 
 function FormContent({ children }: FormContentProps) {
-  return <CardContent>{children}</CardContent>;
+  return <CardContent className="p-4 sm:p-6">{children}</CardContent>;
 }
 
 function FormFooter({ children }: FormFooterContentProps) {
-  return <CardFooter className="flex-col gap-2">{children}</CardFooter>;
+  return (
+    <CardFooter className="flex-col gap-2 p-4 sm:p-6">{children}</CardFooter>
+  );
 }
 
 export function Form({
@@ -51,7 +53,7 @@ export function Form({
   footerContent,
 }: FormProps) {
   return (
-    <Card className="w-full max-w-sm">
+    <Card className="w-full max-w-sm sm:max-w-md lg:max-w-lg">
       <FormHeader title={title} description={description} />
       <FormContent>{content}</FormContent>
       <FormFooter>{footerContent}</FormFooter>

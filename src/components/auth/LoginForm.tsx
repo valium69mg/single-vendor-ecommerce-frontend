@@ -95,11 +95,7 @@ export default function LoginForm() {
       <Form
         title={t("welcome")}
         description={t("loginFormDescription")}
-        content={
-          <LoginFormContent 
-            register={register} 
-            errors={errors} 
-          />}
+        content={<LoginFormContent register={register} errors={errors} />}
         footerContent={
           <LoginFormFooterContent
             mutation={mutation}
