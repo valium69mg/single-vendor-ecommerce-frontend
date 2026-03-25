@@ -51,7 +51,12 @@ export default function AdminSideBar() {
   ];
 
   return (
-    <Sidebar className="hidden sm:flex flex-col h-full w-64 lg:w-68">
+    <Sidebar
+      className="fixed inset-y-0 left-0 z-50 flex flex-col h-full w-64 lg:w-68
+             lg:static lg:z-auto
+             data-[state=closed]:-translate-x-full data-[state=open]:translate-x-0
+             transition-transform duration-300 ease-in-out"
+    >
       {/* Header */}
       <AdminSideBarHeader />
       <Separator />
