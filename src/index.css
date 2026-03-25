@@ -82,3 +82,9 @@
     @apply bg-background text-foreground;
   }
 }
+
+/* Hide browser native password reveal icons */
+input[type="password"]::-ms-reveal,
+input[type="password"]::-ms-clear {
+  display: none;
+}
