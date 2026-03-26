@@ -1,6 +1,7 @@
 import type { ReactNode } from "react";
 import { SidebarMenuItem, SidebarMenuButton } from "../ui/sidebar";
 import { useNavigate } from "react-router-dom";
+import { useSidebar } from "@/components/ui/sidebar";
 
 interface SideBarItemProps {
   title: string;
@@ -9,8 +10,10 @@ interface SideBarItemProps {
 }
 
 export default function SideBarItem({ title, href, icon }: SideBarItemProps) {
+  const { isMobile, setOpen } = useSidebar();
   const navigate = useNavigate();
   const redirect = () => {
+    if (isMobile) setOpen(false);
     navigate(href);
   };
 

@@ -8,6 +8,7 @@ import { SidebarMenuItem, SidebarMenuButton } from "@/components/ui/sidebar";
 import { ChevronDown } from "lucide-react";
 import type { ReactNode } from "react";
 import { useNavigate } from "react-router-dom";
+import { useSidebar } from "@/components/ui/sidebar";
 
 interface AccordionItemProps {
   name: string;
@@ -17,8 +18,10 @@ interface AccordionItemProps {
 
 function AccordionItem({ name, icon, url }: AccordionItemProps) {
   const navigate = useNavigate();
+  const { setOpenMobile } = useSidebar();
 
   const redirect = () => {
+    setOpenMobile(false);
     navigate(url);
   };
 
