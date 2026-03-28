@@ -63,7 +63,6 @@ export async function getCategories(
   size: number,
   token: string,
   term: string,
-  logout: () => void,
 ): Promise<PageResponse<Category>> {
   return apiFetch<PageResponse<Category>>(
     `${API_BASE_URL}/products/categories?page=${page}&size=${size}&term=${term}`,
@@ -73,15 +72,13 @@ export async function getCategories(
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
       },
-    },
-    logout,
+    }
   );
 }
 
 export async function deleteCategory(
   categoryId: number,
   token: string,
-  logout: () => void,
 ): Promise<void> {
   return apiFetch<void>(
     `${API_BASE_URL}/admin/products/categories/${categoryId}`,
@@ -92,6 +89,5 @@ export async function deleteCategory(
         Authorization: `Bearer ${token}`,
       }
     },
-    logout,
   );
 }

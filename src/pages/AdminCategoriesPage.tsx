@@ -1,70 +1,49 @@
-import { useEffect, useState, useCallback } from "react";
+import { useState } from "react";
 import { useTranslation } from "react-i18next";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
 import { DataTable } from "@/components/common/DataTable";
-import type { Category, PageResponse } from "@/api/api";
+import type { Category } from "@/api/api";
 import { getCategories, deleteCategory } from "@/api/api";
 import { useUser } from "@/hooks/useUser";
 import SearchBar from "@/components/common/SearchBar";
 import { useCategoryColumns } from "@/hooks/useCategoryColumns";
+import { API_ERRORS } from "@/constants/apiErrors";
+
+const SIZE = 10;
 
 export default function AdminCategoriesPage() {
   const { t } = useTranslation();
   const { user, logout } = useUser();
+  const queryClient = useQueryClient();
 
-  const [categories, setCategories] = useState<Category[]>([]);
   const [page, setPage] = useState(0);
-  const [loading, setLoading] = useState(false);
   const [term, setTerm] = useState("");
-  const [hasNextPage, setHasNextPage] = useState(false);
-  const size = 10;
 
-  const loadCategories = useCallback(async () => {
-    if (!user?.token) {
-      return logout();
-    }
+  const { data, isLoading } = useQuery({
+    queryKey: ["categories", page, term],
+    queryFn: () => getCategories(page, SIZE, user!.token, term),
+    enabled: !!user?.token,
+    throwOnError: (err: Error) => {
+      if (err.message === API_ERRORS.UNAUTHORIZED) logout();
+      return false;
+    },
+  });
 
-    setLoading(true);
-
-    try {
-      const response: PageResponse<Category> = await getCategories(
-        page,
-        size,
-        user.token,
-        term,
-        logout,
-      );
-
-      setCategories(response.content);
-      setHasNextPage(!response.last);
-    } catch (err) {
-      console.error("Failed to load categories", err);
-    } finally {
-      setLoading(false);
-    }
-  }, [page, size, user?.token, term, logout]);
-
-  useEffect(() => {
-    loadCategories();
-  }, [loadCategories]);
-
-  useEffect(() => {
-    setPage(0);
-  }, [term]);
+  const { mutate: handleDelete } = useMutation({
+    mutationFn: (category: Category) =>
+      deleteCategory(category.categoryId, user!.token),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["categories"] });
+    },
+    onError: (err: Error) => {
+      if (err.message === API_ERRORS.UNAUTHORIZED) logout();
+      console.error("Failed to delete category", err);
+    },
+  });
 
   const handleEdit = (category: Category) => {
     console.log("edit", category);
-  };
-
-  const handleDelete = async (category: Category) => {
-    if (!user?.token) return logout();
-
-    try {
-      await deleteCategory(category.categoryId, user.token, logout);
-      await loadCategories();
-    } catch (err) {
-      console.error("Failed to delete category", err);
-    }
   };
 
   const columns = useCategoryColumns(handleEdit, handleDelete);
@@ -73,19 +52,24 @@ export default function AdminCategoriesPage() {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <h1 className="text-2xl font-bold">{t("categories")}</h1>
-
         <Button>+ {t("categories")}</Button>
       </div>
 
-      <SearchBar query={term} setQuery={setTerm} />
+      <SearchBar
+        query={term}
+        setQuery={(val) => {
+          setTerm(val);
+          setPage(0);
+        }}
+      />
 
       <DataTable
         columns={columns}
-        data={categories}
+        data={data?.content ?? []}
         page={page}
         setPage={setPage}
-        loading={loading}
-        hasNextPage={hasNextPage}
+        loading={isLoading}
+        hasNextPage={data ? !data.last : false}
         labels={{
           previous: t("previous"),
           next: t("next"),

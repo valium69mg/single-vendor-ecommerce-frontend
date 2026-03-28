@@ -1,13 +1,13 @@
+import { API_ERRORS } from "@/constants/apiErrors";
+
 export async function apiFetch<T>(
   url: string,
   options: RequestInit,
-  logout: () => void,
 ): Promise<T> {
   const res = await fetch(url, options);
 
   if (res.status === 401) {
-    logout();
-    throw new Error("Unauthorized - user logged out");
+    throw new Error(API_ERRORS.UNAUTHORIZED);
   }
 
   if (res.status === 204) {
