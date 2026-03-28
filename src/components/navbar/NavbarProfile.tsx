@@ -1,5 +1,8 @@
-// NavbarProfile.tsx — "My Profile" item, label hidden on mobile
-import { LayoutDashboard, Settings, LogOut, UserRound } from "lucide-react";
+import { IoSettingsOutline } from "react-icons/io5";
+import { FaRegUser } from "react-icons/fa";
+import { LuLogOut } from "react-icons/lu";
+import { RxDashboard } from "react-icons/rx";
+import IconWrapper from "../common/IconWrapper";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useUser } from "@/hooks/useUser";
@@ -14,26 +17,26 @@ export default function NavbarProfile() {
   const items = [
     {
       name: t("myProfile"),
-      icon: <UserRound/>,
+      icon: <IconWrapper icon={FaRegUser} size={18}/>,
       onClick: () => navigate("/profile"),
     },
     ...(user?.role === ROLES.ADMIN
       ? [
           {
             name: t("adminPanel"),
-            icon: <LayoutDashboard/>,
+            icon: <IconWrapper icon={RxDashboard} size={18}/>,
             onClick: () => navigate("/admin"),
           },
         ]
       : []),
     {
       name: t("settings"),
-      icon: <Settings/>,
+      icon: <IconWrapper icon={IoSettingsOutline} size={18}/>,
       onClick: () => navigate("/"),
     },
     {
       name: t("logout"),
-      icon: <LogOut/>,
+      icon: <IconWrapper icon={LuLogOut} size={18}/>,
       onClick: logout,
     },
   ];

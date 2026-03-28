@@ -6,19 +6,18 @@ import {
 import { Separator } from "@/components/ui/separator";
 import AdminSideBarHeader from "../admin/AdminSideBarHeader";
 import AdminSideBarFooter from "./AdminSideBarFooter";
-
-import {
-  LayoutDashboard,
-  Package,
-  ShoppingCart,
-  Users,
-  Box,
-  Tags,
-  Layers,
-} from "lucide-react";
+import IconWrapper from "../common/IconWrapper";
+import { RxDashboard } from "react-icons/rx";
+import { BsBoxSeam } from "react-icons/bs";
+import { CgNotes } from "react-icons/cg";
+import { TbUsers } from "react-icons/tb";
+import { BsTags } from "react-icons/bs";
+import { IoLayersOutline } from "react-icons/io5";
+import { TbHammer } from "react-icons/tb";
 import SideBarItem from "../sidebar/SideBarItem";
 import SideBarAccordion from "../sidebar/SideBarAccordion";
 import { useTranslation } from "react-i18next";
+import { IoStorefrontOutline } from "react-icons/io5";
 
 export default function AdminSideBar() {
   const { t } = useTranslation();
@@ -27,27 +26,27 @@ export default function AdminSideBar() {
     {
       id: "products",
       name: t("products"),
-      icon: <Box className="h-4 w-4 mr-2" />,
+      icon: <IconWrapper icon={BsBoxSeam} size={18} />,
       url: "/admin/products",
     },
     {
       id: "categories",
       name: t("categories"),
-      icon: <Tags className="h-4 w-4 mr-2" />,
+      icon: <IconWrapper icon={BsTags} size={18} />,
       url: "/admin/categories",
     },
     {
       id: "brands",
       name: t("brands"),
-      icon: <Layers className="h-4 w-4 mr-2" />,
+      icon: <IconWrapper icon={IoLayersOutline} size={18} />,
       url: "/admin/products",
     },
     {
       id: "materials",
       name: t("materials"),
-      icon: <Package className="h-4 w-4 mr-2" />,
+      icon: <IconWrapper icon={TbHammer} size={18} />,
       url: "/admin/products",
-    }
+    },
   ];
 
   return (
@@ -67,13 +66,13 @@ export default function AdminSideBar() {
           <SideBarItem
             title={t("dashboard")}
             href="/admin/dashboard"
-            icon={<LayoutDashboard className="h-4 w-4" />}
+            icon={<IconWrapper icon={RxDashboard} size={18} />}
           />
 
           {/* Products Accordion */}
           <SideBarAccordion
             title={t("products")}
-            icon={<Package className="h-4 w-4" />}
+            icon={<IconWrapper icon={BsBoxSeam} size={18} />}
             options={productOptions}
           />
 
@@ -81,14 +80,21 @@ export default function AdminSideBar() {
           <SideBarItem
             title={t("orders")}
             href="/admin/orders"
-            icon={<ShoppingCart className="h-4 w-4" />}
+            icon={<IconWrapper icon={CgNotes} size={18} />}
           />
 
           {/* Users */}
           <SideBarItem
             title={t("users")}
             href="/admin/users"
-            icon={<Users className="h-4 w-4" />}
+            icon={<IconWrapper icon={TbUsers} size={18} />}
+          />
+
+          {/* Store */}
+          <SideBarItem
+            title={t("store")}
+            href="/"
+            icon={<IconWrapper icon={IoStorefrontOutline} size={18} />}
           />
         </SidebarGroupContent>
       </SidebarGroup>

@@ -4,13 +4,14 @@ import {
   SidebarMenu,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
-import { Store, LogOut } from "lucide-react";
+import { IoSettingsOutline } from "react-icons/io5";
+import { LuLogOut } from "react-icons/lu";
 import { useTranslation } from "react-i18next";
 import { UserContext } from "../../context/UserContext";
 import { useContext } from "react";
 import GenericDropdownMenu from "../sidebar/SidebarDropdownMenu";
 import { useNavigate } from "react-router-dom";
-
+import IconWrapper from "../common/IconWrapper";
 
 interface AdminSideBarFooterProps {
   side?: "top" | "bottom" | "left" | "right";
@@ -31,15 +32,16 @@ export default function AdminSideBarFooter({
 
   const items = [
     {
-      name: t("store"),
-      icon: <Store className="h-4 w-4 mr-2 text-muted-foreground" />,
-      onClick: () => navigate('/')
+      name: t("settings"),
+      icon: <IconWrapper icon={IoSettingsOutline} size={18}/>,
+      onClick: () => navigate("/"),
     },
     {
       name: t("logout"),
-      icon: <LogOut className="h-4 w-4 mr-2 text-muted-foreground" />,
+      icon: <IconWrapper icon={LuLogOut} size={18} />,
       onClick: logout,
     },
+    
   ];
 
   return (

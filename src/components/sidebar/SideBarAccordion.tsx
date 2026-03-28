@@ -5,10 +5,11 @@ import {
   DropdownMenuItem,
 } from "@/components/ui/dropdown-menu";
 import { SidebarMenuItem, SidebarMenuButton } from "@/components/ui/sidebar";
-import { ChevronDown } from "lucide-react";
+import { IoIosArrowDown } from "react-icons/io";
 import type { ReactNode } from "react";
 import { useNavigate } from "react-router-dom";
 import { useSidebar } from "@/components/ui/sidebar";
+import IconWrapper from "../common/IconWrapper";
 
 interface AccordionItemProps {
   name: string;
@@ -57,7 +58,7 @@ export default function SideBarAccordion({
           <SidebarMenuButton className="flex items-center gap-2 text-sm lg:text-base">
             {icon}
             <span>{title}</span>
-            <ChevronDown className="ml-auto h-4 w-4" />
+            <IconWrapper icon={IoIosArrowDown} size={16} className="ml-auto"/>
           </SidebarMenuButton>
         </DropdownMenuTrigger>
         <DropdownMenuContent className="w-[--radix-popper-anchor-width]">

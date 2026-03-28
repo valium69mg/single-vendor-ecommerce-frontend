@@ -14,6 +14,7 @@ export interface StandardResponse {
 export interface LoginResponse {
   userId: string;
   email: string;
+  name: string;
   token: string;
   role: string;
 }

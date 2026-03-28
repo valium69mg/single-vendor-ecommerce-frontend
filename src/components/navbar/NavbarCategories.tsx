@@ -1,4 +1,5 @@
-import { ChevronDown } from "lucide-react";
+import { IoIosArrowDown } from "react-icons/io";
+import IconWrapper from "../common/IconWrapper";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -27,7 +28,7 @@ export default function NavbarCategories() {
       <DropdownMenuTrigger asChild>
         <Button variant="ghost" className="hidden md:flex items-center gap-1 shrink-0">
           {t("categories")}
-          <ChevronDown className="h-4 w-4" />
+          <IconWrapper icon={IoIosArrowDown} size={18}/>
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="start" className="w-48">

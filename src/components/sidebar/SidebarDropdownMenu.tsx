@@ -5,9 +5,10 @@ import {
   DropdownMenuTrigger,
   DropdownMenuContent,
 } from "@/components/ui/dropdown-menu";
-import { MoreVertical } from "lucide-react";
+import { MdMoreVert } from "react-icons/md";
 import type { SidebarDropDownMenuItemProps } from "../sidebar/SidebarDropdownMenuItem"
 import SidebarDropdownMenuItem from "../sidebar/SidebarDropdownMenuItem"
+import IconWrapper from "../common/IconWrapper";
 
 interface GenericDropdownMenuProps {
   side?: "top" | "bottom" | "left" | "right";
@@ -38,11 +39,11 @@ export default function GenericDropdownMenu({
           <span className="text-sm font-medium">{title}</span>
 
           {/* Trigger icon */}
-          <MoreVertical className="ml-auto h-4 w-4 text-muted-foreground" />
+          <IconWrapper icon={MdMoreVert} size={18} className="ml-auto text-muted-foreground" />
         </SidebarMenuButton>
       </DropdownMenuTrigger>
 
-      <DropdownMenuContent side={side} className="w-40">
+      <DropdownMenuContent side={side} className="w-full">
         {items.map((item) => (
           <SidebarDropdownMenuItem
             key={item.name}
