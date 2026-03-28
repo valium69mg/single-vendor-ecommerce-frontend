@@ -22,7 +22,10 @@ export default function AdminCategoriesPage() {
 
   useEffect(() => {
     const loadCategories = async () => {
-      if (!user?.token) return;
+     
+      if (!user?.token) {
+        return logout();
+      } 
 
       setLoading(true);
 
