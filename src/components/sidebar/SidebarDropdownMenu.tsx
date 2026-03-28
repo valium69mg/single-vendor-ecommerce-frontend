@@ -6,14 +6,14 @@ import {
   DropdownMenuContent,
 } from "@/components/ui/dropdown-menu";
 import { MoreVertical } from "lucide-react";
-import type { GenericDropDownMenuItemProps } from "./GenericDropdownMenuItem";
-import GenericDropdownMenuItem from "./GenericDropdownMenuItem";
+import type { SidebarDropDownMenuItemProps } from "../sidebar/SidebarDropdownMenuItem"
+import SidebarDropdownMenuItem from "../sidebar/SidebarDropdownMenuItem"
 
 interface GenericDropdownMenuProps {
   side?: "top" | "bottom" | "left" | "right";
   avatarSrc?: string;
   title: string;
-  items: GenericDropDownMenuItemProps[];
+  items: SidebarDropDownMenuItemProps[];
 }
 
 export default function GenericDropdownMenu({
@@ -44,7 +44,7 @@ export default function GenericDropdownMenu({
 
       <DropdownMenuContent side={side} className="w-40">
         {items.map((item) => (
-          <GenericDropdownMenuItem
+          <SidebarDropdownMenuItem
             key={item.name}
             name={item.name}
             icon={item.icon}

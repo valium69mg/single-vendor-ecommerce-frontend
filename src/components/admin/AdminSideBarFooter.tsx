@@ -8,7 +8,7 @@ import { LogOut } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { UserContext } from "../../context/UserContext";
 import { useContext } from "react";
-import GenericDropdownMenu from "../common/GenericDropdownMenu";
+import GenericDropdownMenu from "../sidebar/SidebarDropdownMenu";
 
 interface AdminSideBarFooterProps {
   side?: "top" | "bottom" | "left" | "right";

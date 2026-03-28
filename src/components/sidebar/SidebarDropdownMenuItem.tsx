@@ -1,7 +1,7 @@
 import { DropdownMenuItem } from "@/components/ui/dropdown-menu";
 import type { ReactNode } from "react";
 
-export interface GenericDropDownMenuItemProps {
+export interface SidebarDropDownMenuItemProps {
   name: string;
   onClick: React.MouseEventHandler<HTMLDivElement>;
   icon: ReactNode;
@@ -11,7 +11,7 @@ export default function GenericDropdownMenuItem({
   name,
   onClick,
   icon,
-}: GenericDropDownMenuItemProps) {
+}: SidebarDropDownMenuItemProps) {
   return (
     <DropdownMenuItem onClick={onClick}>
       {icon}

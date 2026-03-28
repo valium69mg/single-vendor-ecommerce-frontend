@@ -16,8 +16,8 @@ import {
   Tags,
   Layers,
 } from "lucide-react";
-import SideBarItem from "../common/SideBarItem";
-import SideBarAccordion from "../common/SideBarAccordion";
+import SideBarItem from "../sidebar/SideBarItem";
+import SideBarAccordion from "../sidebar/SideBarAccordion";
 import { useTranslation } from "react-i18next";
 
 export default function AdminSideBar() {
