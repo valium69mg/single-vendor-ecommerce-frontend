@@ -10,6 +10,10 @@ export async function apiFetch<T>(
     throw new Error("Unauthorized - user logged out");
   }
 
+  if (res.status === 204) {
+    return {} as T;
+  }
+
   if (!res.ok) {
     const errorData = await res.json().catch(() => null);
     throw new Error(errorData?.error || "Request failed");

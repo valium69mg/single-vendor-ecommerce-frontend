@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import ImageWithFallback from "@/components/common/ImageWithFallback";
 import { API_FILE_URL } from "@/api/api";
 import { useTranslation } from "react-i18next";
+import DestructiveActionButton from "../components/common/DestructiveActionButton";
 
 export function useCategoryColumns(
   onEdit: (category: Category) => void,
@@ -71,13 +72,9 @@ export function useCategoryColumns(
               {t("edit")}
             </Button>
 
-            <Button
-              variant="destructive"
-              size="sm"
-              onClick={() => onDelete(category)}
-            >
-              {t("delete")}
-            </Button>
+            <DestructiveActionButton
+              onConfirm={() => onDelete(category)}
+            />
           </div>
         );
       },

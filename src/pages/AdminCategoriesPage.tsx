@@ -1,9 +1,9 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
 import { DataTable } from "@/components/common/DataTable";
 import type { Category, PageResponse } from "@/api/api";
-import { getCategories } from "@/api/api";
+import { getCategories, deleteCategory } from "@/api/api";
 import { useUser } from "@/hooks/useUser";
 import SearchBar from "@/components/common/SearchBar";
 import { useCategoryColumns } from "@/hooks/useCategoryColumns";
@@ -17,38 +17,36 @@ export default function AdminCategoriesPage() {
   const [loading, setLoading] = useState(false);
   const [term, setTerm] = useState("");
   const [hasNextPage, setHasNextPage] = useState(false);
-
   const size = 10;
 
+  const loadCategories = useCallback(async () => {
+    if (!user?.token) {
+      return logout();
+    }
+
+    setLoading(true);
+
+    try {
+      const response: PageResponse<Category> = await getCategories(
+        page,
+        size,
+        user.token,
+        term,
+        logout,
+      );
+
+      setCategories(response.content);
+      setHasNextPage(!response.last);
+    } catch (err) {
+      console.error("Failed to load categories", err);
+    } finally {
+      setLoading(false);
+    }
+  }, [page, size, user?.token, term, logout]);
+
   useEffect(() => {
-    const loadCategories = async () => {
-     
-      if (!user?.token) {
-        return logout();
-      } 
-
-      setLoading(true);
-
-      try {
-        const response: PageResponse<Category> = await getCategories(
-          page,
-          size,
-          user.token,
-          term,
-          logout
-        );
-
-        setCategories(response.content);
-        setHasNextPage(!response.last);
-      } catch (err) {
-        console.error("Failed to load categories", err);
-      } finally {
-        setLoading(false);
-      }
-    };
-
     loadCategories();
-  }, [page, term, user?.token, logout]);
+  }, [loadCategories]);
 
   useEffect(() => {
     setPage(0);
@@ -58,21 +56,25 @@ export default function AdminCategoriesPage() {
     console.log("edit", category);
   };
 
-  const handleDelete = (category: Category) => {
-    console.log("delete", category);
+  const handleDelete = async (category: Category) => {
+    if (!user?.token) return logout();
+
+    try {
+      await deleteCategory(category.categoryId, user.token, logout);
+      await loadCategories();
+    } catch (err) {
+      console.error("Failed to delete category", err);
+    }
   };
 
   const columns = useCategoryColumns(handleEdit, handleDelete);
 
   return (
     <div className="space-y-6">
-
       <div className="flex items-center justify-between">
         <h1 className="text-2xl font-bold">{t("categories")}</h1>
 
-        <Button>
-          + {t("categories")}
-        </Button>
+        <Button>+ {t("categories")}</Button>
       </div>
 
       <SearchBar query={term} setQuery={setTerm} />
@@ -91,7 +93,6 @@ export default function AdminCategoriesPage() {
           noResults: t("noResults"),
         }}
       />
-
     </div>
   );
 }

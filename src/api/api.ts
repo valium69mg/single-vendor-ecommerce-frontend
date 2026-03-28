@@ -6,6 +6,11 @@ export const API_BASE_URL =
 export const API_FILE_URL =
   import.meta.env.API_FILE_URL || "http://localhost:8080/api/v1/file?key=";
 
+export interface StandardResponse {
+  status: number;
+  message: string;
+}
+
 export interface LoginResponse {
   userId: string;
   email: string;
@@ -68,6 +73,24 @@ export async function getCategories(
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
       },
+    },
+    logout,
+  );
+}
+
+export async function deleteCategory(
+  categoryId: number,
+  token: string,
+  logout: () => void,
+): Promise<void> {
+  return apiFetch<void>(
+    `${API_BASE_URL}/admin/products/categories/${categoryId}`,
+    {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      }
     },
     logout,
   );
