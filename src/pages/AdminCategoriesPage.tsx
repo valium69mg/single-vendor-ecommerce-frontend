@@ -55,13 +55,16 @@ export default function AdminCategoriesPage() {
         <Button>+ {t("categories")}</Button>
       </div>
 
-      <SearchBar
-        query={term}
-        setQuery={(val) => {
-          setTerm(val);
-          setPage(0);
-        }}
-      />
+      <div className="w-1/4">
+        <SearchBar
+          placeholder={t('searchFor') + " " + t('categories').toLowerCase() + "..."}
+          query={term}
+          setQuery={(val) => {
+            setTerm(val);
+            setPage(0);
+          }}
+        />
+      </div>
 
       <DataTable
         columns={columns}

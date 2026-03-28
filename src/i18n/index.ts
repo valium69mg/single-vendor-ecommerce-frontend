@@ -36,7 +36,11 @@ i18n.use(initReactI18next).init({
         cancel: "Cancel",
         areYouSure: "Are you sure?",
         cannotUndo: "This action cannot be undone",
+        myProfile: "My Profile",
+        settings: "Settings",
+        logout: "Logout",
         store: "Store",
+        searchFor: "Search for",
         validation: {
           required: "This field is required",
           invalidEmail: "Invalid email address",
@@ -82,6 +86,10 @@ i18n.use(initReactI18next).init({
         areYouSure: "¿Estás seguro?",
         cannotUndo: "Esta accion no se puede revertir",
         store: "Tienda",
+        myProfile: "Mi Perfil",
+        settings: "Configuración",
+        logout: "Cerrar sesión",
+        searchFor: "Busca",
         validation: {
           required: "Este campo es obligatorio",
           invalidEmail: "Correo electrónico inválido",
