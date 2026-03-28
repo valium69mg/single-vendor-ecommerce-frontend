@@ -33,6 +33,9 @@ i18n.use(initReactI18next).init({
         page: "Page",
         noResults: "No results",
         image: "Image",
+        cancel: "Cancel",
+        areYouSure: "Are you sure?",
+        cannotUndo: "This action cannot be undone",
         validation: {
           required: "This field is required",
           invalidEmail: "Invalid email address",
@@ -74,6 +77,9 @@ i18n.use(initReactI18next).init({
         page: "Página",
         noResults: "Sin resultados",
         image: "Imágen",
+        cancel: "Cancelar",
+        areYouSure: "¿Estás seguro?",
+        cannotUndo: "Esta accion no se puede revertir",
         validation: {
           required: "Este campo es obligatorio",
           invalidEmail: "Correo electrónico inválido",
