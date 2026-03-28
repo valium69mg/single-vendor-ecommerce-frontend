@@ -9,12 +9,16 @@ interface SearchBarProps {
   setQuery: (value: string) => void;
 }
 
-export default function SearchBar({ query, setQuery }: SearchBarProps) {
+interface SearchBarProps {
+  query: string;
+  setQuery: (value: string) => void;
+  className?: string;
+  placeholder?: string;
+}
+
+export default function SearchBar({ query, setQuery, className, placeholder }: SearchBarProps) {
   const [inputValue, setInputValue] = useState(query);
-  const debouncedValue = useDebounce({
-    value: inputValue,
-    delay: 600,
-  });
+  const debouncedValue = useDebounce({ value: inputValue, delay: 600 });
 
   useEffect(() => {
     setQuery(debouncedValue);
@@ -23,10 +27,10 @@ export default function SearchBar({ query, setQuery }: SearchBarProps) {
   return (
     <Input
       type="text"
-      placeholder=""
+      placeholder={placeholder ?? ""}
       value={inputValue}
       onChange={(e) => setInputValue(e.target.value)}
-      className="w-full max-w-md"
+      className={className}
     />
   );
 }

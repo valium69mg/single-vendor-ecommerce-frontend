@@ -4,11 +4,13 @@ import {
   SidebarMenu,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
-import { LogOut } from "lucide-react";
+import { Store, LogOut } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { UserContext } from "../../context/UserContext";
 import { useContext } from "react";
 import GenericDropdownMenu from "../sidebar/SidebarDropdownMenu";
+import { useNavigate } from "react-router-dom";
+
 
 interface AdminSideBarFooterProps {
   side?: "top" | "bottom" | "left" | "right";
@@ -18,6 +20,7 @@ export default function AdminSideBarFooter({
   side = "right",
 }: AdminSideBarFooterProps) {
   const { t } = useTranslation();
+  const navigate = useNavigate();
   const userCtx = useContext(UserContext);
 
   if (!userCtx) {
@@ -28,6 +31,11 @@ export default function AdminSideBarFooter({
 
   const items = [
     {
+      name: t("store"),
+      icon: <Store className="h-4 w-4 mr-2 text-muted-foreground" />,
+      onClick: () => navigate('/')
+    },
+    {
       name: t("logout"),
       icon: <LogOut className="h-4 w-4 mr-2 text-muted-foreground" />,
       onClick: logout,
@@ -35,7 +43,7 @@ export default function AdminSideBarFooter({
   ];
 
   return (
-    <div className="mt-auto mb-3">
+    <div className="mt-auto mb-6">
       <SidebarFooter>
         <SidebarMenu>
           <SidebarMenuItem>
