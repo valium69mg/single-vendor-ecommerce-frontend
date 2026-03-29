@@ -52,7 +52,7 @@ export default function AdminCategoriesPage() {
         <Button>+ {t("categories")}</Button>
       </div>
 
-      <div className="w-1/4">
+      <div className="w-1/2 sm:w-1/2 lg:w-1/4">
         <SearchBar
           placeholder={
             t("searchFor") + " " + t("categories").toLowerCase() + "..."
