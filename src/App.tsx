@@ -7,10 +7,12 @@ import AdminProductsPage from "./pages/AdminProductsPage";
 import ProtectedRoute from "./components/auth/ProtectedRoute";
 import { ROLES } from "@/constants/roles";
 import AdminCategoriesPage from "./pages/AdminCategoriesPage";
+import { Toaster } from "sonner"
 
 function App() {
   return (
     <UserProvider>
+      <Toaster position="top-center" richColors />
       <BrowserRouter>
         <Routes>
           <Route path="/login" element={<LoginPage />} />

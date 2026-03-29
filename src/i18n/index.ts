@@ -41,6 +41,8 @@ i18n.use(initReactI18next).init({
         logout: "Logout",
         store: "Store",
         searchFor: "Search for",
+        categoryDeletedSuccessfully: "Category deleted successfully",
+        categoryNotDeletedSuccessfully: "Failed to delete category",
         validation: {
           required: "This field is required",
           invalidEmail: "Invalid email address",
@@ -90,6 +92,8 @@ i18n.use(initReactI18next).init({
         settings: "Configuración",
         logout: "Cerrar sesión",
         searchFor: "Busca",
+        categoryDeletedSuccessfully: "Categoría eliminada con éxito",
+        categoryNotDeletedSuccessfully: "No fue posible eliminar la categoría",
         validation: {
           required: "Este campo es obligatorio",
           invalidEmail: "Correo electrónico inválido",

@@ -9,6 +9,7 @@ import { useUser } from "@/hooks/useUser";
 import SearchBar from "@/components/common/SearchBar";
 import { useCategoryColumns } from "@/hooks/useCategoryColumns";
 import { API_ERRORS } from "@/constants/apiErrors";
+import { useToast } from "@/hooks/useToast";
 
 const SIZE = 10;
 
@@ -16,7 +17,7 @@ export default function AdminCategoriesPage() {
   const { t } = useTranslation();
   const { user, logout } = useUser();
   const queryClient = useQueryClient();
-
+  const { success, error } = useToast()
   const [page, setPage] = useState(0);
   const [term, setTerm] = useState("");
 
@@ -35,10 +36,11 @@ export default function AdminCategoriesPage() {
       deleteCategory(category.categoryId, user!.token),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["categories"] });
+      success(t('categoryDeletedSuccessfully'));
     },
     onError: (err: Error) => {
       if (err.message === API_ERRORS.UNAUTHORIZED) logout();
-      console.error("Failed to delete category", err);
+      error(t('categoryNotDeletedSuccessfully'));
     },
   });
 
