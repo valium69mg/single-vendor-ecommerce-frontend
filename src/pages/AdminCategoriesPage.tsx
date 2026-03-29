@@ -10,6 +10,7 @@ import SearchBar from "@/components/common/SearchBar";
 import { useCategoryColumns } from "@/hooks/useCategoryColumns";
 import { API_ERRORS } from "@/constants/apiErrors";
 import { useToast } from "@/hooks/useToast";
+import { handleUnauthorized } from "@/lib/authHandler";
 
 const SIZE = 10;
 
@@ -17,7 +18,7 @@ export default function AdminCategoriesPage() {
   const { t } = useTranslation();
   const { user, logout } = useUser();
   const queryClient = useQueryClient();
-  const { success, error } = useToast()
+  const { success, error } = useToast();
   const [page, setPage] = useState(0);
   const [term, setTerm] = useState("");
 
@@ -26,7 +27,11 @@ export default function AdminCategoriesPage() {
     queryFn: () => getCategories(page, SIZE, user!.token, term),
     enabled: !!user?.token,
     throwOnError: (err: Error) => {
-      if (err.message === API_ERRORS.UNAUTHORIZED) logout();
+      if (err.message === API_ERRORS.UNAUTHORIZED) {
+        handleUnauthorized(logout);
+      } else if (err.message === API_ERRORS.FORBIDDEN) {
+        error(t("notEnoughPermissions"));
+      }
       return false;
     },
   });
@@ -36,11 +41,17 @@ export default function AdminCategoriesPage() {
       deleteCategory(category.categoryId, user!.token),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["categories"] });
-      success(t('categoryDeletedSuccessfully'));
+      success(t("categoryDeletedSuccessfully"));
     },
     onError: (err: Error) => {
-      if (err.message === API_ERRORS.UNAUTHORIZED) logout();
-      error(t('categoryNotDeletedSuccessfully'));
+      if (err.message === API_ERRORS.UNAUTHORIZED) {
+        handleUnauthorized(logout);
+      } else if (err.message === API_ERRORS.FORBIDDEN) {
+        error(t("notEnoughPermissions"));
+      }
+      else {
+        error(t("categoryNotDeletedSuccessfully"));
+      }
     },
   });
 
@@ -59,7 +70,9 @@ export default function AdminCategoriesPage() {
 
       <div className="w-1/4">
         <SearchBar
-          placeholder={t('searchFor') + " " + t('categories').toLowerCase() + "..."}
+          placeholder={
+            t("searchFor") + " " + t("categories").toLowerCase() + "..."
+          }
           query={term}
           setQuery={(val) => {
             setTerm(val);

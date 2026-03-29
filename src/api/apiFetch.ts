@@ -10,8 +10,13 @@ export async function apiFetch<T>(
     throw new Error(API_ERRORS.UNAUTHORIZED);
   }
 
+  if (res.status === 403) {
+    throw new Error(API_ERRORS.FORBIDDEN);
+  }
+
+
   if (res.status === 204) {
-    return {} as T;
+    return undefined as unknown as T;
   }
 
   if (!res.ok) {

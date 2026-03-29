@@ -4,7 +4,7 @@ export const API_BASE_URL =
   import.meta.env.VITE_API_URL || "http://localhost:8080/api/v1";
 
 export const API_FILE_URL =
-  import.meta.env.API_FILE_URL || "http://localhost:8080/api/v1/file?key=";
+  import.meta.env.VITE_API_FILE_URL || "http://localhost:8080/api/v1/file?key=";
 
 export interface StandardResponse {
   status: number;
@@ -81,14 +81,14 @@ export async function deleteCategory(
   categoryId: number,
   token: string,
 ): Promise<void> {
-  return apiFetch<void>(
+  await apiFetch<void>(
     `${API_BASE_URL}/admin/products/categories/${categoryId}`,
     {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
-      }
+      },
     },
   );
 }

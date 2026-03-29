@@ -43,6 +43,7 @@ i18n.use(initReactI18next).init({
         searchFor: "Search for",
         categoryDeletedSuccessfully: "Category deleted successfully",
         categoryNotDeletedSuccessfully: "Failed to delete category",
+        notEnoughPermissions: "You do not have the permissions to perform this action",
         validation: {
           required: "This field is required",
           invalidEmail: "Invalid email address",
@@ -94,6 +95,7 @@ i18n.use(initReactI18next).init({
         searchFor: "Busca",
         categoryDeletedSuccessfully: "Categoría eliminada con éxito",
         categoryNotDeletedSuccessfully: "No fue posible eliminar la categoría",
+        notEnoughPermissions: "No cuentas con los permisos para realizar esta acción",
         validation: {
           required: "Este campo es obligatorio",
           invalidEmail: "Correo electrónico inválido",

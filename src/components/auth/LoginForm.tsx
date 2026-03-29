@@ -12,6 +12,8 @@ import { loginRequest } from "../../api/api";
 import type { LoginResponse } from "../../api/api";
 import type { UseMutationResult } from "@tanstack/react-query";
 import { useUser } from "@/hooks/useUser";
+import { useQueryClient } from "@tanstack/react-query";
+
 interface LoginFormContentProps {
   register: UseFormRegister<LoginFormValues>;
   errors: FieldErrors<LoginFormValues>;
@@ -72,6 +74,7 @@ function LoginFormFooterContent({
 export default function LoginForm() {
   const { t } = useTranslation();
   const { setUser } = useUser();
+  const queryClient = useQueryClient();
   const {
     register,
     handleSubmit,
@@ -85,6 +88,7 @@ export default function LoginForm() {
     onSuccess: (data) => {
       localStorage.setItem("loginData", JSON.stringify(data));
       setUser(data);
+      queryClient.clear();
     },
   });
 
