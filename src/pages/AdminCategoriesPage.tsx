@@ -8,32 +8,25 @@ import { getCategories, deleteCategory } from "@/api/api";
 import { useUser } from "@/hooks/useUser";
 import SearchBar from "@/components/common/SearchBar";
 import { useCategoryColumns } from "@/hooks/useCategoryColumns";
-import { API_ERRORS } from "@/constants/apiErrors";
 import { useToast } from "@/hooks/useToast";
-import { handleUnauthorized } from "@/lib/authHandler";
+import { useApiErrorHandler } from "@/hooks/useApiErrorHandler";
 
 const SIZE = 10;
 
 export default function AdminCategoriesPage() {
   const { t } = useTranslation();
-  const { user, logout } = useUser();
+  const { user } = useUser();
   const queryClient = useQueryClient();
-  const { success, error } = useToast();
+  const { success } = useToast();
   const [page, setPage] = useState(0);
   const [term, setTerm] = useState("");
+  const { handleError, throwOnError } = useApiErrorHandler();
 
   const { data, isLoading } = useQuery({
     queryKey: ["categories", page, term],
     queryFn: () => getCategories(page, SIZE, user!.token, term),
     enabled: !!user?.token,
-    throwOnError: (err: Error) => {
-      if (err.message === API_ERRORS.UNAUTHORIZED) {
-        handleUnauthorized(logout);
-      } else if (err.message === API_ERRORS.FORBIDDEN) {
-        error(t("notEnoughPermissions"));
-      }
-      return false;
-    },
+    throwOnError, 
   });
 
   const { mutate: handleDelete } = useMutation({
@@ -43,16 +36,7 @@ export default function AdminCategoriesPage() {
       queryClient.invalidateQueries({ queryKey: ["categories"] });
       success(t("categoryDeletedSuccessfully"));
     },
-    onError: (err: Error) => {
-      if (err.message === API_ERRORS.UNAUTHORIZED) {
-        handleUnauthorized(logout);
-      } else if (err.message === API_ERRORS.FORBIDDEN) {
-        error(t("notEnoughPermissions"));
-      }
-      else {
-        error(t("categoryNotDeletedSuccessfully"));
-      }
-    },
+    onError: (err: Error) => handleError(err, t("categoryNotDeletedSuccessfully")),
   });
 
   const handleEdit = (category: Category) => {
