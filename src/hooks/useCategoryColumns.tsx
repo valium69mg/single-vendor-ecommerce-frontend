@@ -1,10 +1,11 @@
 import type { ColumnDef } from "@tanstack/react-table";
 import type { Category } from "@/api/api";
-import { Button } from "@/components/ui/button";
 import ImageWithFallback from "@/components/common/ImageWithFallback";
 import { API_FILE_URL } from "@/api/api";
 import { useTranslation } from "react-i18next";
 import DestructiveActionButton from "../components/common/DestructiveActionButton";
+import Modal from "@/components/common/Modal";
+import EditCategoryForm from "@/components/admin/EditCategoryForm";
 
 export function useCategoryColumns(
   onEdit: (category: Category) => void,
@@ -64,14 +65,10 @@ export function useCategoryColumns(
 
         return (
           <div className="flex gap-2">
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => onEdit(category)}
-            >
-              {t("edit")}
-            </Button>
-
+            <Modal 
+              buttonName={t("edit")}
+              content={<EditCategoryForm/>}
+            />
             <DestructiveActionButton
               onConfirm={() => onDelete(category)}
             />
