@@ -1,16 +1,12 @@
 pipeline {
-    agent any
-    
-    tools {
-        nodejs 'NodeJS'
-    }
-    
-    environment {
-        SONARQUBE = 'SonarQube'
+    agent {
+        docker {
+            image 'node:20-bullseye'
+        }
     }
 
-    triggers {
-        pollSCM('H/5 * * * *')
+    environment {
+        SONARQUBE = 'SonarQube'
     }
 
     stages {
@@ -22,63 +18,47 @@ pipeline {
             }
         }
 
-        stage('Install Dependencies') {
+        stage('Install') {
             steps {
-                echo 'Installing dependencies...'
-                sh 'npm install'
+                sh 'npm ci'
             }
         }
 
-        stage('Lint') {
+        stage('Lint & Test') {
             steps {
-                echo 'Running lint...'
                 sh 'npm run lint'
-            }
-        }
-
-        stage('Unit Tests') {
-            steps {
-                echo 'Running unit tests...'
-                sh 'npm run test -- --watchAll=false'
+                sh 'npm run test -- --coverage'
             }
         }
 
         stage('Build') {
             steps {
-                echo 'Building the project...'
                 sh 'npm run build'
             }
         }
 
         stage('SonarQube Analysis') {
             steps {
-                echo 'Running SonarQube analysis...'
                 withSonarQubeEnv("${SONARQUBE}") {
-                    sh '''
-                        npx sonar-scanner \
-                        -Dsonar.projectKey=single-vendor-ecommerce-frontend \
-                        -Dsonar.sources=src
-                    '''
+                    withCredentials([string(credentialsId: 'sonar-token', variable: 'SONAR_TOKEN')]) {
+                        sh '''
+                            npx sonar-scanner \
+                            -Dsonar.projectKey=single-vendor-ecommerce-frontend \
+                            -Dsonar.sources=src \
+                            -Dsonar.javascript.lcov.reportPaths=coverage/lcov.info \
+                            -Dsonar.login=$SONAR_TOKEN
+                        '''
+                    }
                 }
             }
         }
 
-        stage('Wait for SonarQube Quality Gate') {
+        stage('Quality Gate') {
             steps {
-                echo 'Waiting for SonarQube Quality Gate...'
                 timeout(time: 10, unit: 'MINUTES') {
                     waitForQualityGate abortPipeline: true
                 }
             }
-        }
-    }
-
-    post {
-        success {
-            echo '✅ Build, tests and SonarQube Quality Gate passed!'
-        }
-        failure {
-            echo '❌ Pipeline failed!'
         }
     }
 }
