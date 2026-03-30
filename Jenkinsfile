@@ -25,7 +25,7 @@ pipeline {
                 sh 'npm ci'
             }
         }
-
+        
         stage('SonarQube Analysis') {
             agent {
                 docker {
@@ -33,18 +33,18 @@ pipeline {
                     args '--network=jenkins_default -u 0:0'
                 }
             }
-            environment {
-                SONAR_HOST_URL = 'http://sonarqube:9000'
-                SONAR_LOGIN = credentials('sonar-token')
-            }
             steps {
-                sh '''
-                    sonar-scanner \
-                    -Dsonar.projectKey=single-vendor-ecommerce-frontend \
-                    -Dsonar.sources=src \
-                    -Dsonar.host.url=$SONAR_HOST_URL \
-                    -Dsonar.login=$SONAR_LOGIN
-                '''
+                withSonarQubeEnv('SonarQube') {
+                    withCredentials([string(credentialsId: 'sonar-token', variable: 'SONAR_TOKEN')]) {
+                        sh '''
+                            sonar-scanner \
+                            -Dsonar.projectKey=single-vendor-ecommerce-frontend \
+                            -Dsonar.sources=src \
+                            -Dsonar.host.url=$SONAR_HOST_URL \
+                            -Dsonar.login=$SONAR_TOKEN
+                        '''
+                    }
+                }
             }
         }
 
