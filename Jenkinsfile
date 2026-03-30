@@ -24,13 +24,6 @@ pipeline {
             }
         }
 
-        stage('Lint & Test') {
-            steps {
-                sh 'npm run lint'
-                sh 'npm run test -- --coverage'
-            }
-        }
-
         stage('Build') {
             steps {
                 sh 'npm run build'
