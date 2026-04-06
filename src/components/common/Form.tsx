@@ -56,7 +56,7 @@ export function Form({
   isLoading = false,
 }: FormProps) {
   return (
-    <Card className="w-full max-w-sm sm:max-w-md lg:max-w-lg min-w-[400px] min-h-[200px]">
+    <Card className="w-full max-w-sm sm:max-w-md lg:max-w-lg min-w-[250px] min-h-[200px]">
       {isLoading ? (
         <Loader />
       ) : (
