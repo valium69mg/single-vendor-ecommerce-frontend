@@ -26,6 +26,18 @@ pipeline {
             }
         }
         
+        stage('Build') {
+            agent {
+                docker {
+                    image 'node:20-bullseye'
+                }
+            }
+            steps {
+                echo 'Building the frontend...'
+                sh 'npm run build'
+            }
+        }
+        
         stage('SonarQube Analysis') {
             agent {
                 docker {
