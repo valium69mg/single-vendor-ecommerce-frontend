@@ -1,5 +1,5 @@
 pipeline {
-    agent any
+    agent none
 
     environment {
         SONARQUBE = 'SonarQube'
@@ -8,6 +8,7 @@ pipeline {
     stages {
 
         stage('Checkout') {
+            agent any
             steps {
                 git branch: 'dev',
                     url: 'https://github.com/valium69mg/single-vendor-ecommerce-frontend'
@@ -15,13 +16,12 @@ pipeline {
         }
 
         stage('Install & Build') {
+            agent any
             steps {
                 script {
-                    // Use slim Node image and limit memory to 1GB
-                    docker.image('node:20-bullseye-slim').inside('--memory=1g --cpus=1 --user=root') {
-                        echo 'Installing dependencies and building frontend...'
+                    docker.image('node:20-bullseye-slim').inside('--memory=768m --cpus=0.8 --user=root') {
                         sh '''
-                            npm ci
+                            npm ci --prefer-offline
                             npm run build
                         '''
                     }
@@ -30,10 +30,10 @@ pipeline {
         }
 
         stage('SonarQube Analysis') {
+            agent any
             steps {
                 script {
-                    // Use SonarQube scanner in a lightweight container with memory limit
-                    docker.image('sonarsource/sonar-scanner-cli:latest').inside('--memory=512m --cpus=1') {
+                    docker.image('sonarsource/sonar-scanner-cli:latest').inside('--memory=512m --cpus=0.5 --network=jenkins_default -u 0:0') {
                         withSonarQubeEnv('SonarQube') {
                             withCredentials([string(credentialsId: 'sonar-token', variable: 'SONAR_TOKEN')]) {
                                 sh '''
@@ -51,6 +51,7 @@ pipeline {
         }
 
         stage('Quality Gate') {
+            agent any
             steps {
                 timeout(time: 10, unit: 'MINUTES') {
                     waitForQualityGate abortPipeline: true
