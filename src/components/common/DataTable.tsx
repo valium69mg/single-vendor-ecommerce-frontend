@@ -16,7 +16,6 @@ import {
 } from "@/components/ui/table";
 
 import { Button } from "@/components/ui/button";
-import { Spinner } from "../ui/spinner";
 import Loader from "./Loader";
 
 interface DataTableProps<TData> {

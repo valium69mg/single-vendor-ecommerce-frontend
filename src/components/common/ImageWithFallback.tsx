@@ -1,4 +1,3 @@
-import { Images } from "lucide-react";
 import { useState } from "react";
 
 interface ImageWithFallbackProps {

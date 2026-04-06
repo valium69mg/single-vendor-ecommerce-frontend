@@ -20,7 +20,7 @@ import GenericButton from "../common/GenericButton";
 import US from "country-flag-icons/react/3x2/US";
 import MX from "country-flag-icons/react/3x2/MX";
 import { useApiErrorHandler } from "@/hooks/useApiErrorHandler";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 
 interface EditCategoryFormContentProps {
   data: CategoryById | undefined;
@@ -33,10 +33,10 @@ function EditCategoryFormContent({
   register,
   errors,
 }: EditCategoryFormContentProps) {
-  const { t } = useTranslation();
   return (
     <div className="flex flex-col gap-6">
       <FormField
+        key={data?.englishName}
         labelKey="englishName"
         labelIcon={<US className="w-4 h-4" />}
         inputId="englishName"
@@ -46,6 +46,7 @@ function EditCategoryFormContent({
         error={errors.englishName?.message}
       />
       <FormField
+        key={data?.spanishName}
         labelKey="spanishName"
         labelIcon={<MX className="w-4 h-4" />}
         inputId="spanishName"
