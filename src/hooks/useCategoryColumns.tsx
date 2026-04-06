@@ -65,13 +65,16 @@ export function useCategoryColumns(
 
         return (
           <div className="flex gap-2">
-            <Modal 
+            <Modal
               buttonName={t("edit")}
-              content={<EditCategoryForm/>}
+              content={(onClose) => (
+                <EditCategoryForm
+                  categoryId={category.categoryId}
+                  onClose={onClose}
+                />
+              )}
             />
-            <DestructiveActionButton
-              onConfirm={() => onDelete(category)}
-            />
+            <DestructiveActionButton onConfirm={() => onDelete(category)} />
           </div>
         );
       },

@@ -26,7 +26,7 @@ export default function AdminCategoriesPage() {
     queryKey: ["categories", page, term],
     queryFn: () => getCategories(page, SIZE, user!.token, term),
     enabled: !!user?.token,
-    throwOnError, 
+    throwOnError,
   });
 
   const { mutate: handleDelete } = useMutation({
@@ -36,7 +36,8 @@ export default function AdminCategoriesPage() {
       queryClient.invalidateQueries({ queryKey: ["categories"] });
       success(t("categoryDeletedSuccessfully"));
     },
-    onError: (err: Error) => handleError(err, t("categoryNotDeletedSuccessfully")),
+    onError: (err: Error) =>
+      handleError(err, t("categoryNotDeletedSuccessfully")),
   });
 
   const handleEdit = (category: Category) => {

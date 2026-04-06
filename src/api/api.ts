@@ -92,3 +92,43 @@ export async function deleteCategory(
     },
   );
 }
+
+export async function getCategory(
+  categoryId: number,
+  token: string,
+): Promise<Category> {
+  return await apiFetch<Category>(
+      `${API_BASE_URL}/products/categories/${categoryId}`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      }
+  );
+}
+
+export interface EditCategoryMutationVariables {
+  data: { englishName: string; spanishName: string };
+  categoryId: number;
+  token: string;
+}
+
+export async function editCategory({
+  data,
+  categoryId,
+  token,
+}: EditCategoryMutationVariables): Promise<StandardResponse> {
+  return await apiFetch<StandardResponse>(
+    `${API_BASE_URL}/admin/products/categories/${categoryId}`,
+    {
+      method: "PATCH",
+      body: JSON.stringify(data),
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+}

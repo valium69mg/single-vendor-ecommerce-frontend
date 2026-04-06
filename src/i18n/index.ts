@@ -44,6 +44,10 @@ i18n.use(initReactI18next).init({
         categoryDeletedSuccessfully: "Category deleted successfully",
         categoryNotDeletedSuccessfully: "Failed to delete category",
         notEnoughPermissions: "You do not have the permissions to perform this action",
+        category: "Category",
+        editCategoryFormDescription: "Edit the title of an existing category",
+        englishName: "English name",
+        spanishName: "Spanish name",
         validation: {
           required: "This field is required",
           invalidEmail: "Invalid email address",
@@ -96,6 +100,10 @@ i18n.use(initReactI18next).init({
         categoryDeletedSuccessfully: "Categoría eliminada con éxito",
         categoryNotDeletedSuccessfully: "No fue posible eliminar la categoría",
         notEnoughPermissions: "No cuentas con los permisos para realizar esta acción",
+        category: "Categoria",
+        editCategoryFormDescription: "Editar el título de una categoría existente",
+        englishName: "Nombre en inglés",
+        spanishName: "Nombre en español",
         validation: {
           required: "Este campo es obligatorio",
           invalidEmail: "Correo electrónico inválido",
