@@ -1,3 +1,4 @@
+import { Images } from "lucide-react";
 import { useState } from "react";
 
 interface ImageWithFallbackProps {
@@ -15,12 +16,18 @@ export default function ImageWithFallback({
 }: ImageWithFallbackProps) {
   const [imgSrc, setImgSrc] = useState(src);
 
-  return (
+  if (imgSrc === null) {
+    return;
+  }
+
+  return imgSrc ? (
     <img
       src={imgSrc}
       alt={alt}
       className={className}
       onError={() => setImgSrc(fallback)}
     />
+  ) : (
+    <img src={fallback} alt={alt} className={className} />
   );
 }
