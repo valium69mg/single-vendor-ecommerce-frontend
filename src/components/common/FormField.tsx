@@ -3,7 +3,7 @@ import { Input } from "../ui/input";
 import { useTranslation } from "react-i18next";
 import type { UseFormRegisterReturn } from "react-hook-form";
 import { FiEye, FiEyeOff } from "react-icons/fi";
-import { useState } from "react";
+import { useState, type ReactNode } from "react";
 
 interface FormFieldProps {
   labelKey: string;
@@ -14,6 +14,7 @@ interface FormFieldProps {
   anchorElement?: React.ReactNode;
   register?: UseFormRegisterReturn;
   error?: string;
+  labelIcon?: ReactNode;
 }
 
 export default function FormField({
@@ -25,6 +26,7 @@ export default function FormField({
   anchorElement,
   register,
   error,
+  labelIcon,
 }: FormFieldProps) {
   const { t } = useTranslation();
   const [showPassword, setShowPassword] = useState(false);
@@ -34,7 +36,9 @@ export default function FormField({
   return (
     <div className="grid gap-2 sm:gap-3">
       <div className="flex flex-col gap-1 sm:flex-row sm:items-center">
-        <Label htmlFor={inputId}>{t(labelKey)}</Label>
+        <Label className="flex items-center gap-2" htmlFor={inputId}>
+          {t(labelKey)} {labelIcon}
+        </Label>
         {anchorElement && (
           <div className="sm:ml-auto inline-block text-xs sm:text-sm underline-offset-4 hover:underline">
             {anchorElement}

@@ -16,6 +16,8 @@ import type {
 } from "@/api/api";
 import { editCategory } from "@/api/api";
 import GenericButton from "../common/GenericButton";
+import US from "country-flag-icons/react/3x2/US";
+import MX from "country-flag-icons/react/3x2/MX";
 
 interface EditCategoryFormContentProps {
   register: UseFormRegister<EditCategoryFormValues>;
@@ -31,6 +33,7 @@ function EditCategoryFormContent({
     <div className="flex flex-col gap-6">
       <FormField
         labelKey="englishName"
+        labelIcon={<US className="w-4 h-4" />}
         inputId="englishName"
         inputType="text"
         inputPlaceholder=""
@@ -39,6 +42,7 @@ function EditCategoryFormContent({
       />
       <FormField
         labelKey="spanishName"
+        labelIcon={<MX className="w-4 h-4" />}
         inputId="spanishName"
         inputType="text"
         inputPlaceholder=""
