@@ -8,23 +8,28 @@ import type { EditCategoryFormValues } from "../auth/edit-category.schema";
 import { editCategorySchema } from "../auth/edit-category.schema";
 import { useForm } from "react-hook-form";
 import { useUser } from "@/hooks/useUser";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQueryClient, useQuery } from "@tanstack/react-query";
 import { zodResolver } from "@hookform/resolvers/zod";
 import type {
   StandardResponse,
   EditCategoryMutationVariables,
+  CategoryById,
 } from "@/api/api";
-import { editCategory } from "@/api/api";
+import { editCategory, getCategory } from "@/api/api";
 import GenericButton from "../common/GenericButton";
 import US from "country-flag-icons/react/3x2/US";
 import MX from "country-flag-icons/react/3x2/MX";
+import { useApiErrorHandler } from "@/hooks/useApiErrorHandler";
+import { useEffect, useState } from "react";
 
 interface EditCategoryFormContentProps {
+  data: CategoryById | undefined;
   register: UseFormRegister<EditCategoryFormValues>;
   errors: FieldErrors<EditCategoryFormValues>;
 }
 
 function EditCategoryFormContent({
+  data,
   register,
   errors,
 }: EditCategoryFormContentProps) {
@@ -34,6 +39,7 @@ function EditCategoryFormContent({
       <FormField
         labelKey="englishName"
         labelIcon={<US className="w-4 h-4" />}
+        value={data?.englishName}
         inputId="englishName"
         inputType="text"
         inputPlaceholder=""
@@ -43,6 +49,7 @@ function EditCategoryFormContent({
       <FormField
         labelKey="spanishName"
         labelIcon={<MX className="w-4 h-4" />}
+        value={data?.spanishName}
         inputId="spanishName"
         inputType="text"
         inputPlaceholder=""
@@ -97,13 +104,31 @@ export default function EditCategoryForm({
   const { success } = useToast();
   const { user } = useUser();
   const queryClient = useQueryClient();
+  const { throwOnError } = useApiErrorHandler();
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors, isSubmitting },
   } = useForm<EditCategoryFormValues>({
     resolver: zodResolver(editCategorySchema),
   });
+
+  const { data, isLoading } = useQuery({
+    queryKey: ["category", categoryId],
+    queryFn: () => getCategory(categoryId, user!.token),
+    enabled: !!user?.token,
+    throwOnError,
+  });
+
+  useEffect(() => {
+    if (data) {
+      reset({
+        englishName: data.englishName,
+        spanishName: data.spanishName,
+      });
+    }
+  }, [data, reset]);
 
   const mutation = useMutation<
     StandardResponse,
@@ -131,8 +156,13 @@ export default function EditCategoryForm({
       <Form
         title={t("edit") + " " + t("category").toLowerCase()}
         description={t("editCategoryFormDescription")}
+        isLoading={isLoading}
         content={
-          <EditCategoryFormContent register={register} errors={errors} />
+          <EditCategoryFormContent
+            data={data}
+            register={register}
+            errors={errors}
+          />
         }
         footerContent={
           <EditCategoryFormFooterContent

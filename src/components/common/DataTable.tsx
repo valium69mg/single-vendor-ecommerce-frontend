@@ -17,6 +17,7 @@ import {
 
 import { Button } from "@/components/ui/button";
 import { Spinner } from "../ui/spinner";
+import Loader from "./Loader";
 
 interface DataTableProps<TData> {
   columns: ColumnDef<TData>[];
@@ -44,7 +45,7 @@ function DataTableHeader<TData>({ table }: { table: TableType<TData> }) {
                 ? null
                 : flexRender(
                     header.column.columnDef.header,
-                    header.getContext()
+                    header.getContext(),
                   )}
             </TableHead>
           ))}
@@ -65,15 +66,12 @@ function DataTableBody<TData>({
   noResultsLabel: string;
   loading: boolean;
 }) {
-
   if (loading) {
     return (
       <TableBody>
         <TableRow>
           <TableCell colSpan={columns.length}>
-            <div className="flex items-center justify-center h-32">
-              <Spinner />
-            </div>
+            <Loader />
           </TableCell>
         </TableRow>
       </TableBody>
@@ -123,7 +121,6 @@ function DataTablePagination({
 }) {
   return (
     <div className="flex justify-end gap-3">
-
       <Button
         variant="outline"
         disabled={page === 0}
@@ -143,7 +140,6 @@ function DataTablePagination({
       >
         {labels.next}
       </Button>
-
     </div>
   );
 }
@@ -157,7 +153,6 @@ export function DataTable<TData>({
   loading,
   labels,
 }: DataTableProps<TData>) {
-
   const table = useReactTable({
     data,
     columns,
@@ -166,7 +161,6 @@ export function DataTable<TData>({
 
   return (
     <div className="space-y-4">
-
       <Table>
         <DataTableHeader table={table} />
 
@@ -184,7 +178,6 @@ export function DataTable<TData>({
         hasNextPage={hasNextPage}
         labels={labels}
       />
-
     </div>
   );
 }

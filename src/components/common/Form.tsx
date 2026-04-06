@@ -6,12 +6,14 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import Loader from "./Loader";
 
 interface FormProps {
   title: string;
   description?: string;
   content?: React.ReactNode;
   footerContent?: React.ReactNode;
+  isLoading?: boolean;
 }
 
 interface FormContentProps {
@@ -51,12 +53,19 @@ export function Form({
   description,
   content,
   footerContent,
+  isLoading = false,
 }: FormProps) {
   return (
-    <Card className="w-full max-w-sm sm:max-w-md lg:max-w-lg">
-      <FormHeader title={title} description={description} />
-      <FormContent>{content}</FormContent>
-      <FormFooter>{footerContent}</FormFooter>
+    <Card className="w-full max-w-sm sm:max-w-md lg:max-w-lg min-w-[400px] min-h-[200px]">
+      {isLoading ? (
+        <Loader />
+      ) : (
+        <>
+          <FormHeader title={title} description={description} />
+          <FormContent>{content}</FormContent>
+          <FormFooter>{footerContent}</FormFooter>
+        </>
+      )}
     </Card>
   );
 }

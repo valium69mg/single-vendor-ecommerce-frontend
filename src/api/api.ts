@@ -93,11 +93,26 @@ export async function deleteCategory(
   );
 }
 
+export interface CategoryById {
+  categoryId: number;
+  englishName: string;
+  spanishName: string;
+  products: number;
+  unitsSold: number;
+  revenue: number;
+  averagePrice: number;
+  stock: number;
+  imageUrl: string;
+  mediumThumbnailUrl: string;
+  smallThumbnailUrl: string;
+}
+
+
 export async function getCategory(
   categoryId: number,
   token: string,
-): Promise<Category> {
-  return await apiFetch<Category>(
+): Promise<CategoryById> {
+  return await apiFetch<CategoryById>(
       `${API_BASE_URL}/products/categories/${categoryId}`,
       {
         method: "GET",
