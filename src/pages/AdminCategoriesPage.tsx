@@ -21,7 +21,7 @@ export default function AdminCategoriesPage() {
   const [page, setPage] = useState(0);
   const [term, setTerm] = useState("");
   const { handleError, throwOnError } = useApiErrorHandler();
-
+  console.log(`Page: ${page}`);
   const { data, isLoading } = useQuery({
     queryKey: ["categories", page, term],
     queryFn: () => getCategories(page, SIZE, user!.token, term),
@@ -40,11 +40,8 @@ export default function AdminCategoriesPage() {
       handleError(err, t("categoryNotDeletedSuccessfully")),
   });
 
-  const handleEdit = (category: Category) => {
-    console.log("edit", category);
-  };
-
-  const columns = useCategoryColumns(handleEdit, handleDelete);
+  const columns = useCategoryColumns(handleDelete);
+  console.log({ page, last: data?.last, content: data?.content?.length });
 
   return (
     <div className="space-y-6">
@@ -61,7 +58,7 @@ export default function AdminCategoriesPage() {
           query={term}
           setQuery={(val) => {
             setTerm(val);
-            setPage(0);
+            setPage(page);
           }}
         />
       </div>

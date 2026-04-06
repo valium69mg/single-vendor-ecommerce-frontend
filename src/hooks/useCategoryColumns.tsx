@@ -8,7 +8,6 @@ import Modal from "@/components/common/Modal";
 import EditCategoryForm from "@/components/admin/EditCategoryForm";
 
 export function useCategoryColumns(
-  onEdit: (category: Category) => void,
   onDelete: (category: Category) => void,
 ): ColumnDef<Category>[] {
   const { t } = useTranslation();

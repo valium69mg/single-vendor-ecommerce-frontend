@@ -39,7 +39,6 @@ function EditCategoryFormContent({
       <FormField
         labelKey="englishName"
         labelIcon={<US className="w-4 h-4" />}
-        value={data?.englishName}
         inputId="englishName"
         inputType="text"
         inputPlaceholder=""
@@ -49,7 +48,6 @@ function EditCategoryFormContent({
       <FormField
         labelKey="spanishName"
         labelIcon={<MX className="w-4 h-4" />}
-        value={data?.spanishName}
         inputId="spanishName"
         inputType="text"
         inputPlaceholder=""
@@ -138,7 +136,7 @@ export default function EditCategoryForm({
     mutationFn: editCategory,
     onSuccess: (data) => {
       success(data?.message);
-      queryClient.clear();
+      queryClient.invalidateQueries({ queryKey: ["categories"] });
       onClose();
     },
   });
