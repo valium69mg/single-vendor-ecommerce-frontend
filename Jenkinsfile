@@ -19,13 +19,24 @@ pipeline {
             }
         }
 
-        stage('Install & Build') {
+        stage('Install') {
             agent any
             steps {
                 script {
-                    docker.image('node:20-bullseye-slim').inside('--memory=1024m --cpus=0.5 --user=root') {
+                    docker.image('node:20-bullseye-slim').inside('--memory=512m --cpus=0.5 --user=root') {
+                        sh 'npm ci'
+                    }
+                }
+            }
+        }
+
+        stage('Build') {
+            agent any
+            steps {
+                script {
+                    docker.image('node:20-bullseye-slim').inside('--memory=1536m --cpus=1 --user=root') {
                         sh '''
-                            npm ci
+                            export NODE_OPTIONS="--max-old-space-size=1024"
                             npm run build
                         '''
                     }
