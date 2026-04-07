@@ -1,10 +1,10 @@
 import { apiFetch } from "./apiFetch";
 
 export const API_BASE_URL =
-  import.meta.env.VITE_API_URL || "http://localhost:8080/api/v1";
+  import.meta.env.VITE_API_URL || "http://3.80.104.36:80/api/v1";
 
 export const API_FILE_URL =
-  import.meta.env.VITE_API_FILE_URL || "http://localhost:8080/api/v1/file?key=";
+  import.meta.env.VITE_API_FILE_URL || "http://3.80.104.36:80/api/v1/file?key=";
 
 export interface StandardResponse {
   status: number;
