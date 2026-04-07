@@ -23,9 +23,9 @@ pipeline {
             agent any
             steps {
                 script {
-                    docker.image('node:20-bullseye-slim').inside('--memory=768m --cpus=0.8 --user=root') {
+                    docker.image('node:20-bullseye-slim').inside('--memory=768m --cpus=0.5 --user=root') {
                         sh '''
-                            npm ci --prefer-offline
+                            npm ci
                             npm run build
                         '''
                     }
