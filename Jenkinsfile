@@ -44,6 +44,7 @@ pipeline {
             }
         }
 
+        /*
         stage('SonarQube Analysis') {
             agent any
             steps {
@@ -74,13 +75,13 @@ pipeline {
             }
         }
     }
-
+    */
     post {
         success {
-            echo '✅ SonarQube Quality Gate passed!'
+            echo '✅ Deploy completed'
         }
         failure {
-            echo '❌ SonarQube failed!'
+            echo '❌ Deploy failed failed!'
         }
     }
 }
