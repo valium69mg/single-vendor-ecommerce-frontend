@@ -48,7 +48,7 @@ pipeline {
             agent any
             steps {
                 script {
-                    docker.image('sonarsource/sonar-scanner-cli:latest').inside('--memory=512m --cpus=0.5 --network=jenkins_default -u 0:0') {
+                    docker.image('sonarsource/sonar-scanner-cli:latest').inside('--memory=1024m --cpus=0.5 --network=jenkins_default -u 0:0') {
                         withSonarQubeEnv('SonarQube') {
                             withCredentials([string(credentialsId: 'sonar-token', variable: 'SONAR_TOKEN')]) {
                                 sh '''
