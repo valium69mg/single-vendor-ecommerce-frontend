@@ -91,6 +91,19 @@ pipeline {
                 }
             }
         }
+
+        stage('Deploy') {
+            steps {
+                sshagent(['ubuntu-server-ssh']) {
+                    sh '''
+                        ssh -o StrictHostKeyChecking=no ubuntu@3.80.104.36 << 'EOF'
+                        cd /home/ubuntu/single-vendor-ecommerce
+                        docker compose pull
+                        docker compose up -d postgres redis backend frontend thumbnail-worker --remove-orphans
+                    '''
+                }
+            }
+        }
     }
     
     post {
