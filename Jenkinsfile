@@ -76,11 +76,20 @@ pipeline {
         }
         */
 
-        stage('Build & Push Docker Image') {
+       stage('Build & Push Docker Image') {
             agent any
+            environment {
+                VITE_API_URL = 'http://3.80.104.36:80/api/v1'
+                VITE_API_FILE_URL = 'http://3.80.104.36:80/api/v1/file?key='
+            }
             steps {
                 echo 'Building Docker image...'
-                sh "docker build -t carlostranquilinocr98/single-vendor-ecommerce-frontend:latest ."
+                sh """
+                docker build \
+                --build-arg VITE_API_URL=$VITE_API_URL \
+                --build-arg VITE_API_FILE_URL=$VITE_API_FILE_URL \
+                -t carlostranquilinocr98/single-vendor-ecommerce-frontend:latest .
+                """
 
                 echo 'Pushing Docker image to Docker Hub...'
                 withCredentials([usernamePassword(credentialsId: 'docker-hub-credentials', 
