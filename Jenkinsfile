@@ -23,7 +23,7 @@ pipeline {
             agent any
             steps {
                 script {
-                    docker.image('node:20-bullseye-slim').inside('--memory=768m --cpus=0.5 --user=root') {
+                    docker.image('node:20-bullseye-slim').inside('--memory=1024m --cpus=0.5 --user=root') {
                         sh '''
                             npm ci
                             npm run build
