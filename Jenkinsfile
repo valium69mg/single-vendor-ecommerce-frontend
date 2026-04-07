@@ -93,6 +93,7 @@ pipeline {
         }
 
         stage('Deploy') {
+            agent any
             steps {
                 sshagent(['ubuntu-server-ssh']) {
                     sh '''
