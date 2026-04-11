@@ -6,6 +6,8 @@ import { useTranslation } from "react-i18next";
 import DestructiveActionButton from "../components/common/DestructiveActionButton";
 import Modal from "@/components/common/Modal";
 import EditCategoryForm from "@/components/admin/EditCategoryForm";
+import ImageModal from "@/components/common/ImageModal";
+import EditImageForm from "@/components/admin/EditImageForm";
 
 export function useCategoryColumns(
   onDelete: (category: Category) => void,
@@ -24,10 +26,21 @@ export function useCategoryColumns(
         const key = row.original.smallThumbnailUrl;
 
         return (
-          <ImageWithFallback
-            src={API_FILE_URL + key}
-            alt={row.original.name}
-            className="w-12 h-12 object-cover rounded"
+          <ImageModal
+            imageWithFallback={
+              <ImageWithFallback
+                src={API_FILE_URL + key}
+                alt={row.original.name}
+                className="w-12 h-12 object-cover rounded"
+              />
+            }
+            content={(onClose) => (
+              <EditImageForm
+                categoryId={row.original.categoryId}
+                initialImageUrl={key ? API_FILE_URL + key : undefined}
+                onClose={onClose}
+              />)
+            }
           />
         );
       },

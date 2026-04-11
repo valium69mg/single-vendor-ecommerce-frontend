@@ -1,4 +1,4 @@
-import { apiFetch } from "./apiFetch";
+import { apiFetch, apiFetchFile } from "./apiFetch";
 
 export const API_BASE_URL =
   import.meta.env.VITE_API_URL || "http://localhost:8080/api/v1";
@@ -145,5 +145,23 @@ export async function editCategory({
         Authorization: `Bearer ${token}`,
       },
     }
+  );
+}
+
+export interface UploadCategoryImageVariables {
+  categoryId: number;
+  file: File;
+  token: string;
+}
+
+export async function uploadCategoryImage({
+  categoryId,
+  file,
+  token,
+}: UploadCategoryImageVariables): Promise<StandardResponse> {
+  return apiFetchFile<StandardResponse>(
+    `${API_BASE_URL}/admin/products/categories/${categoryId}/image`,
+    file,
+    token
   );
 }
