@@ -95,7 +95,7 @@ export function useCategoryColumns(
                   onClose={onClose}
                 />
               )}
-              triggerClassName="h-8 w-8 p-0 text-stone-600 hover:text-amber-700 hover:border-amber-300"
+              triggerClassName="h-8 w-8 p-0 text-stone-600 hover:text-stone-900 hover:border-stone-400"
             />
             <DestructiveActionButton onConfirm={() => onDelete(category)} />
           </div>
