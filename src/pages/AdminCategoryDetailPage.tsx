@@ -285,7 +285,7 @@ export default function AdminCategoryDetailPage() {
           <Modal
             buttonName={<><Pencil className="h-4 w-4" />{t("edit")}</>}
             size="default"
-            triggerClassName="flex items-center gap-2 bg-stone-900 hover:bg-stone-800 text-white border-stone-900 hover:border-stone-800 font-store-body"
+            triggerClassName="flex items-center gap-2 bg-amber-800 hover:bg-amber-900 text-white border-amber-800 hover:border-amber-900 font-store-body"
             content={(onClose) => (
               <EditCategoryForm categoryId={data.categoryId} onClose={onClose} />
             )}
