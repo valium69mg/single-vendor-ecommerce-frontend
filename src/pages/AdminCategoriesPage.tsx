@@ -49,7 +49,7 @@ export default function AdminCategoriesPage() {
         <Modal
           buttonName={`+ ${t("createCategory")}`}
           content={(onClose) => <CreateCategoryForm onClose={onClose} />}
-          triggerClassName="bg-amber-900 hover:bg-amber-950 text-white border-amber-900 hover:border-amber-950 font-store-body text-sm tracking-wide h-9 px-4"
+          triggerClassName="bg-stone-900 hover:bg-stone-700 text-white border-stone-900 hover:border-stone-700 font-store-body text-sm tracking-wide h-9 px-4"
         />
       </div>
 
