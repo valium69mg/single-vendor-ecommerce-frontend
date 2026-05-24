@@ -3,7 +3,7 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
 import { useMemo } from "react";
 import type { ColumnDef } from "@tanstack/react-table";
-import { ArrowLeft, AlertTriangle } from "lucide-react";
+import { ArrowLeft, AlertTriangle, Pencil } from "lucide-react";
 import { useUser } from "@/hooks/useUser";
 import { getCategory, deleteCategory, API_FILE_URL } from "@/api/api";
 import { useApiErrorHandler } from "@/hooks/useApiErrorHandler";
@@ -283,13 +283,14 @@ export default function AdminCategoryDetailPage() {
       {data && (
         <div className="flex justify-end gap-3">
           <Modal
-            buttonName={t("edit")}
+            buttonName={<><Pencil className="h-4 w-4" />{t("edit")}</>}
             size="default"
+            triggerClassName="flex items-center gap-2"
             content={(onClose) => (
               <EditCategoryForm categoryId={data.categoryId} onClose={onClose} />
             )}
           />
-          <DestructiveActionButton onConfirm={handleDelete} size="default" />
+          <DestructiveActionButton onConfirm={handleDelete} size="default" label={t("delete")} />
         </div>
       )}
     </div>

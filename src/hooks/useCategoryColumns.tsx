@@ -9,6 +9,7 @@ import EditCategoryForm from "@/components/admin/EditCategoryForm";
 import ImageModal from "@/components/common/ImageModal";
 import EditImageForm from "@/components/admin/EditImageForm";
 import { Link } from "react-router-dom";
+import { Pencil } from "lucide-react";
 
 export function useCategoryColumns(
   onDelete: (category: Category) => void,
@@ -85,15 +86,16 @@ export function useCategoryColumns(
         const category = row.original;
 
         return (
-          <div className="flex gap-2">
+          <div className="flex gap-1.5">
             <Modal
-              buttonName={t("edit")}
+              buttonName={<Pencil className="h-3.5 w-3.5" />}
               content={(onClose) => (
                 <EditCategoryForm
                   categoryId={category.categoryId}
                   onClose={onClose}
                 />
               )}
+              triggerClassName="h-8 w-8 p-0 text-stone-600 hover:text-amber-700 hover:border-amber-300"
             />
             <DestructiveActionButton onConfirm={() => onDelete(category)} />
           </div>

@@ -5,7 +5,7 @@ import type { ReactNode } from "react";
 import { useState } from "react";
 
 interface ModalProps {
-  buttonName: string;
+  buttonName: ReactNode;
   content: (onClose: () => void) => ReactNode;
   size?: "sm" | "default" | "lg";
   triggerClassName?: string;

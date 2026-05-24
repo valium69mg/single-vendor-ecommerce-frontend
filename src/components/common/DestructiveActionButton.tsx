@@ -11,6 +11,8 @@ import {
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
 import { useTranslation } from "react-i18next";
+import { Trash2 } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 interface DestructiveActionButtonProps {
   onConfirm: () => void;
@@ -27,8 +29,16 @@ export default function DestructiveActionButton({
   return (
     <AlertDialog>
       <AlertDialogTrigger asChild>
-        <Button variant="destructive" size={size}>
-          {label ?? t("delete")}
+        <Button
+          variant="destructive"
+          size={size}
+          className={cn(!label && "h-8 w-8 p-0 rounded-none")}
+        >
+          {label ? (
+            <><Trash2 className="h-4 w-4" />{label}</>
+          ) : (
+            <Trash2 className="h-3.5 w-3.5" />
+          )}
         </Button>
       </AlertDialogTrigger>
 
