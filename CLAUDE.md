@@ -15,7 +15,7 @@ npm run lint       # ESLint
 npm run preview    # Preview production build locally
 ```
 
-No test suite is configured.
+No test suite is configured yet. See **Testing plan** below for the intended setup.
 
 ## Environment variables
 
@@ -95,6 +95,34 @@ Translations are inlined in `src/i18n/index.ts` (no separate JSON files). Defaul
 ### UI components
 
 `src/components/ui/` contains shadcn/ui generated components — do not edit them manually; regenerate via the shadcn CLI if needed. Custom shared components live in `src/components/common/`.
+
+### Testing plan
+
+**Stack to install:** Vitest + React Testing Library + MSW (Mock Service Worker).
+
+#### 1. Unit tests — pure logic, no rendering
+- Zod schemas (`loginSchema`, `editCategorySchema`, `createCategorySchema`) — valid/invalid inputs, boundary values (min 3, max 60)
+- `useDebounce` — verify the value is debounced by the correct delay
+- `apiFetch` / `apiFetchFile` — mock `fetch`, verify 401 throws `UNAUTHORIZED`, 403 throws `FORBIDDEN`, 204 returns `undefined`, happy path parses JSON
+
+#### 2. Hook / component tests — React Testing Library
+- `useApiErrorHandler` — 401 triggers logout + query clear, 403 shows forbidden toast, fallback message shown for other errors
+- `ProtectedRoute` — unauthenticated redirects to `/login`, wrong role redirects to `/`, correct role renders children
+- `SearchBar` — typing debounces before calling `setQuery`
+- `DataTable` — renders loading state, no-results row, prev/next buttons disabled when appropriate
+- `Modal` — opens on button click, passes `onClose` correctly, closes the dialog
+
+#### 3. Integration tests — MSW intercepting API calls
+- **Login flow:** fill form → submit → MSW returns `LoginResponse` → `localStorage` updated → user context set
+- **Category list:** MSW returns paginated data → table renders → next/prev page works → search debounces and refetches
+- **Create category:** open modal → fill form → submit → MSW 200 → list invalidated → modal closes → toast shown
+- **Edit category:** open modal → data pre-populated from query → submit → detail page refreshes
+- **Delete category:** confirm dialog → MSW 200 → list invalidated → toast shown (+ navigate back on detail page)
+
+#### 4. E2E tests — Playwright
+- Full login → admin panel → create category → edit it → upload image → delete it → back to list
+- Role guard: log in as `USER`, attempt `/admin` → redirected to `/`
+- Session expiry: MSW returns 401 mid-session → user logged out → redirected to `/login`
 
 ### Deployment
 
