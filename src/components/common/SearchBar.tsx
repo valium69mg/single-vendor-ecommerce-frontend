@@ -1,13 +1,6 @@
-"use client";
-
 import { useEffect, useState } from "react";
 import useDebounce from "@/hooks/useDebounce";
 import { Input } from "@/components/ui/input";
-
-interface SearchBarProps {
-  query: string;
-  setQuery: (value: string) => void;
-}
 
 interface SearchBarProps {
   query: string;

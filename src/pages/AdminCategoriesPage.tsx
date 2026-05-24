@@ -22,7 +22,6 @@ export default function AdminCategoriesPage() {
   const [page, setPage] = useState(0);
   const [term, setTerm] = useState("");
   const { handleError, throwOnError } = useApiErrorHandler();
-  console.log(`Page: ${page}`);
   const { data, isLoading } = useQuery({
     queryKey: ["categories", page, term],
     queryFn: () => getCategories(page, SIZE, user!.token, term),
@@ -42,7 +41,6 @@ export default function AdminCategoriesPage() {
   });
 
   const columns = useCategoryColumns(handleDelete);
-  console.log({ page, last: data?.last, content: data?.content?.length });
 
   return (
     <div className="space-y-6">

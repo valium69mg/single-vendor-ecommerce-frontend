@@ -10,6 +10,7 @@ import { uploadCategoryImage } from "@/api/api";
 import { useUser } from "@/hooks/useUser";
 import { useQueryClient } from "@tanstack/react-query";
 import { useEffect, useMemo } from "react";
+import { useApiErrorHandler } from "@/hooks/useApiErrorHandler";
 
 interface EditImageFormValues {
   image: FileList;
@@ -102,6 +103,8 @@ export default function EditImageForm({
     return () => URL.revokeObjectURL(previewUrl);
   }, [previewUrl, imageFile]);
 
+  const { handleError } = useApiErrorHandler();
+
   const mutation = useMutation({
     mutationFn: async (file: File) =>
       uploadCategoryImage({
@@ -117,6 +120,7 @@ export default function EditImageForm({
 
       onClose();
     },
+    onError: (err: Error) => handleError(err, t("imageNotUploaded")),
   });
 
   const onSubmit = (data: EditImageFormValues) => {

@@ -163,11 +163,28 @@ export default function AdminCategoryDetailPage() {
     return <Loader />;
   }
 
-  const imageUrl = data?.mediumThumbnailUrl
+  if (!data) {
+    return (
+      <div className="space-y-4">
+        <Button
+          variant="ghost"
+          size="sm"
+          onClick={() => navigate("/admin/categories")}
+          className="flex items-center gap-2 -ml-2"
+        >
+          <ArrowLeft size={16} />
+          {t("back")}
+        </Button>
+        <p className="text-muted-foreground">{t("noResults")}</p>
+      </div>
+    );
+  }
+
+  const imageUrl = data.mediumThumbnailUrl
     ? API_FILE_URL + data.mediumThumbnailUrl
     : undefined;
 
-  const isLowStock = (data?.stock ?? 0) <= LOW_STOCK_THRESHOLD;
+  const isLowStock = data.stock <= LOW_STOCK_THRESHOLD;
 
   return (
     <div className="space-y-6">
@@ -188,13 +205,13 @@ export default function AdminCategoryDetailPage() {
           imageWithFallback={
             <ImageWithFallback
               src={imageUrl ?? ""}
-              alt={data?.englishName ?? ""}
+              alt={data.englishName}
               className="w-20 h-20 sm:w-24 sm:h-24 object-cover rounded-xl border shrink-0 cursor-pointer hover:opacity-80 transition-opacity"
             />
           }
           content={(onClose) => (
             <EditImageForm
-              categoryId={data?.categoryId ?? id}
+              categoryId={data.categoryId}
               initialImageUrl={imageUrl}
               onClose={onClose}
             />
@@ -202,30 +219,30 @@ export default function AdminCategoryDetailPage() {
         />
         <div className="flex flex-col gap-1">
           <div className="flex items-center gap-2 flex-wrap">
-            <h1 className="text-2xl sm:text-3xl font-bold">{data?.englishName}</h1>
+            <h1 className="text-2xl sm:text-3xl font-bold">{data.englishName}</h1>
             <span className="text-xs text-muted-foreground border rounded px-2 py-0.5">
-              ID: {data?.categoryId}
+              ID: {data.categoryId}
             </span>
           </div>
-          <p className="text-muted-foreground text-base">{data?.spanishName}</p>
+          <p className="text-muted-foreground text-base">{data.spanishName}</p>
         </div>
       </div>
 
       {/* Stats */}
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
-        <StatCard label={t("products")} value={data?.products ?? 0} />
-        <StatCard label={t("unitsSold")} value={data?.unitsSold ?? 0} />
+        <StatCard label={t("products")} value={data.products} />
+        <StatCard label={t("unitsSold")} value={data.unitsSold} />
         <StatCard
           label={t("revenue")}
-          value={`$${(data?.revenue ?? 0).toLocaleString()}`}
+          value={`$${(data.revenue).toLocaleString()}`}
         />
         <StatCard
           label={t("averagePrice")}
-          value={`$${(data?.averagePrice ?? 0).toFixed(2)}`}
+          value={`$${(data.averagePrice).toFixed(2)}`}
         />
         <StatCard
           label={t("stock")}
-          value={data?.stock ?? 0}
+          value={data.stock}
           warning={isLowStock}
           warningLabel={t("lowStockWarning")}
         />

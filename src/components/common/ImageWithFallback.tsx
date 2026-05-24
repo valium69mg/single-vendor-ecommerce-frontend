@@ -15,10 +15,6 @@ export default function ImageWithFallback({
 }: ImageWithFallbackProps) {
   const [imgSrc, setImgSrc] = useState(src);
 
-  if (imgSrc === null) {
-    return;
-  }
-
   return imgSrc ? (
     <img
       src={imgSrc}
