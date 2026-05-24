@@ -15,7 +15,7 @@ export default function GenericButton({
   return (
     <Button
       type={type}
-      className="w-full flex justify-center items-center gap-2 bg-amber-800 hover:bg-amber-900 text-white rounded-none h-11 font-store-body text-sm tracking-wide"
+      className="w-full flex justify-center items-center gap-2 bg-amber-900 hover:bg-amber-950 text-white rounded-none h-11 font-store-body text-sm tracking-wide"
       disabled={isLoading}
     >
       {isLoading && <Spinner className="w-5 h-5" />}
