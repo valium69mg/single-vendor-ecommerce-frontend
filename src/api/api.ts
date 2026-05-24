@@ -148,6 +148,28 @@ export async function editCategory({
   );
 }
 
+export interface CreateCategoryMutationVariables {
+  data: { englishName: string; spanishName: string };
+  token: string;
+}
+
+export async function createCategory({
+  data,
+  token,
+}: CreateCategoryMutationVariables): Promise<StandardResponse> {
+  return await apiFetch<StandardResponse>(
+    `${API_BASE_URL}/admin/products/categories`,
+    {
+      method: "POST",
+      body: JSON.stringify(data),
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+}
+
 export interface UploadCategoryImageVariables {
   categoryId: number;
   file: File;

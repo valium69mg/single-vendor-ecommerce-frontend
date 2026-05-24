@@ -52,9 +52,15 @@ i18n.use(initReactI18next).init({
         imageUploaded: "Image uploaded succesfully",
         uploadImageDescription: "Assign an image below",
         uploadImage: "Subir imágen",
+        createCategory: "Create category",
+        createCategoryFormDescription: "Create a new category with a name in English and Spanish",
+        categoryCreatedSuccessfully: "Category created successfully",
+        categoryNotCreatedSuccessfully: "Failed to create category",
         validation: {
           required: "This field is required",
           invalidEmail: "Invalid email address",
+          minLength: "Must be at least 3 characters",
+          maxLength: "Must be at most 60 characters",
           passwordMin: "Password must be at least 8 characters",
           passwordMax: "Password must be at most 64 characters",
           passwordPattern:
@@ -112,9 +118,15 @@ i18n.use(initReactI18next).init({
         editCategoryFormDescription: "Editar el título de una categoría existente en inglés y español",
         englishName: "Nombre en inglés",
         spanishName: "Nombre en español",
+        createCategory: "Crear categoría",
+        createCategoryFormDescription: "Crea una nueva categoría con nombre en inglés y español",
+        categoryCreatedSuccessfully: "Categoría creada con éxito",
+        categoryNotCreatedSuccessfully: "No fue posible crear la categoría",
         validation: {
           required: "Este campo es obligatorio",
           invalidEmail: "Correo electrónico inválido",
+          minLength: "Debe tener al menos 3 caracteres",
+          maxLength: "Debe tener como máximo 60 caracteres",
           passwordMin: "La contraseña debe tener al menos 8 caracteres",
           passwordMax: "La contraseña debe tener como máximo 64 caracteres",
           passwordPattern:

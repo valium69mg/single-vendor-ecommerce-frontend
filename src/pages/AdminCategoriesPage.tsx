@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { Button } from "@/components/ui/button";
 import { DataTable } from "@/components/common/DataTable";
 import type { Category } from "@/api/api";
 import { getCategories, deleteCategory } from "@/api/api";
@@ -10,6 +9,8 @@ import SearchBar from "@/components/common/SearchBar";
 import { useCategoryColumns } from "@/hooks/useCategoryColumns";
 import { useToast } from "@/hooks/useToast";
 import { useApiErrorHandler } from "@/hooks/useApiErrorHandler";
+import Modal from "@/components/common/Modal";
+import CreateCategoryForm from "@/components/admin/CreateCategoryForm";
 
 const SIZE = 10;
 
@@ -47,7 +48,10 @@ export default function AdminCategoriesPage() {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <h1 className="text-2xl font-bold">{t("categories")}</h1>
-        <Button>+ {t("categories")}</Button>
+        <Modal
+          buttonName={`+ ${t("createCategory")}`}
+          content={(onClose) => <CreateCategoryForm onClose={onClose} />}
+        />
       </div>
 
       <div className="w-1/2 sm:w-1/2 lg:w-1/4">
