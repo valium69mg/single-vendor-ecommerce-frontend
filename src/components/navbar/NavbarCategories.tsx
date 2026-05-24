@@ -1,6 +1,4 @@
-import { IoIosArrowDown } from "react-icons/io";
-import IconWrapper from "../common/IconWrapper";
-import { Button } from "@/components/ui/button";
+import { ChevronDown } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuTrigger,
@@ -8,38 +6,41 @@ import {
   DropdownMenuItem,
 } from "@/components/ui/dropdown-menu";
 import { useNavigate } from "react-router-dom";
-import { useTranslation } from "react-i18next";
 
-const MOCK_CATEGORIES = [
-  "Electronics",
-  "Clothing",
-  "Home & Garden",
-  "Sports",
-  "Books",
-  "Toys",
+const NAV_CATEGORIES = [
+  { label: "Anillos", slug: "rings" },
+  { label: "Collares", slug: "necklaces" },
+  { label: "Aretes", slug: "earrings" },
+  { label: "Pulseras", slug: "bracelets" },
 ];
 
 export default function NavbarCategories() {
   const navigate = useNavigate();
-  const { t } = useTranslation();
 
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="ghost" className="hidden md:flex items-center gap-1 shrink-0">
-          {t("categories")}
-          <IconWrapper icon={IoIosArrowDown} size={18}/>
-        </Button>
+        <button className="hidden md:flex items-center gap-1 font-store-body text-sm text-stone-700 hover:text-amber-700 transition-colors duration-150 shrink-0 outline-none">
+          Categorías
+          <ChevronDown className="h-3.5 w-3.5" />
+        </button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="start" className="w-48">
-        {MOCK_CATEGORIES.map((cat) => (
+      <DropdownMenuContent align="start" className="w-44 rounded-none shadow-md border-stone-200 p-0">
+        {NAV_CATEGORIES.map(({ label, slug }) => (
           <DropdownMenuItem
-            key={cat}
-            onClick={() => navigate(`/?category=${cat}`)}
+            key={slug}
+            className="font-store-body text-sm text-stone-700 hover:text-amber-700 rounded-none cursor-pointer px-4 py-2.5"
+            onClick={() => navigate(`/products/${slug}`)}
           >
-            {cat}
+            {label}
           </DropdownMenuItem>
         ))}
+        <DropdownMenuItem
+          className="font-store-body text-sm text-amber-700 font-medium rounded-none cursor-pointer px-4 py-2.5 border-t border-stone-100"
+          onClick={() => navigate("/categories")}
+        >
+          Ver todas
+        </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
   );

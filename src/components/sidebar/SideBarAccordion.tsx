@@ -61,7 +61,7 @@ export default function SideBarAccordion({
             <IconWrapper icon={IoIosArrowDown} size={16} className="ml-auto"/>
           </SidebarMenuButton>
         </DropdownMenuTrigger>
-        <DropdownMenuContent className="w-[--radix-popper-anchor-width]">
+        <DropdownMenuContent className="w-[--radix-popper-anchor-width] rounded-none border-sidebar-border p-0">
           {options.map((option) => (
             <AccordionItem
               key={option.id}

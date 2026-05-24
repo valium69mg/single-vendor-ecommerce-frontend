@@ -122,18 +122,20 @@ function DataTablePagination({
     <div className="flex justify-end gap-3">
       <Button
         variant="outline"
+        className="rounded-none font-store-body"
         disabled={page === 0}
         onClick={() => setPage(page - 1)}
       >
         {labels.previous}
       </Button>
 
-      <span className="flex items-center text-sm text-muted-foreground">
+      <span className="flex items-center text-sm text-muted-foreground font-store-body">
         {labels.page} {page + 1}
       </span>
 
       <Button
         variant="outline"
+        className="rounded-none font-store-body"
         disabled={!hasNextPage}
         onClick={() => setPage(page + 1)}
       >

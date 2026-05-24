@@ -25,14 +25,14 @@ export default function NavbarDropdownMenu({
         <Button variant="ghost" size="icon" className="rounded-full">
           <Avatar className="h-8 w-8">
             <AvatarImage src={avatarSrc} alt={title} />
-            <AvatarFallback className="text-xs bg-muted">
+            <AvatarFallback className="text-xs bg-stone-200 text-stone-700 font-store-body">
               {title.charAt(0).toUpperCase()}
             </AvatarFallback>
           </Avatar>
         </Button>
       </DropdownMenuTrigger>
 
-      <DropdownMenuContent align="end" className="w-72">
+      <DropdownMenuContent align="end" className="w-64 rounded-none shadow-md border-stone-200">
         {items.map((item) => (
           <GenericDropdownMenuItem
             key={item.name}

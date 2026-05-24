@@ -45,10 +45,11 @@ export default function AdminCategoriesPage() {
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold">{t("categories")}</h1>
+        <h1 className="font-store-heading text-3xl font-semibold text-stone-900">{t("categories")}</h1>
         <Modal
           buttonName={`+ ${t("createCategory")}`}
           content={(onClose) => <CreateCategoryForm onClose={onClose} />}
+          triggerClassName="bg-amber-700 hover:bg-amber-600 text-white border-amber-700 hover:border-amber-600 font-store-body text-sm tracking-wide h-9 px-4"
         />
       </div>
 

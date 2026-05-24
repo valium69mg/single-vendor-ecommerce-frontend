@@ -8,6 +8,10 @@ export default {
   ],
   theme: {
   	extend: {
+  		fontFamily: {
+  			'store-heading': ['Cormorant', 'Georgia', 'serif'],
+  			'store-body': ['Montserrat', 'system-ui', 'sans-serif'],
+  		},
   		borderRadius: {
   			lg: 'var(--radius)',
   			md: 'calc(var(--radius) - 2px)',

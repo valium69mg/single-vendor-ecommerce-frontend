@@ -3,7 +3,7 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
 import { useMemo } from "react";
 import type { ColumnDef } from "@tanstack/react-table";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, AlertTriangle } from "lucide-react";
 import { useUser } from "@/hooks/useUser";
 import { getCategory, deleteCategory, API_FILE_URL } from "@/api/api";
 import { useApiErrorHandler } from "@/hooks/useApiErrorHandler";
@@ -56,22 +56,23 @@ function StatCard({ label, value, warning, warningLabel }: StatCardProps) {
   return (
     <div
       className={cn(
-        "rounded-lg border p-4 flex flex-col gap-1",
-        warning && "border-yellow-400 bg-yellow-50 dark:bg-yellow-950"
+        "rounded-none border p-4 flex flex-col gap-1 bg-white",
+        warning ? "border-amber-400 bg-amber-50" : "border-stone-200"
       )}
     >
-      <span className="text-sm text-muted-foreground">{label}</span>
+      <span className="font-store-body text-xs text-stone-500 uppercase tracking-wider">{label}</span>
       <span
         className={cn(
-          "text-2xl font-bold",
-          warning && "text-yellow-600 dark:text-yellow-400"
+          "font-store-heading text-3xl font-semibold",
+          warning ? "text-amber-700" : "text-stone-900"
         )}
       >
         {value}
       </span>
       {warning && warningLabel && (
-        <span className="text-xs text-yellow-600 dark:text-yellow-400">
-          ⚠ {warningLabel}
+        <span className="flex items-center gap-1 font-store-body text-xs text-amber-700">
+          <AlertTriangle className="h-3 w-3" />
+          {warningLabel}
         </span>
       )}
     </div>
@@ -140,8 +141,8 @@ export default function AdminCategoryDetailPage() {
             className={cn(
               "font-semibold",
               row.original.stock <= 5
-                ? "text-red-500"
-                : "text-yellow-600 dark:text-yellow-400"
+                ? "text-red-600"
+                : "text-amber-700"
             )}
           >
             {row.original.stock}
@@ -206,7 +207,7 @@ export default function AdminCategoryDetailPage() {
             <ImageWithFallback
               src={imageUrl ?? ""}
               alt={data.englishName}
-              className="w-20 h-20 sm:w-24 sm:h-24 object-cover rounded-xl border shrink-0 cursor-pointer hover:opacity-80 transition-opacity"
+              className="w-20 h-20 sm:w-24 sm:h-24 object-cover rounded-none border border-stone-200 shrink-0 cursor-pointer hover:opacity-80 transition-opacity"
             />
           }
           content={(onClose) => (
@@ -219,12 +220,12 @@ export default function AdminCategoryDetailPage() {
         />
         <div className="flex flex-col gap-1">
           <div className="flex items-center gap-2 flex-wrap">
-            <h1 className="text-2xl sm:text-3xl font-bold">{data.englishName}</h1>
-            <span className="text-xs text-muted-foreground border rounded px-2 py-0.5">
+            <h1 className="font-store-heading text-2xl sm:text-3xl font-semibold text-stone-900">{data.englishName}</h1>
+            <span className="font-store-body text-xs text-stone-400 border border-stone-200 rounded-none px-2 py-0.5">
               ID: {data.categoryId}
             </span>
           </div>
-          <p className="text-muted-foreground text-base">{data.spanishName}</p>
+          <p className="font-store-body text-stone-500 text-sm">{data.spanishName}</p>
         </div>
       </div>
 
@@ -252,7 +253,7 @@ export default function AdminCategoryDetailPage() {
 
       <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
         <div>
-          <h2 className="text-lg font-semibold mb-3">{t("topProducts")}</h2>
+          <h2 className="font-store-heading text-xl font-semibold text-stone-900 mb-3">{t("topProducts")}</h2>
           <DataTable
             columns={topProductsColumns}
             data={TOP_PRODUCTS_MOCK}
@@ -265,7 +266,7 @@ export default function AdminCategoryDetailPage() {
         </div>
 
         <div>
-          <h2 className="text-lg font-semibold mb-3">{t("lowStockProducts")}</h2>
+          <h2 className="font-store-heading text-xl font-semibold text-stone-900 mb-3">{t("lowStockProducts")}</h2>
           <DataTable
             columns={lowStockColumns}
             data={LOW_STOCK_PRODUCTS_MOCK}

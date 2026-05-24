@@ -5,7 +5,7 @@ import NavbarProfile from "./NavbarProfile";
 
 export default function Navbar() {
   return (
-    <div className="flex justify-center w-full sticky top-0 z-50">
+    <div className="flex justify-center w-full sticky top-0 z-50 bg-background/95 backdrop-blur-sm border-b border-border">
       <div className="grid grid-cols-[1fr_2fr_1fr] items-center h-16 w-full px-4 md:px-6 lg:px-8">
         <div className="flex items-center justify-start">
           <NavbarLogo />

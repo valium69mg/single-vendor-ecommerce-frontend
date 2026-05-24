@@ -1,4 +1,3 @@
-// components/navbar/NavbarLogo.tsx
 import { useNavigate } from "react-router-dom";
 
 export default function NavbarLogo() {
@@ -6,13 +5,15 @@ export default function NavbarLogo() {
 
   return (
     <div
-      className="flex items-center gap-2 cursor-pointer shrink-0"
+      className="flex items-center gap-2.5 cursor-pointer shrink-0"
       onClick={() => navigate("/")}
     >
-      <div className="h-8 w-8 rounded-lg bg-primary flex items-center justify-center">
-        <span className="text-primary-foreground font-bold text-sm">S</span>
+      <div className="h-8 w-8 bg-amber-700 flex items-center justify-center shrink-0">
+        <span className="text-white font-bold text-sm font-store-heading">J</span>
       </div>
-      <span className="font-semibold text-lg hidden sm:block">Tu tienda</span>
+      <span className="font-store-heading text-xl font-semibold text-stone-900 hidden sm:block">
+        Joyería
+      </span>
     </div>
   );
 }

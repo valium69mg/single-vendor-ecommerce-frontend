@@ -32,8 +32,16 @@ interface FormFooterContentProps {
 function FormHeader({ title, description }: FormHeaderProps) {
   return (
     <CardHeader>
-      <CardTitle className="text-xl sm:text-2xl"> {title} </CardTitle>
-      {description ? <CardDescription>{description}</CardDescription> : <></>}
+      <CardTitle className="font-store-heading text-2xl sm:text-3xl font-semibold text-stone-900">
+        {title}
+      </CardTitle>
+      {description ? (
+        <CardDescription className="font-store-body text-stone-500">
+          {description}
+        </CardDescription>
+      ) : (
+        <></>
+      )}
     </CardHeader>
   );
 }
@@ -56,7 +64,7 @@ export function Form({
   isLoading = false,
 }: FormProps) {
   return (
-    <Card className="w-full max-w-sm sm:max-w-md lg:max-w-lg min-w-[250px] min-h-[200px]">
+    <Card className="w-full max-w-sm sm:max-w-md lg:max-w-lg min-w-[250px] min-h-[200px] rounded-none shadow-none border-stone-200">
       {isLoading ? (
         <Loader />
       ) : (
