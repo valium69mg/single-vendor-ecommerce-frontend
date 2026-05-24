@@ -6,15 +6,16 @@ import { useState } from "react";
 interface ModalProps {
   buttonName: string;
   content: (onClose: () => void) => ReactNode;
+  size?: "sm" | "default" | "lg";
 }
 
-export default function Modal({ buttonName, content }: ModalProps) {
+export default function Modal({ buttonName, content, size = "sm" }: ModalProps) {
   const [open, setOpen] = useState(false);
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button variant="outline" size="sm">
+        <Button variant="outline" size={size}>
           {buttonName}
         </Button>
       </DialogTrigger>

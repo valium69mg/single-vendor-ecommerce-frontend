@@ -7,6 +7,7 @@ import AdminProductsPage from "./pages/AdminProductsPage";
 import ProtectedRoute from "./components/auth/ProtectedRoute";
 import { ROLES } from "@/constants/roles";
 import AdminCategoriesPage from "./pages/AdminCategoriesPage";
+import AdminCategoryDetailPage from "./pages/AdminCategoryDetailPage";
 import { Toaster } from "sonner"
 
 function App() {
@@ -36,6 +37,7 @@ function App() {
           >
             <Route path="products" element={<AdminProductsPage />} />
             <Route path="categories" element={<AdminCategoriesPage />} />
+            <Route path="categories/:categoryId" element={<AdminCategoryDetailPage />} />
           </Route>
         </Routes>
       </BrowserRouter>

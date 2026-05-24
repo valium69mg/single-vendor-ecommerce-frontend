@@ -8,6 +8,7 @@ import Modal from "@/components/common/Modal";
 import EditCategoryForm from "@/components/admin/EditCategoryForm";
 import ImageModal from "@/components/common/ImageModal";
 import EditImageForm from "@/components/admin/EditImageForm";
+import { Link } from "react-router-dom";
 
 export function useCategoryColumns(
   onDelete: (category: Category) => void,
@@ -48,6 +49,14 @@ export function useCategoryColumns(
     {
       accessorKey: "name",
       header: t("categories"),
+      cell: ({ row }) => (
+        <Link
+          to={`/admin/categories/${row.original.categoryId}`}
+          className="hover:underline font-medium"
+        >
+          {row.original.name}
+        </Link>
+      ),
     },
     {
       accessorKey: "products",

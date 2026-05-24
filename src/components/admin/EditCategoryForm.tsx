@@ -138,6 +138,7 @@ export default function EditCategoryForm({
     onSuccess: (data) => {
       success(data?.message);
       queryClient.invalidateQueries({ queryKey: ["categories"] });
+      queryClient.invalidateQueries({ queryKey: ["category", categoryId] });
       onClose();
     },
   });
