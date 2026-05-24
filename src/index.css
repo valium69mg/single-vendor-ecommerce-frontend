@@ -30,13 +30,13 @@
     --chart-5: 27 87% 67%;
     --radius: 0.5rem
   ;
-    --sidebar-background: 20 14% 4%;
-    --sidebar-foreground: 30 5% 83%;
+    --sidebar-background: 60 9% 98%;
+    --sidebar-foreground: 24 6% 28%;
     --sidebar-primary: 30 60% 45%;
     --sidebar-primary-foreground: 0 0% 98%;
-    --sidebar-accent: 20 7% 11%;
-    --sidebar-accent-foreground: 30 5% 83%;
-    --sidebar-border: 20 6% 16%;
+    --sidebar-accent: 60 5% 94%;
+    --sidebar-accent-foreground: 24 6% 28%;
+    --sidebar-border: 20 6% 90%;
     --sidebar-ring: 30 60% 45%}
   .dark {
     --background: 0 0% 3.9%;
