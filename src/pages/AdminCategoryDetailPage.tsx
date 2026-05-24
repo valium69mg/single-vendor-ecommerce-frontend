@@ -283,14 +283,13 @@ export default function AdminCategoryDetailPage() {
       {data && (
         <div className="flex justify-end gap-3">
           <Modal
-            buttonName={<><Pencil className="h-4 w-4" />{t("edit")}</>}
-            size="default"
-            triggerClassName="flex items-center gap-2 bg-stone-900 hover:bg-stone-800 text-white hover:text-white border-stone-900 hover:border-stone-800 font-store-body"
+            buttonName={<Pencil className="h-3.5 w-3.5" />}
+            triggerClassName="h-8 w-8 p-0 text-stone-600 hover:text-stone-900 hover:border-stone-400"
             content={(onClose) => (
               <EditCategoryForm categoryId={data.categoryId} onClose={onClose} />
             )}
           />
-          <DestructiveActionButton onConfirm={handleDelete} size="default" label={t("delete")} />
+          <DestructiveActionButton onConfirm={handleDelete} />
         </div>
       )}
     </div>
