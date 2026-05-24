@@ -36,6 +36,24 @@ Both vars are also required as Docker build args (`ARG VITE_API_URL`, `ARG VITE_
 
 **Stack:** React 19, TypeScript, Vite, Tailwind CSS v3, shadcn/ui (Radix UI primitives), TanStack Query v5, TanStack Table v8, React Hook Form + Zod, react-i18next, React Router v7, Sonner (toasts).
 
+### Design system
+
+The project is a luxury jewelry store. Two visual contexts share the same codebase:
+
+- **Store** (HomePage, Navbar) — warm stone + amber palette, serif headings, sharp corners (`rounded-none`).
+- **Admin** (all `/admin/*` pages) — neutral stone palette, same sharp corners.
+
+**Typography** (defined in `tailwind.config.ts`):
+- `font-store-heading` → Cormorant, Georgia, serif — use for all `<h1>`–`<h3>` and display text.
+- `font-store-body` → Montserrat, system-ui, sans-serif — use for body copy, labels, and UI text. Applied globally to `body`.
+
+**Button conventions:**
+- Store primary CTA: `bg-amber-700 hover:bg-amber-600 text-white rounded-none` (warm amber).
+- Store secondary / outline: `border border-stone-600 text-stone-200 hover:bg-stone-800/50 rounded-none`.
+- Admin / form actions: `bg-stone-900 hover:bg-stone-800 text-white rounded-none` — use `GenericButton` for form submissions.
+
+**Shape:** `rounded-none` throughout all store and admin components — never use the default Tailwind `rounded` or shadcn rounded variants.
+
 ### Auth & user state
 
 - `UserProvider` (`src/providers/UserProvider.tsx`) wraps the entire app and stores the logged-in user (`LoginResponse`) in state, initialized from and persisted to `localStorage` under the key `"loginData"`.
@@ -65,6 +83,10 @@ const { data, isLoading } = useQuery({
 
 Mutations call `queryClient.invalidateQueries` on success and `handleError` on error.
 
+### Toast pattern
+
+Use `useToast()` (`src/hooks/useToast.tsx`) — a thin wrapper around Sonner that exposes `success`, `error`, `info`, `warning`, and `promise`. Do not import `toast` from Sonner directly.
+
 ### Admin table pattern
 
 Admin list pages follow a consistent pattern:
@@ -75,8 +97,50 @@ Admin list pages follow a consistent pattern:
 ### Modal / Form pattern
 
 - `Modal` (`src/components/common/Modal.tsx`) wraps Radix `Dialog` and receives a `content` render prop: `(onClose: () => void) => ReactNode`. This lets forms close the dialog on success.
+- `ImageModal` (`src/components/common/ImageModal.tsx`) is the same pattern but triggered by clicking an image rather than a button. The trigger renders via `imageWithFallback` and the same `content` render prop handles the dialog body.
 - `Form` (`src/components/common/Form.tsx`) is a card-styled shell used inside modals, accepting `title`, `description`, `content`, `footerContent`, and `isLoading`.
+- `GenericButton` (`src/components/common/GenericButton.tsx`) is the standard form submit button — black (`bg-stone-900`), full-width, shows a spinner when `isLoading` is true.
 - Form schemas (Zod) are colocated in `src/components/auth/` (e.g., `edit-category.schema.ts`, `login.schema.ts`).
+
+### Common components
+
+`src/components/common/` contains shared UI primitives:
+
+| Component | Purpose |
+|---|---|
+| `DataTable` | Paginated TanStack Table with prev/next controls |
+| `DestructiveActionButton` | Confirm-before-delete button |
+| `Form` | Card shell for modal forms |
+| `FormField` | Labeled input wrapper for React Hook Form |
+| `GenericButton` | Standard submit button with loading spinner |
+| `IconWrapper` | Consistent icon sizing and color wrapper |
+| `ImageModal` | Dialog triggered by clicking an image |
+| `ImageWithFallback` | `<img>` that swaps to `/images/landscape-placeholder.svg` on error |
+| `Loader` | Centered full-area spinner (use for page-level loading states) |
+| `Modal` | Button-triggered Radix dialog with `content` render prop |
+| `SearchBar` | Debounced search input |
+
+### Home page layout
+
+`HomePage` (`src/pages/HomePage.tsx`) renders the public storefront. It composes components from `src/components/home/` and `src/components/navbar/`:
+
+```
+<Navbar />           ← src/components/navbar/
+  NavbarLogo
+  NavbarCategories
+  NavbarSearch
+  NavbarProfile  (with NavbarDropdownMenu)
+<main>
+  <HeroBanner />
+  <TrustBar />
+  <FeaturedCategories />   ← renders MOCK_CATEGORIES
+  <ProductSection />       ← reused 3× with MOCK_FEATURED_PRODUCTS, MOCK_NEW_ARRIVALS, MOCK_BESTSELLERS
+  <BenefitsSection />
+</main>
+<HomeFooter />
+```
+
+Mock data lives in `src/mocks/home.ts` (`MOCK_CATEGORIES`, `MOCK_FEATURED_PRODUCTS`, `MOCK_NEW_ARRIVALS`, `MOCK_BESTSELLERS`) and is used until the real products API is integrated.
 
 ### Internationalization
 
@@ -85,16 +149,21 @@ Translations are inlined in `src/i18n/index.ts` (no separate JSON files). Defaul
 ### Routing
 
 ```
-/login            → LoginPage (public)
-/                 → HomePage (USER, ADMIN)
-/admin            → AdminHomePage (ADMIN) — layout route with AdminSideBar
-  /admin/products → AdminProductsPage
-  /admin/categories → AdminCategoriesPage
+/login                          → LoginPage (public)
+/                               → HomePage (USER, ADMIN)
+/admin                          → AdminHomePage (ADMIN) — layout route with AdminSideBar
+  /admin/products               → AdminProductsPage
+  /admin/categories             → AdminCategoriesPage
+  /admin/categories/:categoryId → AdminCategoryDetailPage
 ```
+
+`AdminCategoryDetailPage` shows category stats (products, units sold, revenue, average price, stock), a low-stock warning when stock ≤ 10, and two tables with mock product data (top products, low-stock products). It also provides edit (via `Modal`) and delete (via `DestructiveActionButton`) actions that navigate back to `/admin/categories` on success.
 
 ### UI components
 
 `src/components/ui/` contains shadcn/ui generated components — do not edit them manually; regenerate via the shadcn CLI if needed. Custom shared components live in `src/components/common/`.
+
+`src/components/sidebar/` contains accordion and dropdown helpers (`SideBarAccordion`, `SidebarDropdownMenu`, `SidebarDropdownMenuItem`, `SideBarItem`) used by the admin sidebar — edit these directly if needed.
 
 ### Testing plan
 
@@ -110,7 +179,9 @@ Translations are inlined in `src/i18n/index.ts` (no separate JSON files). Defaul
 - `ProtectedRoute` — unauthenticated redirects to `/login`, wrong role redirects to `/`, correct role renders children
 - `SearchBar` — typing debounces before calling `setQuery`
 - `DataTable` — renders loading state, no-results row, prev/next buttons disabled when appropriate
-- `Modal` — opens on button click, passes `onClose` correctly, closes the dialog
+- `Modal` / `ImageModal` — opens on trigger, passes `onClose` correctly, closes the dialog
+- `GenericButton` — shows spinner when `isLoading`, disabled during loading
+- `ImageWithFallback` — renders fallback on image error
 
 #### 3. Integration tests — MSW intercepting API calls
 - **Login flow:** fill form → submit → MSW returns `LoginResponse` → `localStorage` updated → user context set
@@ -118,6 +189,7 @@ Translations are inlined in `src/i18n/index.ts` (no separate JSON files). Defaul
 - **Create category:** open modal → fill form → submit → MSW 200 → list invalidated → modal closes → toast shown
 - **Edit category:** open modal → data pre-populated from query → submit → detail page refreshes
 - **Delete category:** confirm dialog → MSW 200 → list invalidated → toast shown (+ navigate back on detail page)
+- **Category detail:** MSW returns category → stats render → low-stock warning shows when stock ≤ 10
 
 #### 4. E2E tests — Playwright
 - Full login → admin panel → create category → edit it → upload image → delete it → back to list
