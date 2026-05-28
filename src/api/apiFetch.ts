@@ -1,5 +1,13 @@
 import { API_ERRORS } from "@/constants/apiErrors";
 
+export class ApiConflictError extends Error {
+  categoryId: number;
+  constructor(message: string, categoryId: number) {
+    super(message);
+    this.categoryId = categoryId;
+  }
+}
+
 export async function apiFetch<T>(
   url: string,
   options: RequestInit,
@@ -14,9 +22,13 @@ export async function apiFetch<T>(
     throw new Error(API_ERRORS.FORBIDDEN);
   }
 
-
   if (res.status === 204) {
     return undefined as unknown as T;
+  }
+
+  if (res.status === 409) {
+    const errorData = await res.json().catch(() => null);
+    throw new ApiConflictError(errorData?.error || "Conflict", errorData?.categoryId);
   }
 
   if (!res.ok) {

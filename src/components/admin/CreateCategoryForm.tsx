@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Form } from "../common/Form";
 import { useToast } from "@/hooks/useToast";
@@ -12,10 +13,12 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { zodResolver } from "@hookform/resolvers/zod";
 import type { StandardResponse, CreateCategoryMutationVariables } from "@/api/api";
 import { createCategory } from "@/api/api";
+import { ApiConflictError } from "@/api/apiFetch";
 import GenericButton from "../common/GenericButton";
 import US from "country-flag-icons/react/3x2/US";
 import MX from "country-flag-icons/react/3x2/MX";
 import { useApiErrorHandler } from "@/hooks/useApiErrorHandler";
+import RestoreCategoryDialog from "./RestoreCategoryDialog";
 
 interface CreateCategoryFormContentProps {
   register: UseFormRegister<CreateCategoryFormValues>;
@@ -91,9 +94,11 @@ export default function CreateCategoryForm({ onClose }: CreateCategoryFormProps)
   const { user } = useUser();
   const queryClient = useQueryClient();
   const { handleError } = useApiErrorHandler();
+  const [conflictCategoryId, setConflictCategoryId] = useState<number | null>(null);
   const {
     register,
     handleSubmit,
+    setFocus,
     formState: { errors, isSubmitting },
   } = useForm<CreateCategoryFormValues>({
     resolver: zodResolver(createCategorySchema),
@@ -110,8 +115,13 @@ export default function CreateCategoryForm({ onClose }: CreateCategoryFormProps)
       queryClient.invalidateQueries({ queryKey: ["categories"] });
       onClose();
     },
-    onError: (err: Error) =>
-      handleError(err, t("categoryNotCreatedSuccessfully")),
+    onError: (err: Error) => {
+      if (err instanceof ApiConflictError) {
+        setConflictCategoryId(err.categoryId);
+      } else {
+        handleError(err, t("categoryNotCreatedSuccessfully"));
+      }
+    },
   });
 
   const onSubmit = (formValues: CreateCategoryFormValues) => {
@@ -122,20 +132,40 @@ export default function CreateCategoryForm({ onClose }: CreateCategoryFormProps)
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
-      <Form
-        title={t("createCategory")}
-        description={t("createCategoryFormDescription")}
-        content={
-          <CreateCategoryFormContent register={register} errors={errors} />
-        }
-        footerContent={
-          <CreateCategoryFormFooterContent
-            mutation={mutation}
-            isSubmitting={isSubmitting}
-          />
-        }
-      />
-    </form>
+    <>
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <Form
+          title={t("createCategory")}
+          description={t("createCategoryFormDescription")}
+          content={
+            <CreateCategoryFormContent register={register} errors={errors} />
+          }
+          footerContent={
+            <CreateCategoryFormFooterContent
+              mutation={mutation}
+              isSubmitting={isSubmitting}
+            />
+          }
+        />
+      </form>
+
+      {conflictCategoryId !== null && (
+        <RestoreCategoryDialog
+          open={conflictCategoryId !== null}
+          onOpenChange={(open) => {
+            if (!open) setConflictCategoryId(null);
+          }}
+          categoryId={conflictCategoryId}
+          onRestored={() => {
+            setConflictCategoryId(null);
+            onClose();
+          }}
+          onUseDifferentName={() => {
+            setConflictCategoryId(null);
+            setTimeout(() => setFocus("englishName"), 0);
+          }}
+        />
+      )}
+    </>
   );
 }

@@ -170,6 +170,27 @@ export async function createCategory({
   );
 }
 
+export interface RestoreCategoryVariables {
+  categoryId: number;
+  token: string;
+}
+
+export async function restoreCategory({
+  categoryId,
+  token,
+}: RestoreCategoryVariables): Promise<StandardResponse> {
+  return apiFetch<StandardResponse>(
+    `${API_BASE_URL}/admin/products/categories/${categoryId}/restore`,
+    {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+}
+
 export interface UploadCategoryImageVariables {
   categoryId: number;
   file: File;
