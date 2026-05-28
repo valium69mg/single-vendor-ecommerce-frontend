@@ -95,8 +95,7 @@ export async function deleteCategory(
 
 export interface CategoryById {
   categoryId: number;
-  englishName: string;
-  spanishName: string;
+  name: string;
   products: number;
   unitsSold: number;
   revenue: number;
@@ -125,7 +124,7 @@ export async function getCategory(
 }
 
 export interface EditCategoryMutationVariables {
-  data: { englishName: string; spanishName: string };
+  data: { name: string };
   categoryId: number;
   token: string;
 }
@@ -149,7 +148,7 @@ export async function editCategory({
 }
 
 export interface CreateCategoryMutationVariables {
-  data: { englishName: string; spanishName: string };
+  data: { name: string };
   token: string;
 }
 

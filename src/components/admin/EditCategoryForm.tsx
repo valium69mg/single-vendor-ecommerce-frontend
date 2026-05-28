@@ -17,8 +17,6 @@ import type {
 } from "@/api/api";
 import { editCategory, getCategory } from "@/api/api";
 import GenericButton from "../common/GenericButton";
-import US from "country-flag-icons/react/3x2/US";
-import MX from "country-flag-icons/react/3x2/MX";
 import { useApiErrorHandler } from "@/hooks/useApiErrorHandler";
 import { useEffect } from "react";
 
@@ -36,24 +34,13 @@ function EditCategoryFormContent({
   return (
     <div className="flex flex-col gap-6">
       <FormField
-        key={data?.englishName}
-        labelKey="englishName"
-        labelIcon={<US className="w-4 h-4" />}
-        inputId="englishName"
+        key={data?.name}
+        labelKey="name"
+        inputId="name"
         inputType="text"
         inputPlaceholder=""
-        register={register("englishName")}
-        error={errors.englishName?.message}
-      />
-      <FormField
-        key={data?.spanishName}
-        labelKey="spanishName"
-        labelIcon={<MX className="w-4 h-4" />}
-        inputId="spanishName"
-        inputType="text"
-        inputPlaceholder=""
-        register={register("spanishName")}
-        error={errors.spanishName?.message}
+        register={register("name")}
+        error={errors.name?.message}
       />
     </div>
   );
@@ -123,8 +110,7 @@ export default function EditCategoryForm({
   useEffect(() => {
     if (data) {
       reset({
-        englishName: data.englishName,
-        spanishName: data.spanishName,
+        name: data.name,
       });
     }
   }, [data, reset]);

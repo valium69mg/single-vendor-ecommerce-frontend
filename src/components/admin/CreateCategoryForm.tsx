@@ -15,8 +15,6 @@ import type { StandardResponse, CreateCategoryMutationVariables } from "@/api/ap
 import { createCategory } from "@/api/api";
 import { ApiConflictError } from "@/api/apiFetch";
 import GenericButton from "../common/GenericButton";
-import US from "country-flag-icons/react/3x2/US";
-import MX from "country-flag-icons/react/3x2/MX";
 import { useApiErrorHandler } from "@/hooks/useApiErrorHandler";
 import RestoreCategoryDialog from "./RestoreCategoryDialog";
 
@@ -32,22 +30,12 @@ function CreateCategoryFormContent({
   return (
     <div className="flex flex-col gap-6">
       <FormField
-        labelKey="englishName"
-        labelIcon={<US className="w-4 h-4" />}
-        inputId="englishName"
+        labelKey="name"
+        inputId="name"
         inputType="text"
         inputPlaceholder=""
-        register={register("englishName")}
-        error={errors.englishName?.message}
-      />
-      <FormField
-        labelKey="spanishName"
-        labelIcon={<MX className="w-4 h-4" />}
-        inputId="spanishName"
-        inputType="text"
-        inputPlaceholder=""
-        register={register("spanishName")}
-        error={errors.spanishName?.message}
+        register={register("name")}
+        error={errors.name?.message}
       />
     </div>
   );
@@ -162,7 +150,7 @@ export default function CreateCategoryForm({ onClose }: CreateCategoryFormProps)
           }}
           onUseDifferentName={() => {
             setConflictCategoryId(null);
-            setTimeout(() => setFocus("englishName"), 0);
+            setTimeout(() => setFocus("name"), 0);
           }}
         />
       )}

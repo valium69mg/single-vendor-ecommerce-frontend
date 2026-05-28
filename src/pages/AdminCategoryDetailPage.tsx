@@ -206,7 +206,7 @@ export default function AdminCategoryDetailPage() {
           imageWithFallback={
             <ImageWithFallback
               src={imageUrl ?? ""}
-              alt={data.englishName}
+              alt={data.name}
               className="w-20 h-20 sm:w-24 sm:h-24 object-cover rounded-none border border-stone-200 shrink-0 cursor-pointer hover:opacity-80 transition-opacity"
             />
           }
@@ -220,12 +220,11 @@ export default function AdminCategoryDetailPage() {
         />
         <div className="flex flex-col gap-1">
           <div className="flex items-center gap-2 flex-wrap">
-            <h1 className="font-store-heading text-2xl sm:text-3xl font-semibold text-stone-900">{data.englishName}</h1>
+            <h1 className="font-store-heading text-2xl sm:text-3xl font-semibold text-stone-900">{data.name}</h1>
             <span className="font-store-body text-xs text-stone-400 border border-stone-200 rounded-none px-2 py-0.5">
               ID: {data.categoryId}
             </span>
           </div>
-          <p className="font-store-body text-stone-500 text-sm">{data.spanishName}</p>
         </div>
       </div>
 

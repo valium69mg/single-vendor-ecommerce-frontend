@@ -144,7 +144,9 @@ Mock data lives in `src/mocks/home.ts` (`MOCK_CATEGORIES`, `MOCK_FEATURED_PRODUC
 
 ### Internationalization
 
-Translations are inlined in `src/i18n/index.ts` (no separate JSON files). Default and fallback language is `"es"` (Spanish). When adding new UI strings, add keys to both the `en` and `es` translation objects in that file, then use `useTranslation()` / `t("key")`.
+Translations are inlined in `src/i18n/index.ts` (no separate JSON files). The app is **Spanish-only**: there is a single `es` translation object, and both `lng` and `fallbackLng` are `"es"`. When adding new UI strings, add the key to the `es` object only, then use `useTranslation()` / `t("key")`. Do not reintroduce an `en` block.
+
+The backend catalog is likewise Spanish-only: categories, materials, and attributes expose a single `name` field (no `englishName`/`spanishName`). Category create/edit forms and the `Create/EditCategoryMutationVariables` in `src/api/api.ts` send `{ name }`.
 
 ### Routing
 
