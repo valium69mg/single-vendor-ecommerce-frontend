@@ -55,6 +55,7 @@ i18n.use(initReactI18next).init({
         createCategoryFormDescription: "Crea una nueva categoría para tu sitio",
         categoryCreatedSuccessfully: "Categoría creada con éxito",
         categoryNotCreatedSuccessfully: "No fue posible crear la categoría",
+        categoryNotEditedSuccessfully: "No fue posible editar la categoría",
         restoreCategoryTitle: "Categoría eliminada anteriormente",
         restoreCategoryDescription: "Una categoría con este nombre fue eliminada anteriormente. Puedes restaurarla para recuperarla, o usar un nombre diferente.",
         restoreCategory: "Restaurar categoría",

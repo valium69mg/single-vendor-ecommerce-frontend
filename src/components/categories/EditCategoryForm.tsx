@@ -16,9 +16,11 @@ import type {
   CategoryById,
 } from "@/api/api";
 import { editCategory, getCategory } from "@/api/api";
+import { ApiConflictError } from "@/api/apiFetch";
 import GenericButton from "../common/GenericButton";
 import { useApiErrorHandler } from "@/hooks/useApiErrorHandler";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import RestoreCategoryDialog from "./RestoreCategoryDialog";
 
 interface EditCategoryFormContentProps {
   data: CategoryById | undefined;
@@ -90,10 +92,12 @@ export default function EditCategoryForm({
   const { success } = useToast();
   const { user } = useUser();
   const queryClient = useQueryClient();
-  const { throwOnError } = useApiErrorHandler();
+  const { throwOnError, handleError } = useApiErrorHandler();
+  const [conflictCategoryId, setConflictCategoryId] = useState<number | null>(null);
   const {
     register,
     handleSubmit,
+    setFocus,
     reset,
     formState: { errors, isSubmitting },
   } = useForm<EditCategoryFormValues>({
@@ -127,6 +131,13 @@ export default function EditCategoryForm({
       queryClient.invalidateQueries({ queryKey: ["category", categoryId] });
       onClose();
     },
+    onError: (err: Error) => {
+      if (err instanceof ApiConflictError) {
+        setConflictCategoryId(err.categoryId);
+      } else {
+        handleError(err, t("categoryNotEditedSuccessfully"));
+      }
+    },
   });
 
   const onSubmit = (formValues: EditCategoryFormValues) => {
@@ -138,6 +149,7 @@ export default function EditCategoryForm({
   };
 
   return (
+    <>
     <form onSubmit={handleSubmit(onSubmit)}>
       <Form
         title={t("edit") + " " + t("category").toLowerCase()}
@@ -158,5 +170,24 @@ export default function EditCategoryForm({
         }
       />
     </form>
+
+    {conflictCategoryId !== null && (
+      <RestoreCategoryDialog
+        open={conflictCategoryId !== null}
+        onOpenChange={(open) => {
+          if (!open) setConflictCategoryId(null);
+        }}
+        categoryId={conflictCategoryId}
+        onRestored={() => {
+          setConflictCategoryId(null);
+          onClose();
+        }}
+        onUseDifferentName={() => {
+          setConflictCategoryId(null);
+          setTimeout(() => setFocus("name"), 0);
+        }}
+      />
+    )}
+    </>
   );
 }
