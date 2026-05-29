@@ -5,9 +5,9 @@ import { API_FILE_URL } from "@/api/api";
 import { useTranslation } from "react-i18next";
 import DestructiveActionButton from "../components/common/DestructiveActionButton";
 import Modal from "@/components/common/Modal";
-import EditCategoryForm from "@/components/admin/EditCategoryForm";
+import EditCategoryForm from "@/components/categories/EditCategoryForm";
 import ImageModal from "@/components/common/ImageModal";
-import EditImageForm from "@/components/admin/EditImageForm";
+import EditImageForm from "@/components/common/EditImageForm";
 import { Link } from "react-router-dom";
 import { Pencil } from "lucide-react";
 

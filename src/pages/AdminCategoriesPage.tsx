@@ -10,7 +10,7 @@ import { useCategoryColumns } from "@/hooks/useCategoryColumns";
 import { useToast } from "@/hooks/useToast";
 import { useApiErrorHandler } from "@/hooks/useApiErrorHandler";
 import Modal from "@/components/common/Modal";
-import CreateCategoryForm from "@/components/admin/CreateCategoryForm";
+import CreateCategoryForm from "@/components/categories/CreateCategoryForm";
 
 const SIZE = 10;
 
