@@ -52,7 +52,7 @@ i18n.use(initReactI18next).init({
         category: "Categoria",
         editCategoryFormDescription: "Editar el nombre de una categoría existente",
         createCategory: "Crear categoría",
-        createCategoryFormDescription: "Crea una nueva categoría",
+        createCategoryFormDescription: "Crea una nueva categoría para tu sitio",
         categoryCreatedSuccessfully: "Categoría creada con éxito",
         categoryNotCreatedSuccessfully: "No fue posible crear la categoría",
         restoreCategoryTitle: "Categoría eliminada anteriormente",
