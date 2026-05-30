@@ -1,23 +1,37 @@
 import { Link } from "react-router-dom";
 import { cn } from "@/lib/utils";
-import type { MockCategory } from "@/mocks/home";
+import { gradients } from "@/mocks/home";
+import type { CategoryById } from "@/api/api";
+import ImageWithFallback from "../common/ImageWithFallback";
+import { API_FILE_URL } from "@/api/api";
 
 interface Props {
-  category: MockCategory;
+  category: CategoryById;
+}
+
+const CATEGORIES_PRODUCTS_TO_SHOW_THRESHOLD = 500;
+
+function getSanitizedCategoriesProducts(products: number): string {
+  if (products > CATEGORIES_PRODUCTS_TO_SHOW_THRESHOLD) {
+    return String(CATEGORIES_PRODUCTS_TO_SHOW_THRESHOLD) + "+";
+  }
+  return String(products);
 }
 
 export default function CategoryCard({ category }: Props) {
+  const gradient = gradients[Math.floor(Math.random() * gradients.length)];
+
   return (
     <Link
-      to={`/products/${category.slug}`}
+      to={`/category/${category.categoryId}`}
       className="group block"
       aria-label={`Ver categoría ${category.name}`}
     >
       {/* Image / gradient area */}
       <div className="relative overflow-hidden rounded-sm aspect-square mb-3">
         {category.imageUrl ? (
-          <img
-            src={category.imageUrl}
+          <ImageWithFallback
+            src={API_FILE_URL + category.imageUrl}
             alt={category.name}
             className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
           />
@@ -25,7 +39,7 @@ export default function CategoryCard({ category }: Props) {
           <div
             className={cn(
               "h-full w-full bg-gradient-to-br transition-transform duration-500 group-hover:scale-105",
-              category.gradient,
+              gradient,
             )}
           >
             {/* Decorative jewelry-ring placeholder */}
@@ -44,7 +58,7 @@ export default function CategoryCard({ category }: Props) {
           {category.name}
         </h3>
         <p className="font-store-body text-xs text-stone-400 mt-0.5">
-          {category.productCount} productos
+          {getSanitizedCategoriesProducts(category.products)} productos
         </p>
       </div>
     </Link>

@@ -101,9 +101,9 @@ export interface CategoryById {
   revenue: number;
   averagePrice: number;
   stock: number;
-  imageUrl: string;
-  mediumThumbnailUrl: string;
-  smallThumbnailUrl: string;
+  imageUrl: string | null;
+  mediumThumbnailUrl: string | null;
+  smallThumbnailUrl: string | null;
 }
 
 

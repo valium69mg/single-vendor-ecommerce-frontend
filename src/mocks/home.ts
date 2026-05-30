@@ -1,12 +1,3 @@
-export interface MockCategory {
-  id: string;
-  name: string;
-  slug: string;
-  imageUrl: string;
-  productCount: number;
-  gradient: string;
-}
-
 export interface MockProduct {
   id: string;
   name: string;
@@ -20,39 +11,11 @@ export interface MockProduct {
   gradient: string;
 }
 
-export const MOCK_CATEGORIES: MockCategory[] = [
-  {
-    id: "1",
-    name: "Anillos",
-    slug: "rings",
-    imageUrl: "",
-    productCount: 42,
-    gradient: "from-stone-100 via-stone-200 to-stone-300",
-  },
-  {
-    id: "2",
-    name: "Collares",
-    slug: "necklaces",
-    imageUrl: "",
-    productCount: 38,
-    gradient: "from-amber-50 via-amber-100 to-amber-200",
-  },
-  {
-    id: "3",
-    name: "Aretes",
-    slug: "earrings",
-    imageUrl: "",
-    productCount: 56,
-    gradient: "from-yellow-50 via-amber-50 to-yellow-100",
-  },
-  {
-    id: "4",
-    name: "Pulseras",
-    slug: "bracelets",
-    imageUrl: "",
-    productCount: 29,
-    gradient: "from-stone-200 via-stone-300 to-stone-400",
-  },
+export const gradients = [
+  "from-stone-100 via-stone-200 to-stone-300",
+  "from-amber-50 via-amber-100 to-amber-200",
+  "from-yellow-50 via-amber-50 to-yellow-100",
+  "from-stone-200 via-stone-300 to-stone-400",
 ];
 
 export const MOCK_FEATURED_PRODUCTS: MockProduct[] = [
