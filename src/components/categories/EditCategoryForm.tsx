@@ -105,7 +105,7 @@ export default function EditCategoryForm({
   });
 
   const { data, isLoading } = useQuery({
-    queryKey: ["category", categoryId],
+    queryKey: ["admin", "category", categoryId],
     queryFn: () => getAdminCategory(categoryId, user!.token),
     enabled: !!user?.token,
     throwOnError,
@@ -127,8 +127,8 @@ export default function EditCategoryForm({
     mutationFn: editCategory,
     onSuccess: (data) => {
       success(data?.message);
-      queryClient.invalidateQueries({ queryKey: ["categories"] });
-      queryClient.invalidateQueries({ queryKey: ["category", categoryId] });
+      queryClient.invalidateQueries({ queryKey: ["admin", "categories"] });
+      queryClient.invalidateQueries({ queryKey: ["admin", "category", categoryId] });
       onClose();
     },
     onError: (err: Error) => {

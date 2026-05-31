@@ -91,7 +91,7 @@ export default function AdminCategoryDetailPage() {
   const id = Number(categoryId);
 
   const { data, isLoading } = useQuery({
-    queryKey: ["category", id],
+    queryKey: ["admin", "category", id],
     queryFn: () => getAdminCategory(id, user!.token),
     enabled: !!user?.token && !isNaN(id),
     throwOnError,
@@ -101,7 +101,7 @@ export default function AdminCategoryDetailPage() {
     mutationFn: () => deleteCategory(id, user!.token),
     onSuccess: () => {
       success(t("categoryDeletedSuccessfully"));
-      queryClient.invalidateQueries({ queryKey: ["categories"] });
+      queryClient.invalidateQueries({ queryKey: ["admin", "categories"] });
       navigate("/admin/categories");
     },
     onError: (err: Error) => handleError(err, t("categoryNotDeletedSuccessfully")),

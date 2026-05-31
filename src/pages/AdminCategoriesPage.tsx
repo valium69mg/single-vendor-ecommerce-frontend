@@ -23,7 +23,7 @@ export default function AdminCategoriesPage() {
   const [term, setTerm] = useState("");
   const { handleError, throwOnError } = useApiErrorHandler();
   const { data, isLoading } = useQuery({
-    queryKey: ["categories", page, term],
+    queryKey: ["admin", "categories", page, term],
     queryFn: () => getAdminCategories(page, SIZE, term, user!.token),
     enabled: !!user?.token,
     throwOnError,
@@ -33,7 +33,7 @@ export default function AdminCategoriesPage() {
     mutationFn: (category: Category) =>
       deleteCategory(category.categoryId, user!.token),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["categories"] });
+      queryClient.invalidateQueries({ queryKey: ["admin", "categories"] });
       success(t("categoryDeletedSuccessfully"));
     },
     onError: (err: Error) =>

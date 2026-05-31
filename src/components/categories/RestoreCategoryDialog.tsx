@@ -33,7 +33,7 @@ export default function RestoreCategoryDialog({
     mutationFn: () => restoreCategory({ categoryId, token: user?.token || "" }),
     onSuccess: (data) => {
       success(data?.message || t("categoryRestoredSuccessfully"));
-      queryClient.invalidateQueries({ queryKey: ["categories"] });
+      queryClient.invalidateQueries({ queryKey: ["admin", "categories"] });
       onRestored();
     },
     onError: (err: Error) => handleError(err, t("categoryNotRestoredSuccessfully")),

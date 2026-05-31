@@ -100,7 +100,7 @@ export default function CreateCategoryForm({ onClose }: CreateCategoryFormProps)
     mutationFn: createCategory,
     onSuccess: (data) => {
       success(data?.message || t("categoryCreatedSuccessfully"));
-      queryClient.invalidateQueries({ queryKey: ["categories"] });
+      queryClient.invalidateQueries({ queryKey: ["admin", "categories"] });
       onClose();
     },
     onError: (err: Error) => {
