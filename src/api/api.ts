@@ -62,7 +62,6 @@ export interface Category {
 export async function getCategories(
   page: number,
   size: number,
-  token: string,
   term: string,
 ): Promise<PageResponse<Category>> {
   return apiFetch<PageResponse<Category>>(
@@ -70,8 +69,7 @@ export async function getCategories(
     {
       method: "GET",
       headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json"
       },
     }
   );

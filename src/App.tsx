@@ -21,9 +21,7 @@ function App() {
           <Route
             path="/"
             element={
-              <ProtectedRoute roles={[ROLES.USER, ROLES.ADMIN]}>
                 <HomePage />
-              </ProtectedRoute>
             }
           />
 
