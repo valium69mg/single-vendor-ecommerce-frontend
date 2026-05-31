@@ -63,6 +63,7 @@ i18n.use(initReactI18next).init({
         useDifferentName: "Usar un nombre diferente",
         categoryRestoredSuccessfully: "Categoría restaurada con éxito",
         categoryNotRestoredSuccessfully: "No fue posible restaurar la categoría",
+        categoryNotFound: "Categoría no encontrada o eliminada",
         back: "Volver",
         categoryDetails: "Detalles de categoría",
         quickActions: "Acciones rápidas",

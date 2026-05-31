@@ -1,12 +1,12 @@
 import { Link } from "react-router-dom";
 import { cn } from "@/lib/utils";
 import { gradients } from "@/mocks/home";
-import type { CategoryById } from "@/api/api";
+import type { PublicCategory } from "@/api/api";
 import ImageWithFallback from "../common/ImageWithFallback";
 import { API_FILE_URL } from "@/api/api";
 
 interface Props {
-  category: CategoryById;
+  category: PublicCategory;
 }
 
 const CATEGORIES_PRODUCTS_TO_SHOW_THRESHOLD = 500;

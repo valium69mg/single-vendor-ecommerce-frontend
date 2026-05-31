@@ -5,7 +5,7 @@ import { useMemo } from "react";
 import type { ColumnDef } from "@tanstack/react-table";
 import { ArrowLeft, AlertTriangle, Pencil } from "lucide-react";
 import { useUser } from "@/hooks/useUser";
-import { getCategory, deleteCategory, API_FILE_URL } from "@/api/api";
+import { getAdminCategory, deleteCategory, API_FILE_URL } from "@/api/api";
 import { useApiErrorHandler } from "@/hooks/useApiErrorHandler";
 import { DataTable } from "@/components/common/DataTable";
 import Modal from "@/components/common/Modal";
@@ -92,7 +92,7 @@ export default function AdminCategoryDetailPage() {
 
   const { data, isLoading } = useQuery({
     queryKey: ["category", id],
-    queryFn: () => getCategory(id, user!.token),
+    queryFn: () => getAdminCategory(id, user!.token),
     enabled: !!user?.token && !isNaN(id),
     throwOnError,
   });
@@ -176,7 +176,7 @@ export default function AdminCategoryDetailPage() {
           <ArrowLeft size={16} />
           {t("back")}
         </Button>
-        <p className="text-muted-foreground">{t("noResults")}</p>
+        <p className="text-muted-foreground">{t("categoryNotFound")}</p>
       </div>
     );
   }

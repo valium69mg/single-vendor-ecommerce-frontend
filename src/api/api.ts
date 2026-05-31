@@ -46,6 +46,17 @@ export interface PageResponse<T> {
   last: boolean;
 }
 
+// Storefront — public endpoint, no auth required
+export interface PublicCategory {
+  categoryId: number;
+  name: string;
+  products: number;
+  imageUrl: string | null;
+  mediumThumbnailUrl: string | null;
+  smallThumbnailUrl: string | null;
+}
+
+// Admin panel — requires ADMIN JWT
 export interface Category {
   categoryId: number;
   name: string;
@@ -54,24 +65,56 @@ export interface Category {
   revenue: number;
   averagePrice: number;
   stock: number;
-  imageUrl: string;
-  mediumThumbnailUrl: string;
-  smallThumbnailUrl: string;
+  imageUrl: string | null;
+  mediumThumbnailUrl: string | null;
+  smallThumbnailUrl: string | null;
 }
 
 export async function getCategories(
   page: number,
   size: number,
   term: string,
-): Promise<PageResponse<Category>> {
-  return apiFetch<PageResponse<Category>>(
+): Promise<PageResponse<PublicCategory>> {
+  return apiFetch<PageResponse<PublicCategory>>(
     `${API_BASE_URL}/products/categories?page=${page}&size=${size}&term=${term}`,
     {
       method: "GET",
+      headers: { "Content-Type": "application/json" },
+    },
+  );
+}
+
+export async function getAdminCategories(
+  page: number,
+  size: number,
+  term: string,
+  token: string,
+): Promise<PageResponse<Category>> {
+  return apiFetch<PageResponse<Category>>(
+    `${API_BASE_URL}/admin/products/categories?page=${page}&size=${size}&term=${term}`,
+    {
+      method: "GET",
       headers: {
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
       },
-    }
+    },
+  );
+}
+
+export async function getAdminCategory(
+  categoryId: number,
+  token: string,
+): Promise<Category> {
+  return apiFetch<Category>(
+    `${API_BASE_URL}/admin/products/categories/${categoryId}`,
+    {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    },
   );
 }
 
@@ -88,36 +131,6 @@ export async function deleteCategory(
         Authorization: `Bearer ${token}`,
       },
     },
-  );
-}
-
-export interface CategoryById {
-  categoryId: number;
-  name: string;
-  products: number;
-  unitsSold: number;
-  revenue: number;
-  averagePrice: number;
-  stock: number;
-  imageUrl: string | null;
-  mediumThumbnailUrl: string | null;
-  smallThumbnailUrl: string | null;
-}
-
-
-export async function getCategory(
-  categoryId: number,
-  token: string,
-): Promise<CategoryById> {
-  return await apiFetch<CategoryById>(
-      `${API_BASE_URL}/products/categories/${categoryId}`,
-      {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-      }
   );
 }
 
@@ -141,7 +154,7 @@ export async function editCategory({
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
       },
-    }
+    },
   );
 }
 
@@ -163,7 +176,7 @@ export async function createCategory({
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
       },
-    }
+    },
   );
 }
 
@@ -184,7 +197,7 @@ export async function restoreCategory({
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
       },
-    }
+    },
   );
 }
 
@@ -202,6 +215,6 @@ export async function uploadCategoryImage({
   return apiFetchFile<StandardResponse>(
     `${API_BASE_URL}/admin/products/categories/${categoryId}/image`,
     file,
-    token
+    token,
   );
 }

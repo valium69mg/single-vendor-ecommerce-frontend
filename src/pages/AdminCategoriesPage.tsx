@@ -3,7 +3,7 @@ import { useTranslation } from "react-i18next";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { DataTable } from "@/components/common/DataTable";
 import type { Category } from "@/api/api";
-import { getCategories, deleteCategory } from "@/api/api";
+import { getAdminCategories, deleteCategory } from "@/api/api";
 import { useUser } from "@/hooks/useUser";
 import SearchBar from "@/components/common/SearchBar";
 import { useCategoryColumns } from "@/hooks/useCategoryColumns";
@@ -24,7 +24,7 @@ export default function AdminCategoriesPage() {
   const { handleError, throwOnError } = useApiErrorHandler();
   const { data, isLoading } = useQuery({
     queryKey: ["categories", page, term],
-    queryFn: () => getCategories(page, SIZE, term),
+    queryFn: () => getAdminCategories(page, SIZE, term, user!.token),
     enabled: !!user?.token,
     throwOnError,
   });

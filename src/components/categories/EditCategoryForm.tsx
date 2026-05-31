@@ -13,9 +13,9 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import type {
   StandardResponse,
   EditCategoryMutationVariables,
-  CategoryById,
+  Category,
 } from "@/api/api";
-import { editCategory, getCategory } from "@/api/api";
+import { editCategory, getAdminCategory } from "@/api/api";
 import { ApiConflictError } from "@/api/apiFetch";
 import GenericButton from "../common/GenericButton";
 import { useApiErrorHandler } from "@/hooks/useApiErrorHandler";
@@ -23,7 +23,7 @@ import { useEffect, useState } from "react";
 import RestoreCategoryDialog from "./RestoreCategoryDialog";
 
 interface EditCategoryFormContentProps {
-  data: CategoryById | undefined;
+  data: Category | undefined;
   register: UseFormRegister<EditCategoryFormValues>;
   errors: FieldErrors<EditCategoryFormValues>;
 }
@@ -106,7 +106,7 @@ export default function EditCategoryForm({
 
   const { data, isLoading } = useQuery({
     queryKey: ["category", categoryId],
-    queryFn: () => getCategory(categoryId, user!.token),
+    queryFn: () => getAdminCategory(categoryId, user!.token),
     enabled: !!user?.token,
     throwOnError,
   });
