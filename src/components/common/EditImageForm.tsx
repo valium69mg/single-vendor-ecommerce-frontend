@@ -114,11 +114,9 @@ export default function EditImageForm({
       }),
     onSuccess: () => {
       success(t("imageUploaded"));
-
-      queryClient.invalidateQueries({ queryKey: ["admin", "categories"] });
-      queryClient.invalidateQueries({ queryKey: ["admin", "category", categoryId] });
-
       onClose();
+      queryClient.invalidateQueries({ queryKey: ["admin", "categories"] });
+      queryClient.refetchQueries({ queryKey: ["admin", "category", categoryId] });
     },
     onError: (err: Error) => handleError(err, t("imageNotUploaded")),
   });
