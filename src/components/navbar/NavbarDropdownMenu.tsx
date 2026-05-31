@@ -7,10 +7,11 @@ import {
 } from "@/components/ui/dropdown-menu";
 import type { SidebarDropDownMenuItemProps } from "../sidebar/SidebarDropdownMenuItem";
 import GenericDropdownMenuItem from "../sidebar/SidebarDropdownMenuItem";
+import { FaRegUser } from "react-icons/fa";
 
 interface NavbarDropdownMenuProps {
   avatarSrc?: string;
-  title: string;
+  title?: string;
   items: SidebarDropDownMenuItemProps[];
 }
 
@@ -26,7 +27,7 @@ export default function NavbarDropdownMenu({
           <Avatar className="h-8 w-8">
             <AvatarImage src={avatarSrc} alt={title} />
             <AvatarFallback className="text-xs bg-stone-200 text-stone-700 font-store-body">
-              {title.charAt(0).toUpperCase()}
+              {title ? title.charAt(0).toUpperCase() : <FaRegUser className="h-4 w-4" />}
             </AvatarFallback>
           </Avatar>
         </Button>

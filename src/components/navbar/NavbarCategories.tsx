@@ -7,9 +7,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { useNavigate } from "react-router-dom";
 import { getCategories } from "@/api/api";
-import { useUser } from "@/hooks/useUser";
 import { useQuery } from "@tanstack/react-query";
-import { useApiErrorHandler } from "@/hooks/useApiErrorHandler";
 import { Spinner } from "@/components/ui/spinner";
 
 const DEFAULT_NAVBAR_CATEGORIES_NUMBER = 5;
@@ -17,8 +15,6 @@ const DEFAULT_NAVBAR_CATEGORIES_PAGE = 0;
 
 export default function NavbarCategories() {
   const navigate = useNavigate();
-  const { user } = useUser();
-  const { throwOnError } = useApiErrorHandler();
 
   const { data, isLoading } = useQuery({
     queryKey: [
@@ -33,8 +29,6 @@ export default function NavbarCategories() {
         DEFAULT_NAVBAR_CATEGORIES_NUMBER,
         "",
       ),
-    enabled: !!user?.token,
-    throwOnError,
   });
 
   return (

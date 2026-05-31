@@ -1,7 +1,5 @@
 import SectionHeader from "./SectionHeader";
 import CategoryCard from "./CategoryCard";
-import { useUser } from "@/hooks/useUser";
-import { useApiErrorHandler } from "@/hooks/useApiErrorHandler";
 import { useQuery } from "@tanstack/react-query";
 import { getCategories } from "@/api/api";
 import { Spinner } from "../ui/spinner";
@@ -10,8 +8,6 @@ const DEFAULT_HOME_PAGE_CATEGORIES_NUMBER = 4;
 const DEFAULT_HOME_PAGE_CATEGORIES_PAGE = 0;
 
 export default function FeaturedCategories() {
-  const { user } = useUser();
-  const { throwOnError } = useApiErrorHandler();
   const { data, isLoading } = useQuery({
     queryKey: [
       "categories",
@@ -23,11 +19,8 @@ export default function FeaturedCategories() {
       getCategories(
         DEFAULT_HOME_PAGE_CATEGORIES_PAGE,
         DEFAULT_HOME_PAGE_CATEGORIES_NUMBER,
-        user!.token,
         "",
       ),
-    enabled: !!user?.token,
-    throwOnError,
   });
 
   return (

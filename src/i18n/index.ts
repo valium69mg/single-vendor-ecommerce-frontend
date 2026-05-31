@@ -7,6 +7,7 @@ i18n.use(initReactI18next).init({
       translation: {
         welcome: "Bienvenido",
         login: "Iniciar sesión",
+        register: "Registrarse",
         loginFormDescription:
           "Introduzca su correo electrónico debajo para iniciar sesión",
         forgotYourPassword: "¿Olvidó su contraseña?",
