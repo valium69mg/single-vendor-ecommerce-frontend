@@ -24,7 +24,7 @@ export default function AdminCategoriesPage() {
   const { handleError, throwOnError } = useApiErrorHandler();
   const { data, isLoading } = useQuery({
     queryKey: ["categories", page, term],
-    queryFn: () => getCategories(page, SIZE, user!.token, term),
+    queryFn: () => getCategories(page, SIZE, term),
     enabled: !!user?.token,
     throwOnError,
   });

@@ -31,7 +31,6 @@ export default function NavbarCategories() {
       getCategories(
         DEFAULT_NAVBAR_CATEGORIES_PAGE,
         DEFAULT_NAVBAR_CATEGORIES_NUMBER,
-        user!.token,
         "",
       ),
     enabled: !!user?.token,

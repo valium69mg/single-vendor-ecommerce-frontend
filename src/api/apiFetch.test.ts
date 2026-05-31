@@ -48,7 +48,7 @@ describe("apiFetch", () => {
     vi.mocked(fetch).mockResolvedValue(
       mockResponse(409, { error: "Nombre duplicado", categoryId: 7 }),
     );
-    const err = await apiFetch("/url", {}).catch((e) => e);
+    const err = await apiFetch("/url", {}).catch((e) => e) as ApiConflictError;
     expect(err).toBeInstanceOf(ApiConflictError);
     expect(err.message).toBe("Nombre duplicado");
     expect(err.categoryId).toBe(7);
@@ -56,7 +56,7 @@ describe("apiFetch", () => {
 
   it("throws ApiConflictError with 'Conflict' when 409 body is unparseable", async () => {
     vi.mocked(fetch).mockResolvedValue(mockResponse(409));
-    const err = await apiFetch("/url", {}).catch((e) => e);
+    const err = await apiFetch("/url", {}).catch((e) => e) as ApiConflictError;
     expect(err).toBeInstanceOf(ApiConflictError);
     expect(err.message).toBe("Conflict");
   });
