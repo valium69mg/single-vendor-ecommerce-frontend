@@ -1,0 +1,100 @@
+FRONTEND BRIEF — Catalog Endpoint Changes
+=========================================
+
+What changed
+------------
+The catalog read endpoints are now split between public (no auth) and admin
+(requires JWT with ADMIN role).
+
+
+CATEGORIES
+----------
+
+Public — GET /api/v1/products/categories
+         GET /api/v1/products/categories/{id}
+
+  Response shape NO LONGER includes: revenue, averagePrice, unitsSold, stock
+
+  Interface (storefront):
+    categoryId:        number
+    name:              string
+    products:          number
+    imageUrl:          string | null
+    mediumThumbnailUrl: string | null
+    smallThumbnailUrl:  string | null
+
+Admin — GET /api/v1/admin/products/categories
+        GET /api/v1/admin/products/categories/{id}
+
+  Response shape UNCHANGED — still includes revenue, averagePrice, unitsSold, stock.
+
+  Interface (admin panel):
+    categoryId:        number
+    name:              string
+    products:          number
+    unitsSold:         number
+    revenue:           number
+    averagePrice:      number
+    stock:             number
+    imageUrl:          string | null
+    mediumThumbnailUrl: string | null
+    smallThumbnailUrl:  string | null
+
+
+MATERIALS
+---------
+
+Public  — GET /api/v1/products/materials
+          GET /api/v1/products/materials/{id}
+
+Admin   — GET /api/v1/admin/products/materials           (NEW)
+          GET /api/v1/admin/products/materials/{id}      (NEW)
+
+Response shape is identical for both. No interface changes needed.
+
+
+BRANDS
+------
+
+Public  — GET /api/v1/products/brands
+          GET /api/v1/products/brands/{id}
+
+Admin   — GET /api/v1/admin/products/brands              (NEW)
+          GET /api/v1/admin/products/brands/{id}         (NEW)
+
+Response shape is identical for both. No interface changes needed.
+
+
+ATTRIBUTES
+----------
+
+Public  — GET /api/v1/products/attributes
+          GET /api/v1/products/attributes/{id}
+
+Admin   — GET /api/v1/admin/products/attributes          (NEW)
+          GET /api/v1/admin/products/attributes/{id}     (NEW)
+
+Response shape is identical for both. No interface changes needed.
+
+
+BEHAVIOUR CHANGE — getById on all entities
+------------------------------------------
+Both public and admin getById endpoints now return 404 if the item is
+soft-deleted. Previously a deleted record could still be returned.
+Update error handling so that a 404 on getById is treated as
+"item not found or unavailable", not only as "wrong ID".
+
+
+ACTION ITEMS
+------------
+1. Split the category interface into PublicCategoryDTO (storefront) and
+   CategoryDTO (admin panel). Remove revenue, averagePrice, unitsSold, and
+   stock from the public one.
+
+2. Point storefront API calls to /api/v1/products/... — no Authorization
+   header required.
+
+3. Point admin panel API calls to /api/v1/admin/products/... — JWT required
+   (Authorization: Bearer <token>).
+
+4. Handle 404 on all getById calls as "item not found or deleted".
