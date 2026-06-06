@@ -1,7 +1,7 @@
 import type { ColumnDef } from "@tanstack/react-table";
 import type { Category } from "@/api/api";
 import ImageWithFallback from "@/components/common/ImageWithFallback";
-import { API_FILE_URL } from "@/api/api";
+import { getFileUrl } from "@/api/api";
 import { useTranslation } from "react-i18next";
 import DestructiveActionButton from "../components/common/DestructiveActionButton";
 import Modal from "@/components/common/Modal";
@@ -31,7 +31,7 @@ export function useCategoryColumns(
           <ImageModal
             imageWithFallback={
               <ImageWithFallback
-                src={API_FILE_URL + key}
+                src={getFileUrl(key)}
                 alt={row.original.name}
                 className="w-12 h-12 object-cover rounded"
               />
@@ -39,7 +39,7 @@ export function useCategoryColumns(
             content={(onClose) => (
               <EditImageForm
                 categoryId={row.original.categoryId}
-                initialImageUrl={key ? API_FILE_URL + key : undefined}
+                initialImageUrl={key ? getFileUrl(key) : undefined}
                 onClose={onClose}
               />)
             }

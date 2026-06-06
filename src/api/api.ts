@@ -6,6 +6,13 @@ export const API_BASE_URL =
 export const API_FILE_URL =
   import.meta.env.VITE_API_FILE_URL || "http://localhost:8080/api/v1/file?key=";
 
+const FALLBACK_IMAGE = "/images/landscape-placeholder.svg";
+
+export function getFileUrl(key: string | null | undefined): string {
+  if (!key) return FALLBACK_IMAGE;
+  return API_FILE_URL + key;
+}
+
 export interface StandardResponse {
   status: number;
   message: string;

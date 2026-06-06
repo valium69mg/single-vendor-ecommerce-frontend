@@ -3,7 +3,7 @@ import { cn } from "@/lib/utils";
 import { gradients } from "@/mocks/home";
 import type { PublicCategory } from "@/api/api";
 import ImageWithFallback from "../common/ImageWithFallback";
-import { API_FILE_URL } from "@/api/api";
+import { getFileUrl } from "@/api/api";
 
 interface Props {
   category: PublicCategory;
@@ -31,7 +31,7 @@ export default function CategoryCard({ category }: Props) {
       <div className="relative overflow-hidden rounded-sm aspect-square mb-3">
         {category.imageUrl ? (
           <ImageWithFallback
-            src={API_FILE_URL + category.imageUrl}
+            src={getFileUrl(category.imageUrl)}
             alt={category.name}
             className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
           />

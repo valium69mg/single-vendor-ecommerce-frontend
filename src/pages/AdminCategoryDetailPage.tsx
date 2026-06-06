@@ -5,7 +5,7 @@ import { useMemo } from "react";
 import type { ColumnDef } from "@tanstack/react-table";
 import { ArrowLeft, AlertTriangle, Pencil } from "lucide-react";
 import { useUser } from "@/hooks/useUser";
-import { getAdminCategory, deleteCategory, API_FILE_URL } from "@/api/api";
+import { getAdminCategory, deleteCategory, getFileUrl } from "@/api/api";
 import { useApiErrorHandler } from "@/hooks/useApiErrorHandler";
 import { DataTable } from "@/components/common/DataTable";
 import Modal from "@/components/common/Modal";
@@ -181,9 +181,7 @@ export default function AdminCategoryDetailPage() {
     );
   }
 
-  const imageUrl = data.mediumThumbnailUrl
-    ? API_FILE_URL + data.mediumThumbnailUrl
-    : undefined;
+  const imageUrl = getFileUrl(data.mediumThumbnailUrl);
 
   const isLowStock = data.stock <= LOW_STOCK_THRESHOLD;
 
@@ -205,7 +203,7 @@ export default function AdminCategoryDetailPage() {
         <ImageModal
           imageWithFallback={
             <ImageWithFallback
-              src={imageUrl ?? ""}
+              src={imageUrl}
               alt={data.name}
               className="w-20 h-20 sm:w-24 sm:h-24 object-cover rounded-none border border-stone-200 shrink-0 cursor-pointer hover:opacity-80 transition-opacity"
             />
