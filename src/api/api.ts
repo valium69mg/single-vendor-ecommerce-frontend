@@ -53,7 +53,44 @@ export interface PageResponse<T> {
   last: boolean;
 }
 
-// Storefront — public endpoint, no auth required
+// Storefront — public products, no auth required
+export interface PublicProduct {
+  productId: string;
+  name: string;
+  shortDescription: string | null;
+  featured: boolean;
+  status: string;
+  category: { categoryId: number; name: string } | null;
+  brand: { brandId: number; name: string } | null;
+  imageUrl: string | null;
+  mediumThumbnailUrl: string | null;
+  smallThumbnailUrl: string | null;
+  minPrice: number;
+  maxPrice: number;
+  minDiscountPrice: number;
+  totalStock: number;
+}
+
+export async function getProducts(
+  page: number,
+  size: number,
+  featured?: boolean,
+): Promise<PageResponse<PublicProduct>> {
+  const query = new URLSearchParams();
+  query.set("page", String(page));
+  query.set("size", String(size));
+  if (featured !== undefined) query.set("featured", String(featured));
+
+  return apiFetch<PageResponse<PublicProduct>>(
+    `${API_BASE_URL}/products?${query.toString()}`,
+    {
+      method: "GET",
+      headers: { "Content-Type": "application/json" },
+    },
+  );
+}
+
+// Storefront — public categories, no auth required
 export interface PublicCategory {
   categoryId: number;
   name: string;

@@ -2,14 +2,11 @@ import Navbar from "@/components/navbar/Navbar";
 import HeroBanner from "@/components/home/HeroBanner";
 import TrustBar from "@/components/home/TrustBar";
 import FeaturedCategories from "@/components/home/FeaturedCategories";
+import FeaturedProductsSection from "@/components/home/FeaturedProductsSection";
 import ProductSection from "@/components/home/ProductSection";
 import BenefitsSection from "@/components/home/BenefitsSection";
 import HomeFooter from "@/components/home/HomeFooter";
-import {
-  MOCK_FEATURED_PRODUCTS,
-  MOCK_NEW_ARRIVALS,
-  MOCK_BESTSELLERS,
-} from "@/mocks/home";
+import { MOCK_NEW_ARRIVALS, MOCK_BESTSELLERS } from "@/mocks/home";
 
 export default function HomePage() {
   return (
@@ -19,14 +16,7 @@ export default function HomePage() {
         <HeroBanner />
         <TrustBar />
         <FeaturedCategories />
-        <ProductSection
-          title="Productos Destacados"
-          subtitle="Selección especial de nuestras mejores piezas"
-          products={MOCK_FEATURED_PRODUCTS}
-          actionLabel="Ver todos"
-          actionHref="/products"
-          className="bg-white"
-        />
+        <FeaturedProductsSection />
         <ProductSection
           title="Nuevas Llegadas"
           subtitle="Las últimas incorporaciones a nuestra colección"
