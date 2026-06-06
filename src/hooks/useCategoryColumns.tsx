@@ -3,6 +3,7 @@ import type { Category } from "@/api/api";
 import ImageWithFallback from "@/components/common/ImageWithFallback";
 import { getFileUrl } from "@/api/api";
 import { useTranslation } from "react-i18next";
+import { cn } from "@/lib/utils";
 import DestructiveActionButton from "../components/common/DestructiveActionButton";
 import Modal from "@/components/common/Modal";
 import EditCategoryForm from "@/components/categories/EditCategoryForm";
@@ -10,6 +11,14 @@ import ImageModal from "@/components/common/ImageModal";
 import EditImageForm from "@/components/common/EditImageForm";
 import { Link } from "react-router-dom";
 import { Pencil } from "lucide-react";
+
+function formatDate(iso: string): string {
+  return new Date(iso).toLocaleDateString("es-ES", {
+    year: "numeric",
+    month: "short",
+    day: "numeric",
+  });
+}
 
 export function useCategoryColumns(
   onDelete: (category: Category) => void,
@@ -23,7 +32,7 @@ export function useCategoryColumns(
     },
     {
       id: "image",
-      header: "Image",
+      header: t("image"),
       cell: ({ row }) => {
         const key = row.original.smallThumbnailUrl;
 
@@ -41,8 +50,8 @@ export function useCategoryColumns(
                 categoryId={row.original.categoryId}
                 initialImageUrl={key ? getFileUrl(key) : undefined}
                 onClose={onClose}
-              />)
-            }
+              />
+            )}
           />
         );
       },
@@ -62,22 +71,74 @@ export function useCategoryColumns(
     {
       accessorKey: "products",
       header: t("products"),
+      cell: ({ row }) => (
+        <span className="font-store-body text-stone-700">
+          {row.original.products}
+        </span>
+      ),
     },
     {
       accessorKey: "unitsSold",
       header: t("unitsSold"),
+      cell: ({ row }) => (
+        <span className="font-store-body text-stone-700">
+          {row.original.unitsSold}
+        </span>
+      ),
     },
     {
       accessorKey: "revenue",
       header: t("revenue"),
+      cell: ({ row }) => (
+        <span className="font-store-body text-stone-700">
+          ${row.original.revenue.toLocaleString("es-ES")}
+        </span>
+      ),
     },
     {
       accessorKey: "averagePrice",
       header: t("averagePrice"),
+      cell: ({ row }) => (
+        <span className="font-store-body text-stone-700">
+          ${row.original.averagePrice.toFixed(2)}
+        </span>
+      ),
     },
     {
       accessorKey: "stock",
       header: t("stock"),
+      cell: ({ row }) => (
+        <span
+          className={cn(
+            "font-store-body",
+            row.original.stock <= 10 && row.original.stock > 0
+              ? "text-amber-700 font-medium"
+              : row.original.stock === 0
+                ? "text-red-600 font-medium"
+                : "text-stone-700",
+          )}
+        >
+          {row.original.stock}
+        </span>
+      ),
+    },
+    {
+      accessorKey: "createdAt",
+      header: t("createdAt"),
+      cell: ({ row }) => (
+        <span className="font-store-body text-stone-500 text-xs whitespace-nowrap">
+          {formatDate(row.original.createdAt)}
+        </span>
+      ),
+    },
+    {
+      accessorKey: "updatedAt",
+      header: t("updatedAt"),
+      cell: ({ row }) => (
+        <span className="font-store-body text-stone-500 text-xs whitespace-nowrap">
+          {formatDate(row.original.updatedAt)}
+        </span>
+      ),
     },
     {
       id: "actions",

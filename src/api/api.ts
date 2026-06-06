@@ -75,6 +75,8 @@ export interface Category {
   imageUrl: string | null;
   mediumThumbnailUrl: string | null;
   smallThumbnailUrl: string | null;
+  createdAt: string;
+  updatedAt: string;
 }
 
 export async function getCategories(

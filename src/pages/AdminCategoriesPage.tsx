@@ -66,20 +66,22 @@ export default function AdminCategoriesPage() {
         />
       </div>
 
-      <DataTable
-        columns={columns}
-        data={data?.content ?? []}
-        page={page}
-        setPage={setPage}
-        loading={isLoading}
-        hasNextPage={data ? !data.last : false}
-        labels={{
-          previous: t("previous"),
-          next: t("next"),
-          page: t("page"),
-          noResults: t("noResults"),
-        }}
-      />
+      <div className="overflow-x-auto">
+        <DataTable
+          columns={columns}
+          data={data?.content ?? []}
+          page={page}
+          setPage={setPage}
+          loading={isLoading}
+          hasNextPage={data ? !data.last : false}
+          labels={{
+            previous: t("previous"),
+            next: t("next"),
+            page: t("page"),
+            noResults: t("noResults"),
+          }}
+        />
+      </div>
     </div>
   );
 }
