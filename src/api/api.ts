@@ -75,11 +75,13 @@ export async function getProducts(
   page: number,
   size: number,
   featured?: boolean,
+  createdAtStart?: string,
 ): Promise<PageResponse<PublicProduct>> {
   const query = new URLSearchParams();
   query.set("page", String(page));
   query.set("size", String(size));
   if (featured !== undefined) query.set("featured", String(featured));
+  if (createdAtStart) query.set("createdAtStart", createdAtStart);
 
   return apiFetch<PageResponse<PublicProduct>>(
     `${API_BASE_URL}/products?${query.toString()}`,
