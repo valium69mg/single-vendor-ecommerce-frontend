@@ -187,6 +187,95 @@ export async function createCategory({
   );
 }
 
+// ─── Brands ─────────────────────────────────────────────────────────────────
+
+export interface AdminBrand {
+  brandId: number;
+  name: string;
+}
+
+export async function getAdminBrands(
+  page: number,
+  size: number,
+  term: string,
+  token: string,
+): Promise<PageResponse<AdminBrand>> {
+  return apiFetch<PageResponse<AdminBrand>>(
+    `${API_BASE_URL}/admin/products/brands?page=${page}&size=${size}&term=${term}`,
+    {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    },
+  );
+}
+
+// ─── Admin Products ───────────────────────────────────────────────────────────
+
+export interface AdminProduct {
+  productId: number;
+  name: string;
+  description: string | null;
+  price: number;
+  stock: number;
+  status: string;
+  featured: boolean;
+  unitsSold: number;
+  categoryId: number | null;
+  categoryName: string | null;
+  brandId: number | null;
+  brandName: string | null;
+  imageUrl: string | null;
+  mediumThumbnailUrl: string | null;
+  smallThumbnailUrl: string | null;
+  createdAt: string;
+}
+
+export interface AdminProductsParams {
+  page: number;
+  size: number;
+  term?: string;
+  sortBy?: string;
+  sortDirection?: "ASC" | "DESC";
+  status?: string;
+  featured?: boolean;
+  categoryId?: number;
+  brandId?: number;
+}
+
+export async function getAdminProducts(
+  params: AdminProductsParams,
+  token: string,
+): Promise<PageResponse<AdminProduct>> {
+  const query = new URLSearchParams();
+  query.set("page", String(params.page));
+  query.set("size", String(params.size));
+  if (params.term) query.set("term", params.term);
+  if (params.sortBy) {
+    query.set("sortBy", params.sortBy);
+    query.set("sortDirection", params.sortDirection ?? "ASC");
+  }
+  if (params.status) query.set("status", params.status);
+  if (params.featured !== undefined) query.set("featured", String(params.featured));
+  if (params.categoryId !== undefined) query.set("categoryId", String(params.categoryId));
+  if (params.brandId !== undefined) query.set("brandId", String(params.brandId));
+
+  return apiFetch<PageResponse<AdminProduct>>(
+    `${API_BASE_URL}/admin/products?${query.toString()}`,
+    {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    },
+  );
+}
+
+// ─── Category mutations ───────────────────────────────────────────────────────
+
 export interface RestoreCategoryVariables {
   categoryId: number;
   token: string;
