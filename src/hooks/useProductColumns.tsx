@@ -2,28 +2,17 @@ import type { ColumnDef } from "@tanstack/react-table";
 import type { AdminProduct } from "@/api/api";
 import { getFileUrl } from "@/api/api";
 import ImageWithFallback from "@/components/common/ImageWithFallback";
+import ProductStatusBadge from "@/components/products/ProductStatusBadge";
 import { useTranslation } from "react-i18next";
 import { cn } from "@/lib/utils";
 import { Pencil, Trash2 } from "lucide-react";
 
-function StatusBadge({ status }: { status: string }) {
-  return (
-    <span
-      className={cn(
-        "inline-flex items-center px-2 py-0.5 text-xs font-store-body font-medium border rounded-none",
-        status === "ACTIVE" &&
-          "border-green-300 bg-green-50 text-green-700",
-        status === "INACTIVE" &&
-          "border-red-300 bg-red-50 text-red-700",
-        status === "DRAFT" &&
-          "border-stone-300 bg-stone-50 text-stone-500",
-        !["ACTIVE", "INACTIVE", "DRAFT"].includes(status) &&
-          "border-stone-300 bg-stone-50 text-stone-500",
-      )}
-    >
-      {status}
-    </span>
-  );
+function formatDate(iso: string): string {
+  return new Date(iso).toLocaleDateString("es-ES", {
+    year: "numeric",
+    month: "short",
+    day: "numeric",
+  });
 }
 
 export function useProductColumns(): ColumnDef<AdminProduct>[] {
@@ -42,10 +31,6 @@ export function useProductColumns(): ColumnDef<AdminProduct>[] {
       ),
     },
     {
-      accessorKey: "productId",
-      header: "ID",
-    },
-    {
       accessorKey: "name",
       header: t("name"),
       cell: ({ row }) => (
@@ -55,36 +40,45 @@ export function useProductColumns(): ColumnDef<AdminProduct>[] {
       ),
     },
     {
-      accessorKey: "price",
+      accessorKey: "minPrice",
       header: t("price"),
       cell: ({ row }) => (
         <span className="font-store-body text-stone-700">
-          ${row.original.price.toFixed(2)}
+          ${row.original.minPrice}
         </span>
       ),
     },
     {
-      accessorKey: "stock",
+      accessorKey: "totalStock",
       header: t("stock"),
       cell: ({ row }) => (
         <span
           className={cn(
             "font-store-body",
-            row.original.stock <= 10 && row.original.stock > 0
+            row.original.totalStock <= 10 && row.original.totalStock > 0
               ? "text-amber-700 font-medium"
-              : row.original.stock === 0
+              : row.original.totalStock === 0
                 ? "text-red-600 font-medium"
                 : "text-stone-700",
           )}
         >
-          {row.original.stock}
+          {row.original.totalStock}
+        </span>
+      ),
+    },
+    {
+      accessorKey: "variantCount",
+      header: t("variants"),
+      cell: ({ row }) => (
+        <span className="font-store-body text-stone-600 text-sm">
+          {row.original.variantCount}
         </span>
       ),
     },
     {
       accessorKey: "status",
       header: t("status"),
-      cell: ({ row }) => <StatusBadge status={row.original.status} />,
+      cell: ({ row }) => <ProductStatusBadge status={row.original.status} />,
     },
     {
       accessorKey: "featured",
@@ -103,20 +97,38 @@ export function useProductColumns(): ColumnDef<AdminProduct>[] {
       ),
     },
     {
-      accessorKey: "categoryName",
+      id: "category",
       header: t("category"),
       cell: ({ row }) => (
         <span className="font-store-body text-stone-600 text-sm">
-          {row.original.categoryName ?? "—"}
+          {row.original.category?.name ?? "—"}
         </span>
       ),
     },
     {
-      accessorKey: "brandName",
+      id: "brand",
       header: t("brands"),
       cell: ({ row }) => (
         <span className="font-store-body text-stone-600 text-sm">
-          {row.original.brandName ?? "—"}
+          {row.original.brand?.name ?? "—"}
+        </span>
+      ),
+    },
+    {
+      accessorKey: "createdAt",
+      header: t("createdAt"),
+      cell: ({ row }) => (
+        <span className="font-store-body text-stone-500 text-xs whitespace-nowrap">
+          {formatDate(row.original.createdAt)}
+        </span>
+      ),
+    },
+    {
+      accessorKey: "updatedAt",
+      header: t("updatedAt"),
+      cell: ({ row }) => (
+        <span className="font-store-body text-stone-500 text-xs whitespace-nowrap">
+          {formatDate(row.original.updatedAt)}
         </span>
       ),
     },

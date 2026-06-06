@@ -214,23 +214,33 @@ export async function getAdminBrands(
 
 // ─── Admin Products ───────────────────────────────────────────────────────────
 
-export interface AdminProduct {
-  productId: number;
+export interface AdminProductCategory {
+  categoryId: number;
   name: string;
-  description: string | null;
-  price: number;
-  stock: number;
-  status: string;
+}
+
+export interface AdminProductBrand {
+  brandId: number;
+  name: string;
+}
+
+export interface AdminProduct {
+  productId: string;
+  name: string;
+  shortDescription: string | null;
   featured: boolean;
-  unitsSold: number;
-  categoryId: number | null;
-  categoryName: string | null;
-  brandId: number | null;
-  brandName: string | null;
+  status: string;
+  category: AdminProductCategory | null;
+  brand: AdminProductBrand | null;
   imageUrl: string | null;
   mediumThumbnailUrl: string | null;
   smallThumbnailUrl: string | null;
+  minPrice: number;
+  minDiscountPrice: number;
+  totalStock: number;
+  variantCount: number;
   createdAt: string;
+  updatedAt: string;
 }
 
 export interface AdminProductsParams {

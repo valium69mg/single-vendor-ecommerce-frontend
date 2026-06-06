@@ -87,6 +87,9 @@ i18n.use(initReactI18next).init({
         clearFilters: "Limpiar filtros",
         comingSoon: "Próximamente",
         description: "Descripción",
+        variants: "Variantes",
+        createdAt: "Creado",
+        updatedAt: "Actualizado",
         validation: {
           required: "Este campo es obligatorio",
           invalidEmail: "Correo electrónico inválido",

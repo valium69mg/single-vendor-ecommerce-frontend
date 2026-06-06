@@ -251,9 +251,10 @@ export default function AdminProductsPage() {
         >
           <option value="">{t("all")}</option>
           <option value="name">{t("name")}</option>
-          <option value="price">{t("price")}</option>
-          <option value="stock">{t("stock")}</option>
-          <option value="unitsSold">{t("unitsSold")}</option>
+          <option value="minPrice">{t("price")}</option>
+          <option value="totalStock">{t("stock")}</option>
+          <option value="variantCount">{t("variants")}</option>
+          <option value="createdAt">{t("createdAt")}</option>
         </FilterSelect>
 
         {/* Sort direction — only useful when sortBy is set */}
