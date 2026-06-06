@@ -236,6 +236,7 @@ export interface AdminProduct {
   mediumThumbnailUrl: string | null;
   smallThumbnailUrl: string | null;
   minPrice: number;
+  maxPrice: number;
   minDiscountPrice: number;
   totalStock: number;
   variantCount: number;
