@@ -106,11 +106,11 @@ export default function ProductCard({ product }: Props) {
         </div>
         <div className="flex items-center gap-2">
           <span className="font-store-body text-sm font-semibold text-stone-900">
-            {MXN.format(product.price)}
+            {MXN.format(product.discountPrice ?? product.price)}
           </span>
           {product.discountPrice && (
             <span className="font-store-body text-xs text-stone-400 line-through">
-              {MXN.format(product.discountPrice)}
+              {MXN.format(product.price)}
             </span>
           )}
         </div>

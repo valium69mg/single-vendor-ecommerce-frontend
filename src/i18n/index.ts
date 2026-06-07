@@ -73,7 +73,7 @@ i18n.use(initReactI18next).init({
         name: "Nombre",
         price: "Precio",
         avgPrice: "Precio prom.",
-        avgDiscountPrice: "Dto. prom.",
+        avgDiscountPrice: "P. con dto.",
         createProduct: "Crear producto",
         productCreatedSuccessfully: "Producto creado con éxito",
         productNotCreatedSuccessfully: "No fue posible crear el producto",

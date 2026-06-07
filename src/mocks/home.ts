@@ -42,8 +42,8 @@ export const MOCK_FEATURED_PRODUCTS: MockProduct[] = [
   {
     id: "f3",
     name: "Aretes de Zafiro Azul",
-    price: 4800,
-    discountPrice: 6000,
+    price: 6000,
+    discountPrice: 4800,
     imageUrl: "",
     rating: 4.7,
     reviewCount: 63,
@@ -144,8 +144,8 @@ export const MOCK_BESTSELLERS: MockProduct[] = [
   {
     id: "b4",
     name: "Pulsera de Charm",
-    price: 1800,
-    discountPrice: 2200,
+    price: 2200,
+    discountPrice: 1800,
     imageUrl: "",
     rating: 4.6,
     reviewCount: 143,
