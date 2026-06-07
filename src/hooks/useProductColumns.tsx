@@ -49,11 +49,11 @@ export function useProductColumns(): ColumnDef<AdminProduct>[] {
       ),
     },
     {
-      accessorKey: "avgDiscount",
-      header: t("avgDiscount"),
+      accessorKey: "avgDiscountPrice",
+      header: t("avgDiscountPrice"),
       cell: ({ row }) => (
         <span className="font-store-body text-stone-700">
-          ${row.original.avgDiscount}
+          ${row.original.avgDiscountPrice}
         </span>
       ),
     },

@@ -73,7 +73,7 @@ i18n.use(initReactI18next).init({
         name: "Nombre",
         price: "Precio",
         avgPrice: "Precio prom.",
-        avgDiscount: "Dto. prom.",
+        avgDiscountPrice: "Dto. prom.",
         createProduct: "Crear producto",
         status: "Estado",
         featured: "Destacado",
