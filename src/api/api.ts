@@ -279,6 +279,7 @@ export interface AdminProduct {
   minPrice: number;
   maxPrice: number;
   minDiscountPrice: number;
+  maxDiscountPrice: number;
   totalStock: number;
   variantCount: number;
   createdAt: string;
