@@ -365,3 +365,118 @@ export async function uploadCategoryImage({
     token,
   );
 }
+
+// ─── Materials (admin) ────────────────────────────────────────────────────────
+
+export interface AdminMaterial {
+  materialId: number;
+  name: string;
+}
+
+export async function getAdminMaterials(
+  page: number,
+  size: number,
+  term: string,
+  token: string,
+): Promise<PageResponse<AdminMaterial>> {
+  return apiFetch<PageResponse<AdminMaterial>>(
+    `${API_BASE_URL}/admin/products/materials?page=${page}&size=${size}&term=${term}`,
+    {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    },
+  );
+}
+
+// ─── Attributes (admin) ───────────────────────────────────────────────────────
+
+export interface AdminAttributeValue {
+  attributeValueId: number;
+  value: string;
+}
+
+export interface AdminAttribute {
+  attributeId: number;
+  name: string;
+  attributeValues: AdminAttributeValue[];
+}
+
+export async function getAdminAttributesPage(
+  page: number,
+  size: number,
+  token: string,
+): Promise<PageResponse<AdminAttribute>> {
+  const list = await apiFetch<AdminAttribute[]>(
+    `${API_BASE_URL}/admin/products/attributes?page=${page}&size=${size}`,
+    {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    },
+  );
+  return {
+    content: list,
+    page,
+    size,
+    totalElements: list.length,
+    totalPages: -1,
+    last: list.length < size,
+  };
+}
+
+// ─── Create Product ───────────────────────────────────────────────────────────
+
+export interface CreateProductVariantInput {
+  sku: string;
+  price: number;
+  discountPrice?: number | null;
+  stock: number;
+  weightGrams?: number | null;
+  attributeValueIds: number[];
+}
+
+export interface CreateProductInput {
+  name: string;
+  shortDescription?: string | null;
+  longDescription?: string | null;
+  status: string;
+  featured: boolean;
+  brandId?: number | null;
+  categoryId?: number | null;
+  materialIds: number[];
+  variants: CreateProductVariantInput[];
+}
+
+export async function createProduct(
+  data: CreateProductInput,
+  token: string,
+): Promise<StandardResponse> {
+  return apiFetch<StandardResponse>(
+    `${API_BASE_URL}/admin/products`,
+    {
+      method: "POST",
+      body: JSON.stringify(data),
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    },
+  );
+}
+
+export async function uploadProductImage(
+  productId: string,
+  file: File,
+  token: string,
+): Promise<StandardResponse> {
+  return apiFetchFile<StandardResponse>(
+    `${API_BASE_URL}/admin/products/${productId}/image`,
+    file,
+    token,
+  );
+}

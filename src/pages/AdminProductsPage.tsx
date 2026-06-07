@@ -5,6 +5,8 @@ import { SlidersHorizontal, X } from "lucide-react";
 import { DataTable } from "@/components/common/DataTable";
 import SearchBar from "@/components/common/SearchBar";
 import { InfiniteScrollSelect } from "@/components/common/InfiniteScrollSelect";
+import Modal from "@/components/common/Modal";
+import CreateProductForm from "@/components/products/CreateProductForm";
 import { useProductColumns } from "@/hooks/useProductColumns";
 import { useUser } from "@/hooks/useUser";
 import { useApiErrorHandler } from "@/hooks/useApiErrorHandler";
@@ -179,17 +181,11 @@ export default function AdminProductsPage() {
         <h1 className="font-store-heading text-3xl font-semibold text-stone-900">
           {t("products")}
         </h1>
-        <button
-          type="button"
-          disabled
-          title={t("comingSoon")}
-          className={cn(
-            "bg-stone-300 text-stone-500 border border-stone-300 cursor-not-allowed",
-            "font-store-body text-sm tracking-wide h-9 px-4 rounded-none opacity-60",
-          )}
-        >
-          + {t("createProduct")}
-        </button>
+        <Modal
+          buttonName={`+ ${t("createProduct")}`}
+          triggerClassName="bg-stone-900 hover:bg-stone-800 text-white border-stone-900 font-store-body text-sm tracking-wide h-9 px-4"
+          content={(onClose) => <CreateProductForm onClose={onClose} />}
+        />
       </div>
 
       {/* ── Search + filter toggle ── */}

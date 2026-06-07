@@ -9,34 +9,34 @@ import type { PageResponse } from "@/api/api";
 
 const PAGE_SIZE = 20;
 
-interface InfiniteScrollSelectProps<T> {
+interface InfiniteScrollMultiSelectProps<T> {
   queryKeyPrefix: readonly unknown[];
   fetchFn: (page: number, size: number, term: string) => Promise<PageResponse<T>>;
   getLabel: (item: T) => string;
   getId: (item: T) => number;
-  selectedId: number | undefined;
-  selectedLabel: string | undefined;
-  onSelect: (id: number | undefined, label: string | undefined) => void;
-  allLabel: string;
+  selectedIds: number[];
+  selectedLabels: string[];
+  onSelect: (ids: number[], labels: string[]) => void;
+  placeholder: string;
   searchPlaceholder?: string;
   label?: string;
   /** Render dropdown via portal — use inside modals/scrollable containers */
   modal?: boolean;
 }
 
-export function InfiniteScrollSelect<T>({
+export function InfiniteScrollMultiSelect<T>({
   queryKeyPrefix,
   fetchFn,
   getLabel,
   getId,
-  selectedId,
-  selectedLabel,
+  selectedIds,
+  selectedLabels,
   onSelect,
-  allLabel,
+  placeholder,
   searchPlaceholder = "Buscar...",
   label,
   modal = false,
-}: InfiniteScrollSelectProps<T>) {
+}: InfiniteScrollMultiSelectProps<T>) {
   const [open, setOpen] = useState(false);
   const [searchInput, setSearchInput] = useState("");
   const debouncedSearch = useDebounce({ value: searchInput, delay: 400 });
@@ -60,7 +60,6 @@ export function InfiniteScrollSelect<T>({
 
   const items = data?.pages.flatMap((p) => p.content) ?? [];
 
-  // recalculate portal position on open
   useEffect(() => {
     if (open && modal && triggerRef.current) {
       const rect = triggerRef.current.getBoundingClientRect();
@@ -74,7 +73,6 @@ export function InfiniteScrollSelect<T>({
     }
   }, [open, modal]);
 
-  // close on outside click
   useEffect(() => {
     if (!open) return;
     const handler = (e: MouseEvent) => {
@@ -90,14 +88,10 @@ export function InfiniteScrollSelect<T>({
     return () => document.removeEventListener("mousedown", handler);
   }, [open, modal]);
 
-  // focus search input when opened
   useEffect(() => {
-    if (open) {
-      setTimeout(() => inputRef.current?.focus(), 50);
-    }
+    if (open) setTimeout(() => inputRef.current?.focus(), 50);
   }, [open]);
 
-  // sentinel for infinite scroll
   useEffect(() => {
     const el = sentinelRef.current;
     if (!el || !hasNextPage || isFetchingNextPage) return;
@@ -111,30 +105,35 @@ export function InfiniteScrollSelect<T>({
     return () => observer.disconnect();
   }, [hasNextPage, isFetchingNextPage, fetchNextPage, items.length]);
 
-  const handleSelect = (item: T) => {
+  const handleToggleItem = (item: T) => {
     const id = getId(item);
-    if (selectedId === id) {
-      onSelect(undefined, undefined);
+    const lbl = getLabel(item);
+    if (selectedIds.includes(id)) {
+      const idx = selectedIds.indexOf(id);
+      const newIds = selectedIds.filter((_, i) => i !== idx);
+      const newLabels = selectedLabels.filter((_, i) => i !== idx);
+      onSelect(newIds, newLabels);
     } else {
-      onSelect(id, getLabel(item));
+      onSelect([...selectedIds, id], [...selectedLabels, lbl]);
     }
     setOpen(false);
     setSearchInput("");
   };
 
-  const handleClear = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    onSelect(undefined, undefined);
+  const handleRemoveTag = (id: number) => {
+    const idx = selectedIds.indexOf(id);
+    if (idx === -1) return;
+    const newIds = selectedIds.filter((_, i) => i !== idx);
+    const newLabels = selectedLabels.filter((_, i) => i !== idx);
+    onSelect(newIds, newLabels);
   };
 
-  const handleToggle = () => {
-    if (open) {
-      setOpen(false);
-      setSearchInput("");
-    } else {
-      setOpen(true);
-    }
-  };
+  const triggerLabel =
+    selectedIds.length === 0
+      ? placeholder
+      : selectedIds.length === 1
+        ? selectedLabels[0]
+        : `${selectedIds.length} seleccionados`;
 
   const dropdownContent = (
     <div
@@ -157,36 +156,22 @@ export function InfiniteScrollSelect<T>({
       </div>
 
       <div className="max-h-52 overflow-y-auto" onWheelCapture={(e) => e.stopPropagation()}>
-        <button
-          type="button"
-          className={cn(
-            "w-full text-left px-3 py-2 text-sm font-store-body hover:bg-stone-50 transition-colors",
-            selectedId === undefined && "bg-stone-100 font-medium",
-          )}
-          onClick={() => {
-            onSelect(undefined, undefined);
-            setOpen(false);
-            setSearchInput("");
-          }}
-        >
-          {allLabel}
-        </button>
-
         {items.map((item) => {
           const id = getId(item);
           const lbl = getLabel(item);
+          const isSelected = selectedIds.includes(id);
           return (
             <button
               key={id}
               type="button"
               className={cn(
                 "w-full text-left px-3 py-2 text-sm font-store-body hover:bg-stone-50 transition-colors flex items-center justify-between gap-2",
-                selectedId === id && "bg-stone-100 font-medium",
+                isSelected && "bg-stone-100",
               )}
-              onClick={() => handleSelect(item)}
+              onClick={() => handleToggleItem(item)}
             >
               <span className="truncate">{lbl}</span>
-              {selectedId === id && (
+              {isSelected && (
                 <Check className="h-3.5 w-3.5 shrink-0 text-stone-600" />
               )}
             </button>
@@ -218,32 +203,43 @@ export function InfiniteScrollSelect<T>({
       <button
         ref={triggerRef}
         type="button"
-        onClick={handleToggle}
+        onClick={() => setOpen((p) => !p)}
         className={cn(
           "flex items-center justify-between gap-2 h-9 px-3 min-w-[150px] border border-stone-300 bg-white text-sm font-store-body text-stone-700 rounded-none",
           "hover:bg-stone-50 transition-colors focus:outline-none",
           open && "border-stone-600",
-          selectedId !== undefined && "border-stone-500",
+          selectedIds.length > 0 && "border-stone-500",
         )}
       >
-        <span className="truncate text-left flex-1">
-          {selectedLabel ?? allLabel}
-        </span>
-        <span className="flex items-center gap-1 shrink-0">
-          {selectedId !== undefined && (
-            <X
-              className="h-3 w-3 text-stone-400 hover:text-stone-700"
-              onClick={handleClear}
-            />
+        <span className="truncate text-left flex-1">{triggerLabel}</span>
+        <ChevronDown
+          className={cn(
+            "h-3.5 w-3.5 text-stone-400 transition-transform duration-150 shrink-0",
+            open && "rotate-180",
           )}
-          <ChevronDown
-            className={cn(
-              "h-3.5 w-3.5 text-stone-400 transition-transform duration-150",
-              open && "rotate-180",
-            )}
-          />
-        </span>
+        />
       </button>
+
+      {/* Selected tags */}
+      {selectedIds.length > 0 && (
+        <div className="flex flex-wrap gap-1 mt-1">
+          {selectedIds.map((id, idx) => (
+            <span
+              key={id}
+              className="inline-flex items-center gap-1 px-2 py-0.5 text-xs font-store-body bg-stone-100 border border-stone-300 text-stone-700 rounded-none"
+            >
+              {selectedLabels[idx]}
+              <button
+                type="button"
+                onClick={() => handleRemoveTag(id)}
+                className="text-stone-400 hover:text-stone-700 transition-colors"
+              >
+                <X className="h-2.5 w-2.5" />
+              </button>
+            </span>
+          ))}
+        </div>
+      )}
 
       {open && (
         modal
