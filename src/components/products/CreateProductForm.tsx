@@ -213,6 +213,8 @@ function AttributeValueAdder({
       attributeValueId: selectedValue.attributeValueId,
       label: `${selectedAttr.name}: ${selectedValue.value}`,
     });
+    setOpen(false);
+    setSelectedAttr(null);
     setSelectedValue(null);
   };
 
