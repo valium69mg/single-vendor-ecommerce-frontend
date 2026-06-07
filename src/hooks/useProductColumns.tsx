@@ -40,38 +40,20 @@ export function useProductColumns(): ColumnDef<AdminProduct>[] {
       ),
     },
     {
-      accessorKey: "minPrice",
-      header: t("minPrice"),
+      accessorKey: "avgPrice",
+      header: t("avgPrice"),
       cell: ({ row }) => (
         <span className="font-store-body text-stone-700">
-          ${row.original.minPrice}
+          ${row.original.avgPrice}
         </span>
       ),
     },
     {
-      accessorKey: "maxPrice",
-      header: t("maxPrice"),
+      accessorKey: "avgDiscount",
+      header: t("avgDiscount"),
       cell: ({ row }) => (
         <span className="font-store-body text-stone-700">
-          ${row.original.maxPrice}
-        </span>
-      ),
-    },
-    {
-      accessorKey: "minDiscountPrice",
-      header: t("minDiscountPrice"),
-      cell: ({ row }) => (
-        <span className="font-store-body text-stone-700">
-          ${row.original.minDiscountPrice}
-        </span>
-      ),
-    },
-    {
-      accessorKey: "maxDiscountPrice",
-      header: t("maxDiscountPrice"),
-      cell: ({ row }) => (
-        <span className="font-store-body text-stone-700">
-          ${row.original.maxDiscountPrice}
+          ${row.original.avgDiscount}
         </span>
       ),
     },

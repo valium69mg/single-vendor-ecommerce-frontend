@@ -251,7 +251,7 @@ export default function AdminProductsPage() {
         >
           <option value="">{t("all")}</option>
           <option value="name">{t("name")}</option>
-          <option value="minPrice">{t("price")}</option>
+          <option value="avgPrice">{t("avgPrice")}</option>
           <option value="totalStock">{t("stock")}</option>
           <option value="variantCount">{t("variants")}</option>
           <option value="createdAt">{t("createdAt")}</option>
