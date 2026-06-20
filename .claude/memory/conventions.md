@@ -26,7 +26,7 @@
 
 ## Zod schemas in src/components/auth/
 **Rule:** Form schemas (Zod) live in `src/components/auth/` named `<action>-<resource>.schema.ts`.
-**Why:** [Fill in — why auth/ and not a schemas/ directory?]
+**Why:** Code smell — schemas ended up in `auth/` organically and will be moved to a proper `schemas/` directory in a future cleanup. Do not add more schemas here; flag this when doing a refactor pass.
 **Example:** `src/components/auth/create-product.schema.ts`, `src/components/auth/edit-category.schema.ts`.
 
 ## Validation error keys, not raw strings
