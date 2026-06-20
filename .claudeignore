@@ -1,0 +1,48 @@
+# Build artifacts
+dist/
+dist-ssr/
+
+# Dependencies
+node_modules/
+
+# Coverage & test output
+coverage/
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Environment files (may contain secrets)
+.env
+.env.*
+!.env.example
+
+# IDE / OS
+.idea/
+.vscode/
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Lock files (not useful for code understanding)
+package-lock.json
+
+# Git
+.git/
+
+# Docker / CI artifacts
+Jenkinsfile
+Dockerfile
+nginx.conf.template
+entrypoint.sh
+
+# Static assets (binary-like, not useful to read)
+src/assets/
+public/images/
