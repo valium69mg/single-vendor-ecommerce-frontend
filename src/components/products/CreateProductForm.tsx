@@ -345,6 +345,7 @@ function AttributeValueAdder({
             {tag.label}
             <button
               type="button"
+              aria-label={"Eliminar atributo " + tag.label}
               onClick={() => onRemove(tag.attributeValueId)}
               className="text-stone-400 hover:text-stone-700 transition-colors leading-none"
             >

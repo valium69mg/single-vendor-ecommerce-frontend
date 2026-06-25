@@ -231,6 +231,7 @@ export function InfiniteScrollMultiSelect<T>({
               {selectedLabels[idx]}
               <button
                 type="button"
+                aria-label={"Eliminar atributo " + selectedLabels[idx]}
                 onClick={() => handleRemoveTag(id)}
                 className="text-stone-400 hover:text-stone-700 transition-colors"
               >
