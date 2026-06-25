@@ -11,14 +11,7 @@ import ImageModal from "@/components/common/ImageModal";
 import EditImageForm from "@/components/common/EditImageForm";
 import { Link } from "react-router-dom";
 import { Pencil } from "lucide-react";
-
-function formatDate(iso: string): string {
-  return new Date(iso).toLocaleDateString("es-ES", {
-    year: "numeric",
-    month: "short",
-    day: "numeric",
-  });
-}
+import { formatDate } from "@/lib/formatDate";
 
 export function useCategoryColumns(
   onDelete: (category: Category) => void,

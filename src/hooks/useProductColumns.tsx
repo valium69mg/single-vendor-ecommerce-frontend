@@ -6,14 +6,7 @@ import ProductStatusBadge from "@/components/products/ProductStatusBadge";
 import { useTranslation } from "react-i18next";
 import { cn } from "@/lib/utils";
 import { Pencil, Trash2 } from "lucide-react";
-
-function formatDate(iso: string): string {
-  return new Date(iso).toLocaleDateString("es-ES", {
-    year: "numeric",
-    month: "short",
-    day: "numeric",
-  });
-}
+import { formatDate } from "@/lib/formatDate";
 
 export function useProductColumns(): ColumnDef<AdminProduct>[] {
   const { t } = useTranslation();
