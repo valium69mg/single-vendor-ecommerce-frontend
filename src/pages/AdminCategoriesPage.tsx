@@ -61,7 +61,7 @@ export default function AdminCategoriesPage() {
           query={term}
           setQuery={(val) => {
             setTerm(val);
-            setPage(page);
+            setPage(0);
           }}
         />
       </div>
