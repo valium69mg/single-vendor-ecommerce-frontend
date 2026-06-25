@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useMemo, useCallback } from "react";
 import type { ReactNode } from "react";
 import { UserContext } from "../context/UserContext";
 import type { LoginResponse } from "../api/api";
@@ -9,13 +9,18 @@ export function UserProvider({ children }: { children: ReactNode }) {
     return saved ? JSON.parse(saved) : null;
   });
 
-  const logout = () => {
+  const logout = useCallback(() => {
     localStorage.removeItem("loginData");
     setUser(null);
-  };
+  }, []);
+
+  const value = useMemo(
+    () => ({ user, setUser, logout }),
+    [user, logout]
+  );
 
   return (
-    <UserContext.Provider value={{ user, setUser, logout }}>
+    <UserContext.Provider value={value}>
       {children}
     </UserContext.Provider>
   );
