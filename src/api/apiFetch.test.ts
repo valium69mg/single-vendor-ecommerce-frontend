@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
-import { apiFetch, apiFetchFile, ApiConflictError } from "./apiFetch";
+import { apiFetch, apiFetchFile, ApiConflictError, ApiError } from "./apiFetch";
 import { API_ERRORS } from "@/constants/apiErrors";
 
 function mockResponse(status: number, body?: unknown): Response {
@@ -71,6 +71,21 @@ describe("apiFetch", () => {
   it("throws 'Request failed' when non-ok body is unparseable", async () => {
     vi.mocked(fetch).mockResolvedValue(mockResponse(500));
     await expect(apiFetch("/url", {})).rejects.toThrow("Request failed");
+  });
+
+  it("throws ApiError carrying the status and parsed body on a non-ok response", async () => {
+    vi.mocked(fetch).mockResolvedValue(
+      mockResponse(400, {
+        status: 400,
+        error: "cart_stock_exceeded",
+        availableStock: 4,
+      }),
+    );
+    const err = (await apiFetch("/url", {}).catch((e) => e)) as ApiError;
+    expect(err).toBeInstanceOf(ApiError);
+    expect(err.message).toBe("cart_stock_exceeded");
+    expect(err.status).toBe(400);
+    expect((err.body as { availableStock: number }).availableStock).toBe(4);
   });
 
   it("forwards the options to fetch", async () => {

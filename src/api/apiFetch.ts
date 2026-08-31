@@ -8,6 +8,22 @@ export class ApiConflictError extends Error {
   }
 }
 
+/**
+ * Thrown for any non-ok response that is not already mapped to a more specific
+ * error above. Carries the HTTP status and the parsed error body so callers can
+ * read structured fields (e.g. the top-level `availableStock` on cart 400s).
+ */
+export class ApiError extends Error {
+  status: number;
+  body: unknown;
+  constructor(message: string, status: number, body?: unknown) {
+    super(message);
+    this.name = "ApiError";
+    this.status = status;
+    this.body = body;
+  }
+}
+
 export async function apiFetch<T>(
   url: string,
   options: RequestInit,
@@ -33,7 +49,7 @@ export async function apiFetch<T>(
 
   if (!res.ok) {
     const errorData = await res.json().catch(() => null);
-    throw new Error(errorData?.error || "Request failed");
+    throw new ApiError(errorData?.error || "Request failed", res.status, errorData);
   }
 
   return res.json();

@@ -1,4 +1,4 @@
-import { apiFetch, apiFetchFile } from "./apiFetch";
+import { apiFetch, apiFetchFile, ApiError } from "./apiFetch";
 
 export const API_BASE_URL =
   import.meta.env.VITE_API_URL || "http://localhost:8080/api/v1";
@@ -479,4 +479,127 @@ export async function uploadProductImage(
     file,
     token,
   );
+}
+
+// ─── Cart (authenticated) ─────────────────────────────────────────────────────
+// Backend contract (Slice 1): base path `/cart`, JWT required. Every endpoint
+// returns a `CartResponse` with HTTP 200 — including DELETE (never 204). Line
+// totals and the subtotal are computed server-side from the live variant price.
+
+export interface CartItemResponse {
+  cartItemId: number;
+  productVariantId: number;
+  productId: string;
+  productName: string;
+  sku: string;
+  imageUrl: string | null;
+  unitPrice: number;
+  discountPrice: number | null;
+  quantity: number;
+  availableStock: number;
+  lineTotal: number;
+}
+
+export interface CartResponse {
+  cartId: number | null;
+  items: CartItemResponse[];
+  subtotal: number;
+  totalItems: number;
+}
+
+export interface AddCartItemRequest {
+  productVariantId: number;
+  quantity: number;
+}
+
+export interface UpdateCartItemRequest {
+  quantity: number;
+}
+
+/**
+ * Raised when the backend rejects an add/update with HTTP 400 because the
+ * requested quantity exceeds available stock. `availableStock` is spread onto
+ * the error body root by the backend `GlobalExceptionHandler` (not nested under
+ * `metadata`), so the UI can tell the shopper how many units are left.
+ */
+export class CartStockError extends Error {
+  availableStock: number;
+  constructor(message: string, availableStock: number) {
+    super(message);
+    this.name = "CartStockError";
+    this.availableStock = availableStock;
+  }
+}
+
+function mapCartStockError(error: unknown): unknown {
+  if (
+    error instanceof ApiError &&
+    error.status === 400 &&
+    error.body !== null &&
+    typeof error.body === "object"
+  ) {
+    const stock = (error.body as Record<string, unknown>).availableStock;
+    if (typeof stock === "number") {
+      return new CartStockError(error.message, stock);
+    }
+  }
+  return error;
+}
+
+function cartHeaders(token: string): HeadersInit {
+  return {
+    "Content-Type": "application/json",
+    Authorization: `Bearer ${token}`,
+  };
+}
+
+export async function getCart(token: string): Promise<CartResponse> {
+  return apiFetch<CartResponse>(`${API_BASE_URL}/cart`, {
+    method: "GET",
+    headers: cartHeaders(token),
+  });
+}
+
+export async function addCartItem(
+  body: AddCartItemRequest,
+  token: string,
+): Promise<CartResponse> {
+  try {
+    return await apiFetch<CartResponse>(`${API_BASE_URL}/cart/items`, {
+      method: "POST",
+      headers: cartHeaders(token),
+      body: JSON.stringify(body),
+    });
+  } catch (error) {
+    throw mapCartStockError(error);
+  }
+}
+
+export async function updateCartItem(
+  cartItemId: number,
+  body: UpdateCartItemRequest,
+  token: string,
+): Promise<CartResponse> {
+  try {
+    return await apiFetch<CartResponse>(
+      `${API_BASE_URL}/cart/items/${cartItemId}`,
+      {
+        method: "PATCH",
+        headers: cartHeaders(token),
+        body: JSON.stringify(body),
+      },
+    );
+  } catch (error) {
+    throw mapCartStockError(error);
+  }
+}
+
+export async function removeCartItem(
+  cartItemId: number,
+  token: string,
+): Promise<CartResponse> {
+  return apiFetch<CartResponse>(`${API_BASE_URL}/cart/items/${cartItemId}`, {
+    method: "DELETE",
+    headers: cartHeaders(token),
+  });
 }
