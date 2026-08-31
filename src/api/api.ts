@@ -92,6 +92,50 @@ export async function getProducts(
   );
 }
 
+// Storefront — single public product with its variants, no auth required
+export interface PublicVariantAttributeValue {
+  attributeValueId: number;
+  value: string;
+}
+
+export interface PublicProductVariant {
+  productVariantId: number;
+  price: number;
+  discountPrice: number | null;
+  stock: number;
+  attributeValues: PublicVariantAttributeValue[];
+}
+
+export interface PublicProductById {
+  productId: string;
+  name: string;
+  shortDescription: string | null;
+  longDescription: string | null;
+  featured: boolean;
+  category: { categoryId: number; name: string } | null;
+  brand: { brandId: number; name: string } | null;
+  imageUrl: string | null;
+  mediumThumbnailUrl: string | null;
+  smallThumbnailUrl: string | null;
+  minPrice: number;
+  minDiscountPrice: number | null;
+  createdAt: string;
+  materials: { materialId: number; name: string }[];
+  variants: PublicProductVariant[];
+}
+
+export async function getPublicProduct(
+  productId: string,
+): Promise<PublicProductById> {
+  return apiFetch<PublicProductById>(
+    `${API_BASE_URL}/products/${productId}`,
+    {
+      method: "GET",
+      headers: { "Content-Type": "application/json" },
+    },
+  );
+}
+
 // Storefront — public categories, no auth required
 export interface PublicCategory {
   categoryId: number;
