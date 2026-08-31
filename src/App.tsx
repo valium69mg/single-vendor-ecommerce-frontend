@@ -9,6 +9,8 @@ import ProtectedRoute from "./components/auth/ProtectedRoute";
 import { ROLES } from "@/constants/roles";
 import AdminCategoriesPage from "./pages/AdminCategoriesPage";
 import AdminCategoryDetailPage from "./pages/AdminCategoryDetailPage";
+import CartPage from "./pages/CartPage";
+import ProductDetailPage from "./pages/ProductDetailPage";
 import { Toaster } from "sonner"
 
 function App() {
@@ -26,6 +28,9 @@ function App() {
                   <HomePage />
               }
             />
+
+            <Route path="/carrito" element={<CartPage />} />
+            <Route path="/product/:productId" element={<ProductDetailPage />} />
 
             <Route
               path="/admin"

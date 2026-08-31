@@ -10,6 +10,7 @@ src/
 ├── components/
 │   ├── admin/              # AdminSideBar, AdminSideBarHeader, AdminSideBarFooter
 │   ├── auth/               # ProtectedRoute, LoginForm, LoginButton + Zod schemas
+│   ├── cart/               # QuantityStepper, CartItemRow, CartDrawer (+ cartError helper)
 │   ├── categories/         # CreateCategoryForm, EditCategoryForm, RestoreCategoryDialog
 │   ├── common/             # Shared UI primitives (DataTable, Modal, Form, etc.)
 │   ├── home/               # Store-facing components (HeroBanner, ProductSection, etc.)
@@ -21,9 +22,11 @@ src/
 │   ├── apiErrors.ts        # API_ERRORS.UNAUTHORIZED / FORBIDDEN strings
 │   └── roles.ts            # ROLES.USER / ROLES.ADMIN
 ├── context/
+│   ├── CartContext.tsx     # CartContextValue definition (items, subtotal, drawer, actions)
 │   └── UserContext.tsx     # React context definition for user state
 ├── hooks/
 │   ├── useApiErrorHandler.tsx   # Centralised error handling (401→logout, 403→toast)
+│   ├── useCart.tsx              # Access cart context (throws outside CartProvider)
 │   ├── useCategoryColumns.tsx   # TanStack Table ColumnDef[] for categories
 │   ├── useDebounce.tsx          # Generic debounce hook
 │   ├── use-mobile.tsx           # Breakpoint hook (shadcn generated)
@@ -33,6 +36,7 @@ src/
 ├── i18n/index.ts           # All Spanish translations (single es locale, no JSON files)
 ├── lib/
 │   ├── authHandler.ts      # handleUnauthorized (prevents re-entrant logouts)
+│   ├── format.ts           # formatMXN() — Intl es-MX / MXN currency
 │   └── utils.ts            # cn() (clsx + tailwind-merge)
 ├── mocks/home.ts           # MOCK_CATEGORIES, MOCK_FEATURED_PRODUCTS, MOCK_NEW_ARRIVALS, MOCK_BESTSELLERS
 ├── pages/
@@ -40,11 +44,15 @@ src/
 │   ├── AdminCategoryDetailPage.tsx
 │   ├── AdminHomePage.tsx          # Layout route — renders AdminSideBar + <Outlet />
 │   ├── AdminProductsPage.tsx
+│   ├── CartPage.tsx               # /carrito — full cart page
 │   ├── HomePage.tsx
-│   └── LoginPage.tsx
+│   ├── LoginPage.tsx
+│   └── ProductDetailPage.tsx      # /product/:productId — minimal add-to-cart entry point
 ├── providers/
+│   ├── CartProvider.tsx    # Guest localStorage["cart"] + authed cart-API sync; exposes useCart value
+│   ├── cartReducer.ts      # Pure cartReducer + subtotal/totalItems/mapCartResponse selectors
 │   └── UserProvider.tsx    # Wraps app; stores LoginResponse in state + localStorage["loginData"]
-├── test/setup.ts           # Vitest setup file (exists, suite not yet implemented)
+├── test/setup.ts           # Vitest setup (jest-dom + i18n init)
 └── App.tsx                 # Route tree root
 ```
 
@@ -77,6 +85,8 @@ src/
 ```
 /login                          → LoginPage (public)
 /                               → HomePage (public, no role guard)
+/carrito                        → CartPage (public) — full cart, subtotal, empty state
+/product/:productId             → ProductDetailPage (public) — minimal: variant select + add-to-cart
 /admin                          → AdminHomePage (ADMIN) — layout with AdminSideBar + <Outlet />
   /admin/products               → AdminProductsPage
   /admin/categories             → AdminCategoriesPage
@@ -91,7 +101,12 @@ Base URL: `VITE_API_URL` (default `http://localhost:8080/api/v1`)
 |---|---|---|---|
 | POST | `/auth/login` | — | `loginRequest` |
 | GET | `/products` | — | `getProducts` |
+| GET | `/products/:productId` | — | `getPublicProduct` (single product + variants) |
 | GET | `/products/categories` | — | `getCategories` |
+| GET | `/cart` | JWT | `getCart` |
+| POST | `/cart/items` | JWT | `addCartItem` |
+| PATCH | `/cart/items/:cartItemId` | JWT | `updateCartItem` |
+| DELETE | `/cart/items/:cartItemId` | JWT | `removeCartItem` (returns updated `CartResponse`, 200) |
 | GET | `/admin/products/categories` | ADMIN | `getAdminCategories` |
 | GET | `/admin/products/categories/:id` | ADMIN | `getAdminCategory` |
 | PATCH | `/admin/products/categories/:id` | ADMIN | `editCategory` |

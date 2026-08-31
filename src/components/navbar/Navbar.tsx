@@ -2,6 +2,7 @@ import NavbarLogo from "./NavbarLogo";
 import NavbarCategories from "./NavbarCategories";
 import NavbarSearch from "./NavbarSearch";
 import NavbarProfile from "./NavbarProfile";
+import NavbarCart from "./NavbarCart";
 
 export default function Navbar() {
   return (
@@ -18,7 +19,8 @@ export default function Navbar() {
           <NavbarSearch />
         </div>
 
-        <div className="flex items-center justify-end">
+        <div className="flex items-center justify-end gap-2">
+          <NavbarCart />
           <NavbarProfile />
         </div>
       </div>
