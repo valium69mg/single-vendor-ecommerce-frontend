@@ -1,5 +1,6 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { UserProvider } from "./providers/UserProvider";
+import { CartProvider } from "./providers/CartProvider";
 import LoginPage from "./pages/LoginPage";
 import HomePage from "./pages/HomePage";
 import AdminHomePage from "./pages/AdminHomePage";
@@ -14,31 +15,33 @@ function App() {
   return (
     <UserProvider>
       <Toaster position="bottom-right" richColors />
-      <BrowserRouter>
-        <Routes>
-          <Route path="/login" element={<LoginPage />} />
+      <CartProvider>
+        <BrowserRouter>
+          <Routes>
+            <Route path="/login" element={<LoginPage />} />
 
-          <Route
-            path="/"
-            element={
-                <HomePage />
-            }
-          />
+            <Route
+              path="/"
+              element={
+                  <HomePage />
+              }
+            />
 
-          <Route
-            path="/admin"
-            element={
-              <ProtectedRoute roles={[ROLES.ADMIN]}>
-                <AdminHomePage />
-              </ProtectedRoute>
-            }
-          >
-            <Route path="products" element={<AdminProductsPage />} />
-            <Route path="categories" element={<AdminCategoriesPage />} />
-            <Route path="categories/:categoryId" element={<AdminCategoryDetailPage />} />
-          </Route>
-        </Routes>
-      </BrowserRouter>
+            <Route
+              path="/admin"
+              element={
+                <ProtectedRoute roles={[ROLES.ADMIN]}>
+                  <AdminHomePage />
+                </ProtectedRoute>
+              }
+            >
+              <Route path="products" element={<AdminProductsPage />} />
+              <Route path="categories" element={<AdminCategoriesPage />} />
+              <Route path="categories/:categoryId" element={<AdminCategoryDetailPage />} />
+            </Route>
+          </Routes>
+        </BrowserRouter>
+      </CartProvider>
     </UserProvider>
   );
 }
