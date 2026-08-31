@@ -1,8 +1,8 @@
 #!/bin/sh
 set -e
 
-# Default fallback (optional)
-: "${BACKEND_ADDRESS:=http://backend:8080}"
+# Default fallback (optional). Must be exported so the envsubst child process sees it.
+export BACKEND_ADDRESS="${BACKEND_ADDRESS:-http://backend:8080}"
 
 echo "Using BACKEND_ADDRESS=$BACKEND_ADDRESS"
 
