@@ -1,9 +1,13 @@
 # Skill: Write a Test
 
-## Stack (not yet installed — see CLAUDE.md Testing plan)
-Vitest + React Testing Library + MSW
+## Stack
+Vitest 4 + React Testing Library + jsdom — configured and in use (see `vite.config.ts` `test` block; `src/api/*.test.ts`, `src/hooks/*.test.tsx`, `src/components/cart/*.test.tsx`, `src/pages/*.test.tsx` all exist).
 
-Setup file: `src/test/setup.ts`
+**Unit and component tests only. No MSW, no e2e.** Mock the `@/api/api` module (or the specific hook) with `vi.mock` instead of intercepting network.
+
+Setup file: `src/test/setup.ts` — loads `@testing-library/jest-dom` matchers and `@/i18n` (so `t()` returns real Spanish copy in assertions).
+
+Run: `npm run test` (watch) or `npx vitest run` (one-shot).
 
 ## Test file locations
 Place test files next to the code they test:
@@ -75,28 +79,35 @@ describe("Modal", () => {
 });
 ```
 
-## Integration test — MSW
+## Page/hook test — mock the api module (no MSW)
 ```tsx
-import { setupServer } from "msw/node";
-import { http, HttpResponse } from "msw";
-import { render, screen, waitFor } from "@testing-library/react";
+import { render, screen } from "@testing-library/react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { describe, it, expect, vi } from "vitest";
 import AdminCategoriesPage from "@/pages/AdminCategoriesPage";
-import { API_BASE_URL } from "@/api/api";
 
-const server = setupServer(
-  http.get(`${API_BASE_URL}/admin/products/categories`, () => {
-    return HttpResponse.json({
-      content: [{ categoryId: 1, name: "Rings", products: 5, unitsSold: 10, revenue: 500, averagePrice: 100, stock: 20, imageUrl: null, mediumThumbnailUrl: null, smallThumbnailUrl: null, createdAt: "2024-01-01T00:00:00Z", updatedAt: "2024-01-01T00:00:00Z" }],
-      page: 0, size: 10, totalElements: 1, totalPages: 1, last: true,
-    });
-  })
+vi.mock("@/api/api", () => ({
+  getAdminCategories: vi.fn().mockResolvedValue({
+    content: [{ categoryId: 1, name: "Rings", products: 5, unitsSold: 10, revenue: 500, averagePrice: 100, stock: 20, imageUrl: null, mediumThumbnailUrl: null, smallThumbnailUrl: null, createdAt: "2024-01-01T00:00:00Z", updatedAt: "2024-01-01T00:00:00Z" }],
+    page: 0, size: 10, totalElements: 1, totalPages: 1, last: true,
+  }),
+}));
+
+const wrapper = ({ children }: { children: React.ReactNode }) => (
+  <QueryClientProvider client={new QueryClient({ defaultOptions: { queries: { retry: false } } })}>
+    {children}
+  </QueryClientProvider>
 );
 
-beforeAll(() => server.listen());
-afterEach(() => server.resetHandlers());
-afterAll(() => server.close());
+describe("AdminCategoriesPage", () => {
+  it("renders rows from the mocked api", async () => {
+    render(<AdminCategoriesPage />, { wrapper });
+    expect(await screen.findByText("Rings")).toBeInTheDocument();
+  });
+});
 ```
+
+For hooks, `renderHook` from `@testing-library/react` with the same `wrapper`; mock `@/api/api` the same way.
 
 ## Key things to know
 - `UserProvider` reads from `localStorage["loginData"]` on mount. Set it in `beforeEach` via `localStorage.setItem("loginData", JSON.stringify({ token: "test-token", role: "ADMIN", ... }))`.
@@ -105,7 +116,7 @@ afterAll(() => server.close());
 - `throwOnError` from `useApiErrorHandler` returns `false` — no need to set up ErrorBoundaries in tests.
 
 ## Before you commit
-- [ ] Test file is next to the source file, not in a separate `__tests__/` directory?
-- [ ] MSW handlers cleaned up in `afterEach(() => server.resetHandlers())`?
-- [ ] Component tests wrapped in `QueryClientProvider` if they use any hook that calls `useQueryClient`?
+- [ ] `npx vitest run` passes; new tests are next to the source file, not in a separate `__tests__/` directory?
+- [ ] `vi.mock` calls / spies reset — `vi.restoreAllMocks()` in `afterEach` (or `clearMocks` in config)?
+- [ ] Component/hook tests wrapped in `QueryClientProvider` if they use any hook that calls `useQueryClient`?
 - [ ] Any discovery about test setup behavior that's non-obvious? → add to `.claude/memory/gotchas.md`.

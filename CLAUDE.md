@@ -20,9 +20,11 @@ npm run dev        # Start dev server (Vite HMR)
 npm run build      # Type-check + production build (tsc -b && vite build)
 npm run lint       # ESLint
 npm run preview    # Preview production build locally
+npm run test       # Vitest (watch mode)
+npx vitest run     # Vitest, one-shot — use this for CI / pre-commit
 ```
 
-No test suite is configured yet. Stack to install: Vitest + React Testing Library + MSW. See `.claude/skills/write-test.md` for the full plan.
+**Testing:** Vitest 4 + React Testing Library + jsdom, wired via the `test` block in `vite.config.ts` (setup file `src/test/setup.ts`, which loads `@testing-library/jest-dom` and `@/i18n`). Unit and component tests only — **no MSW, no e2e**. Mock modules/hooks with `vi.mock`. Place test files next to the code they test. Full patterns in `.claude/skills/write-test.md`.
 
 ## Environment variables
 
