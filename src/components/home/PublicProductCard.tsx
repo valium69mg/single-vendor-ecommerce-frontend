@@ -3,16 +3,11 @@ import { cn } from "@/lib/utils";
 import { gradients } from "@/mocks/home";
 import type { PublicProduct } from "@/api/api";
 import { getFileUrl } from "@/api/api";
+import { formatMXN } from "@/lib/format";
 
 interface Props {
   product: PublicProduct;
 }
-
-const MXN = new Intl.NumberFormat("es-MX", {
-  style: "currency",
-  currency: "MXN",
-  minimumFractionDigits: 0,
-});
 
 export default function PublicProductCard({ product }: Props) {
   const hasDiscount = product.minDiscountPrice < product.minPrice;
@@ -81,11 +76,11 @@ export default function PublicProductCard({ product }: Props) {
         </h3>
         <div className="flex items-center gap-2">
           <span className="font-store-body text-sm font-semibold text-stone-900">
-            {MXN.format(hasDiscount ? product.minDiscountPrice : product.minPrice)}
+            {formatMXN(hasDiscount ? product.minDiscountPrice : product.minPrice)}
           </span>
           {hasDiscount && (
             <span className="font-store-body text-xs text-stone-400 line-through">
-              {MXN.format(product.minPrice)}
+              {formatMXN(product.minPrice)}
             </span>
           )}
         </div>
