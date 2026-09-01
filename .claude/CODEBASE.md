@@ -9,7 +9,7 @@ src/
 │   └── apiFetch.ts         # Low-level fetch wrappers (apiFetch, apiFetchFile)
 ├── components/
 │   ├── admin/              # AdminSideBar, AdminSideBarHeader, AdminSideBarFooter
-│   ├── auth/               # ProtectedRoute, LoginForm, LoginButton + Zod schemas
+│   ├── auth/               # ProtectedRoute, LoginForm + Zod schemas
 │   ├── cart/               # QuantityStepper, CartItemRow, CartDrawer (+ cartError helper)
 │   ├── categories/         # CreateCategoryForm, EditCategoryForm, RestoreCategoryDialog
 │   ├── common/             # Shared UI primitives (DataTable, Modal, Form, etc.)
