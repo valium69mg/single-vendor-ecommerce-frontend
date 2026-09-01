@@ -56,6 +56,17 @@ describe("getAdminBrands", () => {
       Authorization: "Bearer t",
     });
   });
+
+  it("transmits a term with reserved characters as exactly one term param (F1)", async () => {
+    vi.mocked(fetch).mockResolvedValue(mockResponse(200, page([])));
+
+    await getAdminBrands(0, 10, "oro & plata #x=1", "t");
+
+    const { url, query } = lastCall();
+    expect(query.get("term")).toBe("oro & plata #x=1");
+    expect([...query.keys()].sort()).toEqual(["page", "size", "term"]);
+    expect(new URL(url).hash).toBe("");
+  });
 });
 
 describe("getAdminMaterials", () => {
@@ -71,6 +82,17 @@ describe("getAdminMaterials", () => {
     expect(query.get("size")).toBe("10");
     expect(query.get("term")).toBe("gold");
     expect(init.headers).toMatchObject({ Authorization: "Bearer t" });
+  });
+
+  it("transmits a term with reserved characters as exactly one term param (F1)", async () => {
+    vi.mocked(fetch).mockResolvedValue(mockResponse(200, page([])));
+
+    await getAdminMaterials(0, 10, "oro & plata #x=1", "t");
+
+    const { url, query } = lastCall();
+    expect(query.get("term")).toBe("oro & plata #x=1");
+    expect([...query.keys()].sort()).toEqual(["page", "size", "term"]);
+    expect(new URL(url).hash).toBe("");
   });
 });
 

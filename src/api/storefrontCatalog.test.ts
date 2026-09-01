@@ -111,4 +111,15 @@ describe("getCategories", () => {
 
     await expect(getCategories(0, 10, "rings")).resolves.toEqual(body);
   });
+
+  it("transmits a term with reserved characters as exactly one term param (F1)", async () => {
+    vi.mocked(fetch).mockResolvedValue(mockResponse(200, PAGE));
+
+    await getCategories(0, 10, "oro & plata #x=1");
+
+    const { url, query } = lastCall();
+    expect(query.get("term")).toBe("oro & plata #x=1");
+    expect([...query.keys()].sort()).toEqual(["page", "size", "term"]);
+    expect(new URL(url).hash).toBe("");
+  });
 });

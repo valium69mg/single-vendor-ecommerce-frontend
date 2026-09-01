@@ -54,6 +54,19 @@ describe("admin category wrappers — Bearer auth", () => {
     });
   });
 
+  it("transmits a term with reserved characters as exactly one term param (F1)", async () => {
+    vi.mocked(fetch).mockResolvedValue(
+      mockResponse(200, { content: [], page: 0, size: 10, totalElements: 0, totalPages: 0, last: true }),
+    );
+
+    await getAdminCategories(0, 10, "oro & plata #x=1", "t123");
+
+    const { url, query } = lastCall();
+    expect(query.get("term")).toBe("oro & plata #x=1");
+    expect([...query.keys()].sort()).toEqual(["page", "size", "term"]);
+    expect(new URL(url).hash).toBe("");
+  });
+
   it("getAdminCategory hits the id path with the Bearer token", async () => {
     vi.mocked(fetch).mockResolvedValue(mockResponse(200, CATEGORY));
 

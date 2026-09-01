@@ -174,8 +174,13 @@ export async function getCategories(
   size: number,
   term: string,
 ): Promise<PageResponse<PublicCategory>> {
+  const query = new URLSearchParams();
+  query.set("page", String(page));
+  query.set("size", String(size));
+  query.set("term", term);
+
   return apiFetch<PageResponse<PublicCategory>>(
-    `${API_BASE_URL}/products/categories?page=${page}&size=${size}&term=${term}`,
+    `${API_BASE_URL}/products/categories?${query.toString()}`,
     {
       method: "GET",
       headers: { "Content-Type": "application/json" },
@@ -189,8 +194,13 @@ export async function getAdminCategories(
   term: string,
   token: string,
 ): Promise<PageResponse<Category>> {
+  const query = new URLSearchParams();
+  query.set("page", String(page));
+  query.set("size", String(size));
+  query.set("term", term);
+
   return apiFetch<PageResponse<Category>>(
-    `${API_BASE_URL}/admin/products/categories?page=${page}&size=${size}&term=${term}`,
+    `${API_BASE_URL}/admin/products/categories?${query.toString()}`,
     {
       method: "GET",
       headers: {
@@ -292,8 +302,13 @@ export async function getAdminBrands(
   term: string,
   token: string,
 ): Promise<PageResponse<AdminBrand>> {
+  const query = new URLSearchParams();
+  query.set("page", String(page));
+  query.set("size", String(size));
+  query.set("term", term);
+
   return apiFetch<PageResponse<AdminBrand>>(
-    `${API_BASE_URL}/admin/products/brands?page=${page}&size=${size}&term=${term}`,
+    `${API_BASE_URL}/admin/products/brands?${query.toString()}`,
     {
       method: "GET",
       headers: {
@@ -430,8 +445,13 @@ export async function getAdminMaterials(
   term: string,
   token: string,
 ): Promise<PageResponse<AdminMaterial>> {
+  const query = new URLSearchParams();
+  query.set("page", String(page));
+  query.set("size", String(size));
+  query.set("term", term);
+
   return apiFetch<PageResponse<AdminMaterial>>(
-    `${API_BASE_URL}/admin/products/materials?page=${page}&size=${size}&term=${term}`,
+    `${API_BASE_URL}/admin/products/materials?${query.toString()}`,
     {
       method: "GET",
       headers: {
