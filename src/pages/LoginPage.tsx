@@ -14,6 +14,9 @@ export default function LoginPage() {
         navigate("/admin", { replace: true });
       } else if (user.role === ROLES.USER) {
         navigate("/", { replace: true });
+      } else {
+        // Any other/unknown role: never strand an authenticated user on login.
+        navigate("/", { replace: true });
       }
     }
   }, [user, navigate]);
