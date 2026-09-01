@@ -86,7 +86,8 @@ export default function LoginForm() {
   const mutation = useMutation<LoginResponse, Error, LoginFormValues>({
     mutationFn: loginRequest,
     onSuccess: (data) => {
-      localStorage.setItem("loginData", JSON.stringify(data));
+      // Persistence is owned by UserProvider's effect on `user`; the form only
+      // sets the session and clears the query cache.
       setUser(data);
       queryClient.clear();
     },
