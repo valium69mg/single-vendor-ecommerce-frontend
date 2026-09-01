@@ -3,6 +3,8 @@ import type { ReactNode } from "react";
 import { CartContext } from "@/context/CartContext";
 import type { CartContextValue } from "@/context/CartContext";
 import { useUser } from "@/hooks/useUser";
+import { handleUnauthorized } from "@/lib/authHandler";
+import { API_ERRORS } from "@/constants/apiErrors";
 import {
   addCartItem,
   getCart,
@@ -38,7 +40,7 @@ function toErrorMessage(error: unknown): string {
 }
 
 export function CartProvider({ children }: { children: ReactNode }) {
-  const { user } = useUser();
+  const { user, logout } = useUser();
   const token = user?.token ?? null;
 
   const [state, dispatch] = useReducer(cartReducer, undefined, readGuestCart);
@@ -73,7 +75,12 @@ export function CartProvider({ children }: { children: ReactNode }) {
           dispatch({ type: "HYDRATE", payload: mapCartResponse(response) });
         }
       } catch (err) {
-        if (!cancelled) setError(toErrorMessage(err));
+        if (cancelled) return;
+        if (err instanceof Error && err.message === API_ERRORS.UNAUTHORIZED) {
+          handleUnauthorized(logout);
+        } else {
+          setError(toErrorMessage(err));
+        }
       } finally {
         if (!cancelled) setIsLoading(false);
       }
@@ -84,7 +91,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
     return () => {
       cancelled = true;
     };
-  }, [token]);
+  }, [token, logout]);
 
   const addItem = useCallback(
     async (input: CartInput) => {
