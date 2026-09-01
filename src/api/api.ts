@@ -30,15 +30,22 @@ export async function loginRequest(data: {
   email: string;
   password: string;
 }): Promise<LoginResponse> {
-  const res = await fetch(`${API_BASE_URL}/auth/login`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(data),
-  });
+  let res: Response;
+  try {
+    res = await fetch(`${API_BASE_URL}/auth/login`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data),
+    });
+  } catch {
+    throw new Error("auth.networkError");
+  }
 
   if (!res.ok) {
-    const errorData = await res.json().catch(() => null);
-    throw new Error(errorData?.error || "Login failed");
+    // Pre-auth endpoint: never surface API_ERRORS.UNAUTHORIZED (that drives a
+    // global logout). Map to stable i18n keys the login form can localize.
+    if (res.status === 401) throw new Error("auth.invalidCredentials");
+    throw new Error("auth.loginFailed");
   }
 
   return res.json();

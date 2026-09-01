@@ -116,6 +116,12 @@ i18n.use(initReactI18next).init({
         variants: "Variantes",
         createdAt: "Creado",
         updatedAt: "Actualizado",
+        auth: {
+          invalidCredentials: "Correo electrónico o contraseña incorrectos",
+          loginFailed: "No fue posible iniciar sesión. Inténtalo de nuevo.",
+          networkError:
+            "No pudimos conectar con el servidor. Revisa tu conexión.",
+        },
         cart: {
           title: "Carrito",
           empty: "Tu carrito está vacío",
