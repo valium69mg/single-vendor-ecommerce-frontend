@@ -138,4 +138,25 @@ describe("getAdminAttributesPage — array to PageResponse adaptation", () => {
     expect(res.page).toBe(3);
     expect(res.last).toBe(false);
   });
+
+  it("reports honest pagination bounds instead of type-lie sentinels (F3)", async () => {
+    const list = Array.from({ length: 20 }, (_, i) => attr(i + 1));
+    vi.mocked(fetch).mockResolvedValue(mockResponse(200, list));
+
+    const res = await getAdminAttributesPage(1, 20, "t");
+
+    expect(res.totalElements).toBe(40);
+    expect(res.totalPages).not.toBe(-1);
+    expect(res.totalPages).toBeGreaterThan(0);
+  });
+
+  it("bounds totals from the cumulative count on a partial final page (F3)", async () => {
+    const list = Array.from({ length: 7 }, (_, i) => attr(i + 1));
+    vi.mocked(fetch).mockResolvedValue(mockResponse(200, list));
+
+    const res = await getAdminAttributesPage(0, 20, "t");
+
+    expect(res.totalElements).toBe(7);
+    expect(res.totalPages).toBe(1);
+  });
 });

@@ -490,13 +490,19 @@ export async function getAdminAttributesPage(
       },
     },
   );
+  // The backend returns a bare array, not a PageResponse, so exact totals and a
+  // reliable `last` for an exactly-full page are not knowable frontend-only.
+  // Derive honest lower bounds and keep the array-length `last` heuristic; the
+  // residual (an exactly-full non-final page still reports last:false, costing
+  // one wasted page+1 request) is tracked in ticket T7 / F3-backend.
+  const last = list.length < size; // 0-indexed page param (initialPageParam: 0)
   return {
     content: list,
     page,
     size,
-    totalElements: list.length,
-    totalPages: -1,
-    last: list.length < size,
+    totalElements: page * size + list.length, // cumulative lower bound
+    totalPages: last ? page + 1 : page + 2, // exact when last, lower bound otherwise
+    last,
   };
 }
 
