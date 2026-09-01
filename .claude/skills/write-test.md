@@ -3,7 +3,7 @@
 ## Stack
 Vitest 4 + React Testing Library + jsdom — configured and in use (see `vite.config.ts` `test` block; `src/api/*.test.ts`, `src/hooks/*.test.tsx`, `src/components/cart/*.test.tsx`, `src/pages/*.test.tsx` all exist).
 
-**Unit and component tests only. No MSW, no e2e.** Mock the `@/api/api` module (or the specific hook) with `vi.mock` instead of intercepting network.
+**Unit and component tests: no e2e.** For unit/component tests, mock the `@/api/api` module (or the specific hook) with `vi.mock` instead of intercepting network. For integration tests (`*.integration.test.tsx`), use MSW to intercept HTTP — see "Integration test — MSW" below.
 
 Setup file: `src/test/setup.ts` — loads `@testing-library/jest-dom` matchers and `@/i18n` (so `t()` returns real Spanish copy in assertions).
 
@@ -108,6 +108,30 @@ describe("AdminCategoriesPage", () => {
 ```
 
 For hooks, `renderHook` from `@testing-library/react` with the same `wrapper`; mock `@/api/api` the same way.
+
+## Integration test — MSW (`*.integration.test.tsx`)
+For flows that should exercise the real API layer (`getPublicProduct` → `apiFetch` → `fetch`), intercept HTTP with MSW instead of stubbing `fetch` or mocking `@/api/api`. The MSW node server is started in `src/test/setup.ts` with `onUnhandledRequest: "error"`, so any un-mocked request fails the test. Register per-test handlers with `server.use(...)`; they reset automatically after each test.
+
+```tsx
+import { http, HttpResponse } from "msw";
+import { render, screen } from "@testing-library/react";
+import { describe, it, expect } from "vitest";
+import { server } from "@/mocks/server";
+import { getPublicProduct } from "@/api/api";
+
+// API_BASE_URL falls back to http://localhost:8080/api/v1 under Vitest —
+// use a wildcard host so the handler matches regardless of base URL.
+it("renders a product served by MSW", async () => {
+  server.use(
+    http.get("*/api/v1/products/:id", () =>
+      HttpResponse.json({ productId: "p-1", name: "Collar de Oro", variants: [] }),
+    ),
+  );
+  // render a component/hook that calls getPublicProduct, then assert the field
+});
+```
+
+Add shared always-on handlers to `src/mocks/handlers.ts`.
 
 ## Key things to know
 - `UserProvider` reads from `localStorage["loginData"]` on mount. Set it in `beforeEach` via `localStorage.setItem("loginData", JSON.stringify({ token: "test-token", role: "ADMIN", ... }))`.
