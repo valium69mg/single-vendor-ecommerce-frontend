@@ -6,7 +6,10 @@ export function handleUnauthorized(logout: () => void) {
   isLoggingOut = true;
 
   setTimeout(() => {
-    logout();
-    isLoggingOut = false;
+    try {
+      logout();
+    } finally {
+      isLoggingOut = false;
+    }
   }, 0);
 }
