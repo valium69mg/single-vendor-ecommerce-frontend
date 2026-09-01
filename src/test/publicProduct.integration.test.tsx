@@ -79,3 +79,21 @@ describe("public product detail (MSW integration)", () => {
     expect(screen.queryByRole("heading", { name: "Collar de Oro" })).toBeNull();
   });
 });
+
+describe("unhandled request errors (MSW integration)", () => {
+  // No `server.use(...)` here and `handlers` is empty, so this request matches
+  // no handler. `onUnhandledRequest: "error"` (src/test/setup.ts) must turn that
+  // into a failed request, not a silent pass-through or a mere console warning.
+
+  it("rejects a real API call whose endpoint has no registered handler", async () => {
+    await expect(getPublicProduct("no-handler-for-this")).rejects.toThrow(
+      /\[MSW\]/,
+    );
+  });
+
+  it("rejects a bare fetch to an endpoint no handler covers", async () => {
+    await expect(
+      fetch("http://localhost:8080/api/v1/does-not-exist"),
+    ).rejects.toThrow(/\[MSW\]/);
+  });
+});
