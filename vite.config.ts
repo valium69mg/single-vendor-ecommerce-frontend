@@ -17,6 +17,20 @@ export default defineConfig({
     coverage: {
       provider: "v8",
       reporter: ["text", "html"],
+      // Count the whole source tree, not just files imported by a test, so the
+      // reported percentages are representative of real coverage. Vitest 4
+      // removed `coverage.all` (the intent of this change); `coverage.include`
+      // is what now pulls untested files into the report.
+      include: ["src/**/*.{ts,tsx}"],
+      exclude: [
+        "src/**/*.test.{ts,tsx}",
+        "src/**/*.integration.test.{ts,tsx}",
+        "src/test/**",
+        "src/mocks/**",
+        "src/main.tsx",
+        "src/vite-env.d.ts",
+        "src/**/*.d.ts",
+      ],
       // Glob-scoped floors only (no global thresholds): each value is the
       // measured `vitest run --coverage` actual minus 2 points, floored.
       // Measured 2026-08-31 — apiFetch 100/97.22/85.71/96.29,
@@ -28,9 +42,17 @@ export default defineConfig({
       // i18n 100/100/100/100, LoginPage 100/100/100/100,
       // useApiErrorHandler 100/100/100/100, useUser 100/100/100/100,
       // ProtectedRoute 100/100/100/100, login.schema 100/100/100/100.
-      // No whole-file floor for src/api/api.ts (large mostly-untested module;
-      // only loginRequest is characterized here).
+      // Measured 2026-09-01 (frontend-api-unit-tests) — order
+      // lines/statements/functions/branches, `all: true` + src/** include in
+      // effect: api.ts 98.73/97.72/100/86.84. Whole-file floor added below at
+      // measured actual minus 2, floored to an integer.
       thresholds: {
+        "src/api/api.ts": {
+          lines: 96,
+          statements: 95,
+          functions: 98,
+          branches: 84,
+        },
         "src/api/apiFetch.ts": {
           lines: 98,
           statements: 95,
