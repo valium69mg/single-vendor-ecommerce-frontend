@@ -242,10 +242,18 @@ export async function getBrandBySlug(slug: string): Promise<PublicBrandBySlug> {
 export interface PublicCategory {
   categoryId: number;
   name: string;
+  slug: string;
   products: number;
   imageUrl: string | null;
   mediumThumbnailUrl: string | null;
   smallThumbnailUrl: string | null;
+}
+
+// Storefront — public brands, no auth required. Mirrors the backend `BrandDTO`.
+export interface PublicBrand {
+  brandId: number;
+  name: string;
+  slug: string;
 }
 
 // Admin panel — requires ADMIN JWT
@@ -276,6 +284,25 @@ export async function getCategories(
 
   return apiFetch<PageResponse<PublicCategory>>(
     `${API_BASE_URL}/products/categories?${query.toString()}`,
+    {
+      method: "GET",
+      headers: { "Content-Type": "application/json" },
+    },
+  );
+}
+
+export async function getBrands(
+  page: number,
+  size: number,
+  term: string,
+): Promise<PageResponse<PublicBrand>> {
+  const query = new URLSearchParams();
+  query.set("page", String(page));
+  query.set("size", String(size));
+  query.set("term", term);
+
+  return apiFetch<PageResponse<PublicBrand>>(
+    `${API_BASE_URL}/products/brands?${query.toString()}`,
     {
       method: "GET",
       headers: { "Content-Type": "application/json" },

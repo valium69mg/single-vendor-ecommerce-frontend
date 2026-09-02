@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
-import { getProducts, getCategories, API_BASE_URL } from "./api";
+import { getProducts, getCategories, getBrands, API_BASE_URL } from "./api";
 
 function mockResponse(status: number, body?: unknown): Response {
   return {
@@ -139,6 +139,45 @@ describe("getCategories", () => {
     vi.mocked(fetch).mockResolvedValue(mockResponse(200, PAGE));
 
     await getCategories(0, 10, "oro & plata #x=1");
+
+    const { url, query } = lastCall();
+    expect(query.get("term")).toBe("oro & plata #x=1");
+    expect([...query.keys()].sort()).toEqual(["page", "size", "term"]);
+    expect(new URL(url).hash).toBe("");
+  });
+});
+
+describe("getBrands", () => {
+  it("GETs the public brands page with page, size and term always present", async () => {
+    vi.mocked(fetch).mockResolvedValue(mockResponse(200, PAGE));
+
+    await getBrands(0, 50, "cartier");
+
+    const { url, init, query } = lastCall();
+    expect(url.startsWith(`${API_BASE_URL}/products/brands?`)).toBe(true);
+    expect(query.get("page")).toBe("0");
+    expect(query.get("size")).toBe("50");
+    expect(query.get("term")).toBe("cartier");
+    expect(init.method).toBe("GET");
+    expect(init.headers).toMatchObject({ "Content-Type": "application/json" });
+    expect(init.headers).not.toHaveProperty("Authorization");
+  });
+
+  it("resolves the parsed PageResponse body carrying brand slugs", async () => {
+    const body = {
+      ...PAGE,
+      content: [{ brandId: 1, name: "Cartier", slug: "cartier" }],
+      totalElements: 1,
+    };
+    vi.mocked(fetch).mockResolvedValue(mockResponse(200, body));
+
+    await expect(getBrands(0, 50, "")).resolves.toEqual(body);
+  });
+
+  it("transmits a term with reserved characters as exactly one term param", async () => {
+    vi.mocked(fetch).mockResolvedValue(mockResponse(200, PAGE));
+
+    await getBrands(0, 50, "oro & plata #x=1");
 
     const { url, query } = lastCall();
     expect(query.get("term")).toBe("oro & plata #x=1");
