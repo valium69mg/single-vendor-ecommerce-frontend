@@ -13,6 +13,8 @@ import CartPage from "./pages/CartPage";
 import ProductDetailPage from "./pages/ProductDetailPage";
 import CategoryDetailPage from "./pages/CategoryDetailPage";
 import BrandDetailPage from "./pages/BrandDetailPage";
+import CategoriesListPage from "./pages/CategoriesListPage";
+import BrandsListPage from "./pages/BrandsListPage";
 import NotFoundPage from "./pages/NotFoundPage";
 import { Toaster } from "sonner"
 
@@ -32,6 +34,8 @@ export function AppRoutes() {
       <Route path="/product/:slug" element={<ProductDetailPage />} />
       <Route path="/category/:slug" element={<CategoryDetailPage />} />
       <Route path="/brand/:slug" element={<BrandDetailPage />} />
+      <Route path="/categories" element={<CategoriesListPage />} />
+      <Route path="/brands" element={<BrandsListPage />} />
 
       <Route
         path="/admin"

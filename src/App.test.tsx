@@ -15,6 +15,12 @@ vi.mock("./pages/CategoryDetailPage", () => ({
 vi.mock("./pages/BrandDetailPage", () => ({
   default: () => <div>brand detail page</div>,
 }));
+vi.mock("./pages/CategoriesListPage", () => ({
+  default: () => <div>categories list page</div>,
+}));
+vi.mock("./pages/BrandsListPage", () => ({
+  default: () => <div>brands list page</div>,
+}));
 vi.mock("./pages/AdminHomePage", () => ({ default: () => <div>admin home</div> }));
 vi.mock("./pages/AdminProductsPage", () => ({
   default: () => <div>admin products</div>,
@@ -66,5 +72,15 @@ describe("AppRoutes", () => {
   it("resolves the brand detail route", () => {
     renderAt("/brand/cartier");
     expect(screen.getByText("brand detail page")).toBeInTheDocument();
+  });
+
+  it("resolves the categories list route", () => {
+    renderAt("/categories");
+    expect(screen.getByText("categories list page")).toBeInTheDocument();
+  });
+
+  it("resolves the brands list route", () => {
+    renderAt("/brands");
+    expect(screen.getByText("brands list page")).toBeInTheDocument();
   });
 });

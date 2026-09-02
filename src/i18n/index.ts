@@ -127,6 +127,14 @@ i18n.use(initReactI18next).init({
         brandPage: {
           empty: "No hay productos de esta marca todavía.",
         },
+        categoriesList: {
+          title: "Categorías",
+          empty: "No hay categorías disponibles por el momento.",
+        },
+        brandsList: {
+          title: "Marcas",
+          empty: "No hay marcas disponibles por el momento.",
+        },
         auth: {
           invalidCredentials: "Correo electrónico o contraseña incorrectos",
           loginFailed: "No fue posible iniciar sesión. Inténtalo de nuevo.",
