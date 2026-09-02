@@ -24,6 +24,21 @@ export class ApiError extends Error {
   }
 }
 
+/**
+ * Thrown when a by-slug endpoint answers with an HTTP 301/308 that reaches the
+ * client instead of being followed transparently by `fetch`. Carries the
+ * canonical slug (from the response body) so the caller can re-fetch and
+ * reconcile the browser URL. See `src/api/apiFetch.spike.test.ts`.
+ */
+export class ApiMovedError extends Error {
+  canonicalSlug: string;
+  constructor(canonicalSlug: string) {
+    super("Moved Permanently");
+    this.name = "ApiMovedError";
+    this.canonicalSlug = canonicalSlug;
+  }
+}
+
 export async function apiFetch<T>(
   url: string,
   options: RequestInit,
@@ -36,6 +51,11 @@ export async function apiFetch<T>(
 
   if (res.status === 403) {
     throw new Error(API_ERRORS.FORBIDDEN);
+  }
+
+  if (res.status === 301 || res.status === 308) {
+    const movedBody = await res.json().catch(() => null);
+    throw new ApiMovedError(movedBody?.canonicalSlug ?? "");
   }
 
   if (res.status === 204) {

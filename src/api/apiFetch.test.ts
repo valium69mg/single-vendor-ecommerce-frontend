@@ -1,5 +1,11 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
-import { apiFetch, apiFetchFile, ApiConflictError, ApiError } from "./apiFetch";
+import {
+  apiFetch,
+  apiFetchFile,
+  ApiConflictError,
+  ApiError,
+  ApiMovedError,
+} from "./apiFetch";
 import { API_ERRORS } from "@/constants/apiErrors";
 
 function mockResponse(status: number, body?: unknown): Response {
@@ -86,6 +92,31 @@ describe("apiFetch", () => {
     expect(err.message).toBe("cart_stock_exceeded");
     expect(err.status).toBe(400);
     expect((err.body as { availableStock: number }).availableStock).toBe(4);
+  });
+
+  it("throws ApiMovedError carrying the canonical slug from the body on 301", async () => {
+    vi.mocked(fetch).mockResolvedValue(
+      mockResponse(301, { status: 301, canonicalSlug: "gold-rings" }),
+    );
+    const err = (await apiFetch("/url", {}).catch((e) => e)) as ApiMovedError;
+    expect(err).toBeInstanceOf(ApiMovedError);
+    expect(err.canonicalSlug).toBe("gold-rings");
+  });
+
+  it("throws ApiMovedError on a 308 permanent redirect", async () => {
+    vi.mocked(fetch).mockResolvedValue(
+      mockResponse(308, { status: 308, canonicalSlug: "cartier" }),
+    );
+    const err = (await apiFetch("/url", {}).catch((e) => e)) as ApiMovedError;
+    expect(err).toBeInstanceOf(ApiMovedError);
+    expect(err.canonicalSlug).toBe("cartier");
+  });
+
+  it("throws ApiMovedError with an empty slug when the 301 body is unparseable", async () => {
+    vi.mocked(fetch).mockResolvedValue(mockResponse(301));
+    const err = (await apiFetch("/url", {}).catch((e) => e)) as ApiMovedError;
+    expect(err).toBeInstanceOf(ApiMovedError);
+    expect(err.canonicalSlug).toBe("");
   });
 
   it("forwards the options to fetch", async () => {
