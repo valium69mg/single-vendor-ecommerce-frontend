@@ -121,6 +121,12 @@ i18n.use(initReactI18next).init({
           body: "Lo sentimos, la página que buscas no existe o fue movida.",
           cta: "Volver al inicio",
         },
+        categoryPage: {
+          empty: "No hay productos en esta categoría todavía.",
+        },
+        brandPage: {
+          empty: "No hay productos de esta marca todavía.",
+        },
         auth: {
           invalidCredentials: "Correo electrónico o contraseña incorrectos",
           loginFailed: "No fue posible iniciar sesión. Inténtalo de nuevo.",

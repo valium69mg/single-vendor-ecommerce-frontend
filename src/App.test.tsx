@@ -9,6 +9,12 @@ vi.mock("./pages/CartPage", () => ({ default: () => <div>cart page</div> }));
 vi.mock("./pages/ProductDetailPage", () => ({
   default: () => <div>product detail page</div>,
 }));
+vi.mock("./pages/CategoryDetailPage", () => ({
+  default: () => <div>category detail page</div>,
+}));
+vi.mock("./pages/BrandDetailPage", () => ({
+  default: () => <div>brand detail page</div>,
+}));
 vi.mock("./pages/AdminHomePage", () => ({ default: () => <div>admin home</div> }));
 vi.mock("./pages/AdminProductsPage", () => ({
   default: () => <div>admin products</div>,
@@ -50,5 +56,15 @@ describe("AppRoutes", () => {
   it("renders the home page at the root", () => {
     renderAt("/");
     expect(screen.getByText("home page")).toBeInTheDocument();
+  });
+
+  it("resolves the category detail route", () => {
+    renderAt("/category/anillos");
+    expect(screen.getByText("category detail page")).toBeInTheDocument();
+  });
+
+  it("resolves the brand detail route", () => {
+    renderAt("/brand/cartier");
+    expect(screen.getByText("brand detail page")).toBeInTheDocument();
   });
 });
