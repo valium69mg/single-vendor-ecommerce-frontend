@@ -23,7 +23,7 @@ export default function CategoryCard({ category }: Props) {
 
   return (
     <Link
-      to={`/category/${category.categoryId}`}
+      to={`/category/${category.slug}`}
       className="group block"
       aria-label={`Ver categoría ${category.name}`}
     >

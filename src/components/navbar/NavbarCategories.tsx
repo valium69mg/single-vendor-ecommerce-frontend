@@ -48,11 +48,11 @@ export default function NavbarCategories() {
             <Spinner className="w-5 h-5" />
           </div>
         ) : (
-          data?.content.map(({ name, categoryId }) => (
+          data?.content.map(({ name, categoryId, slug }) => (
             <DropdownMenuItem
               key={categoryId}
               className="font-store-body text-sm text-stone-700 hover:text-amber-700 rounded-none cursor-pointer px-4 py-2.5"
-              onClick={() => navigate(`/category/${categoryId}`)}
+              onClick={() => navigate(`/category/${slug}`)}
             >
               {name}
             </DropdownMenuItem>
