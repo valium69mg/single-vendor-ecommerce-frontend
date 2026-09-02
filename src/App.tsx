@@ -11,7 +11,41 @@ import AdminCategoriesPage from "./pages/AdminCategoriesPage";
 import AdminCategoryDetailPage from "./pages/AdminCategoryDetailPage";
 import CartPage from "./pages/CartPage";
 import ProductDetailPage from "./pages/ProductDetailPage";
+import NotFoundPage from "./pages/NotFoundPage";
 import { Toaster } from "sonner"
+
+export function AppRoutes() {
+  return (
+    <Routes>
+      <Route path="/login" element={<LoginPage />} />
+
+      <Route
+        path="/"
+        element={
+            <HomePage />
+        }
+      />
+
+      <Route path="/carrito" element={<CartPage />} />
+      <Route path="/product/:productId" element={<ProductDetailPage />} />
+
+      <Route
+        path="/admin"
+        element={
+          <ProtectedRoute roles={[ROLES.ADMIN]}>
+            <AdminHomePage />
+          </ProtectedRoute>
+        }
+      >
+        <Route path="products" element={<AdminProductsPage />} />
+        <Route path="categories" element={<AdminCategoriesPage />} />
+        <Route path="categories/:categoryId" element={<AdminCategoryDetailPage />} />
+      </Route>
+
+      <Route path="*" element={<NotFoundPage />} />
+    </Routes>
+  );
+}
 
 function App() {
   return (
@@ -19,32 +53,7 @@ function App() {
       <Toaster position="bottom-right" richColors />
       <CartProvider>
         <BrowserRouter>
-          <Routes>
-            <Route path="/login" element={<LoginPage />} />
-
-            <Route
-              path="/"
-              element={
-                  <HomePage />
-              }
-            />
-
-            <Route path="/carrito" element={<CartPage />} />
-            <Route path="/product/:productId" element={<ProductDetailPage />} />
-
-            <Route
-              path="/admin"
-              element={
-                <ProtectedRoute roles={[ROLES.ADMIN]}>
-                  <AdminHomePage />
-                </ProtectedRoute>
-              }
-            >
-              <Route path="products" element={<AdminProductsPage />} />
-              <Route path="categories" element={<AdminCategoriesPage />} />
-              <Route path="categories/:categoryId" element={<AdminCategoryDetailPage />} />
-            </Route>
-          </Routes>
+          <AppRoutes />
         </BrowserRouter>
       </CartProvider>
     </UserProvider>

@@ -116,6 +116,11 @@ i18n.use(initReactI18next).init({
         variants: "Variantes",
         createdAt: "Creado",
         updatedAt: "Actualizado",
+        notFound: {
+          title: "Página no encontrada",
+          body: "Lo sentimos, la página que buscas no existe o fue movida.",
+          cta: "Volver al inicio",
+        },
         auth: {
           invalidCredentials: "Correo electrónico o contraseña incorrectos",
           loginFailed: "No fue posible iniciar sesión. Inténtalo de nuevo.",
