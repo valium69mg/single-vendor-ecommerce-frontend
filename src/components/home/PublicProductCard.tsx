@@ -19,7 +19,7 @@ export default function PublicProductCard({ product }: Props) {
 
   return (
     <Link
-      to={`/product/${product.productId}`}
+      to={`/product/${product.slug}`}
       className="group block"
       aria-label={`Ver ${product.name}`}
     >

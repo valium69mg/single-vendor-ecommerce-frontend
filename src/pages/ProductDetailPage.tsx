@@ -1,13 +1,14 @@
-import { useMemo, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useEffect, useMemo, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useQuery } from "@tanstack/react-query";
 import Navbar from "@/components/navbar/Navbar";
 import ImageWithFallback from "@/components/common/ImageWithFallback";
 import { QuantityStepper } from "@/components/cart/QuantityStepper";
 import { Spinner } from "@/components/ui/spinner";
-import { getPublicProduct, getFileUrl } from "@/api/api";
+import { getPublicProductBySlug, getFileUrl } from "@/api/api";
 import type { PublicProductVariant } from "@/api/api";
+import NotFoundPage from "./NotFoundPage";
 import { formatMXN } from "@/lib/format";
 import { useCart } from "@/hooks/useCart";
 
@@ -21,15 +22,26 @@ function effectivePrice(variant: PublicProductVariant): number {
 }
 
 export default function ProductDetailPage() {
-  const { productId = "" } = useParams();
+  const { slug = "" } = useParams();
   const { t } = useTranslation();
+  const navigate = useNavigate();
   const { addItem, openDrawer } = useCart();
 
   const { data: product, isLoading, isError } = useQuery({
-    queryKey: ["public-product", productId],
-    queryFn: () => getPublicProduct(productId),
-    enabled: Boolean(productId),
+    queryKey: ["public-product", slug],
+    queryFn: () => getPublicProductBySlug(slug),
+    enabled: Boolean(slug),
+    retry: false,
   });
+
+  // Reconcile the browser URL when the slug in the address bar is stale: the
+  // backend 301 is followed transparently by `fetch`, so the canonical slug only
+  // shows up in the response DTO.
+  useEffect(() => {
+    if (product && product.slug && product.slug !== slug) {
+      navigate(`/product/${product.slug}`, { replace: true });
+    }
+  }, [product, slug, navigate]);
 
   const [selectedId, setSelectedId] = useState<number | null>(null);
   const [quantity, setQuantity] = useState(1);
@@ -57,18 +69,18 @@ export default function ProductDetailPage() {
     openDrawer();
   };
 
+  if (isError) {
+    return <NotFoundPage />;
+  }
+
   return (
     <div className="min-h-screen flex flex-col bg-stone-50">
       <Navbar />
       <main className="mx-auto w-full max-w-5xl flex-1 px-4 py-10 sm:px-6 lg:px-8">
-        {isLoading ? (
+        {isLoading || !product ? (
           <div className="flex justify-center py-20">
             <Spinner className="h-6 w-6" />
           </div>
-        ) : isError || !product ? (
-          <p className="py-20 text-center font-store-body text-sm text-stone-400">
-            {t("categoryNotFound")}
-          </p>
         ) : (
           <div className="grid gap-10 md:grid-cols-2">
             <ImageWithFallback

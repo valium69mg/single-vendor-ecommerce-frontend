@@ -27,7 +27,7 @@ export function AppRoutes() {
       />
 
       <Route path="/carrito" element={<CartPage />} />
-      <Route path="/product/:productId" element={<ProductDetailPage />} />
+      <Route path="/product/:slug" element={<ProductDetailPage />} />
 
       <Route
         path="/admin"

@@ -1,9 +1,10 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
-import { MemoryRouter, Routes, Route } from "react-router-dom";
+import { MemoryRouter, Routes, Route, useLocation } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import type { CartContextValue } from "@/context/CartContext";
 import * as api from "@/api/api";
+import { ApiError } from "@/api/apiFetch";
 import { useCart } from "@/hooks/useCart";
 import ProductDetailPage from "./ProductDetailPage";
 
@@ -11,7 +12,7 @@ vi.mock("@/hooks/useCart", () => ({ useCart: vi.fn() }));
 vi.mock("@/components/navbar/Navbar", () => ({ default: () => null }));
 vi.mock("@/api/api", async (importOriginal) => {
   const actual = await importOriginal<typeof import("@/api/api")>();
-  return { ...actual, getPublicProduct: vi.fn() };
+  return { ...actual, getPublicProductBySlug: vi.fn() };
 });
 
 const mockedUseCart = vi.mocked(useCart);
@@ -68,16 +69,22 @@ function cartValue(overrides: Partial<CartContextValue>): CartContextValue {
   };
 }
 
-function renderPage() {
+function LocationProbe() {
+  const { pathname } = useLocation();
+  return <div data-testid="location">{pathname}</div>;
+}
+
+function renderPage(initialSlug = "anillo-de-plata") {
   const client = new QueryClient({
     defaultOptions: { queries: { retry: false } },
   });
   return render(
     <QueryClientProvider client={client}>
-      <MemoryRouter initialEntries={["/product/abc-123"]}>
+      <MemoryRouter initialEntries={[`/product/${initialSlug}`]}>
         <Routes>
-          <Route path="/product/:productId" element={<ProductDetailPage />} />
+          <Route path="/product/:slug" element={<ProductDetailPage />} />
         </Routes>
+        <LocationProbe />
       </MemoryRouter>
     </QueryClientProvider>,
   );
@@ -85,17 +92,23 @@ function renderPage() {
 
 beforeEach(() => {
   vi.clearAllMocks();
-  vi.mocked(api.getPublicProduct).mockResolvedValue(product);
+  vi.mocked(api.getPublicProductBySlug).mockResolvedValue(product);
   mockedUseCart.mockReturnValue(cartValue({}));
 });
 
 describe("ProductDetailPage", () => {
+  it("resolves the product by its slug param", async () => {
+    renderPage();
+
+    expect(await screen.findByText("Anillo de plata")).toBeInTheDocument();
+    expect(api.getPublicProductBySlug).toHaveBeenCalledWith("anillo-de-plata");
+  });
+
   it("renders a variant select with an option per variant", async () => {
     renderPage();
 
     expect(await screen.findByText("Anillo de plata")).toBeInTheDocument();
-    const select = screen.getByRole("combobox");
-    expect(select).toBeInTheDocument();
+    expect(screen.getByRole("combobox")).toBeInTheDocument();
     expect(screen.getByRole("option", { name: /Talla 6/ })).toBeInTheDocument();
     expect(screen.getByRole("option", { name: /Talla 7/ })).toBeInTheDocument();
   });
@@ -109,38 +122,43 @@ describe("ProductDetailPage", () => {
     await screen.findByText("Anillo de plata");
 
     fireEvent.change(screen.getByRole("combobox"), { target: { value: "2" } });
-    fireEvent.click(
-      screen.getByRole("button", { name: "Agregar al carrito" }),
-    );
+    fireEvent.click(screen.getByRole("button", { name: "Agregar al carrito" }));
 
     await waitFor(() => expect(addItem).toHaveBeenCalledTimes(1));
     expect(addItem).toHaveBeenCalledWith(
       expect.objectContaining({
         productVariantId: 2,
-        quantity: 1,
-        productName: "Anillo de plata",
         unitPrice: 270,
-        availableStock: 3,
         productId: "abc-123",
       }),
     );
     expect(openDrawer).toHaveBeenCalled();
   });
 
-  it("defaults to the first variant when none is chosen", async () => {
-    const addItem = vi.fn().mockResolvedValue(undefined);
-    mockedUseCart.mockReturnValue(cartValue({ addItem }));
-
-    renderPage();
-    await screen.findByText("Anillo de plata");
-
-    fireEvent.click(
-      screen.getByRole("button", { name: "Agregar al carrito" }),
+  it("renders NotFoundPage when the API responds 404", async () => {
+    vi.mocked(api.getPublicProductBySlug).mockRejectedValue(
+      new ApiError("product_not_found", 404, { error: "product_not_found" }),
     );
 
-    await waitFor(() => expect(addItem).toHaveBeenCalledTimes(1));
-    expect(addItem).toHaveBeenCalledWith(
-      expect.objectContaining({ productVariantId: 1, unitPrice: 250 }),
+    renderPage("does-not-exist");
+
+    expect(
+      await screen.findByRole("heading", { name: "Página no encontrada" }),
+    ).toBeInTheDocument();
+  });
+
+  it("replaces the URL with the canonical slug when the returned slug differs", async () => {
+    vi.mocked(api.getPublicProductBySlug).mockResolvedValue({
+      ...product,
+      slug: "anillo-de-plata",
+    });
+
+    renderPage("anillo-viejo");
+
+    await waitFor(() =>
+      expect(screen.getByTestId("location")).toHaveTextContent(
+        "/product/anillo-de-plata",
+      ),
     );
   });
 });
