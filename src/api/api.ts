@@ -174,6 +174,70 @@ export async function getPublicProductBySlug(
   }
 }
 
+// Storefront — resolve a category by its slug. Mirrors `getPublicProductBySlug`:
+// the backend answers 200 with the canonical DTO, a real HTTP 301 for a
+// superseded slug, or 404. When the redirect status reaches the client
+// (`ApiMovedError`) we re-fetch the canonical slug so the caller always ends on
+// the current category.
+export interface PublicCategoryBySlug {
+  categoryId: number;
+  name: string;
+  slug: string;
+  products: number;
+  imageUrl: string | null;
+  mediumThumbnailUrl: string | null;
+  smallThumbnailUrl: string | null;
+}
+
+export async function getCategoryBySlug(
+  slug: string,
+): Promise<PublicCategoryBySlug> {
+  const request = (target: string) =>
+    apiFetch<PublicCategoryBySlug>(
+      `${API_BASE_URL}/products/categories/by-slug/${target}`,
+      {
+        method: "GET",
+        headers: { "Content-Type": "application/json" },
+      },
+    );
+
+  try {
+    return await request(slug);
+  } catch (err) {
+    if (err instanceof ApiMovedError) {
+      return request(err.canonicalSlug);
+    }
+    throw err;
+  }
+}
+
+// Storefront — resolve a brand by its slug, same 200 / 301 / 404 contract.
+export interface PublicBrandBySlug {
+  brandId: number;
+  name: string;
+  slug: string;
+}
+
+export async function getBrandBySlug(slug: string): Promise<PublicBrandBySlug> {
+  const request = (target: string) =>
+    apiFetch<PublicBrandBySlug>(
+      `${API_BASE_URL}/products/brands/by-slug/${target}`,
+      {
+        method: "GET",
+        headers: { "Content-Type": "application/json" },
+      },
+    );
+
+  try {
+    return await request(slug);
+  } catch (err) {
+    if (err instanceof ApiMovedError) {
+      return request(err.canonicalSlug);
+    }
+    throw err;
+  }
+}
+
 // Storefront — public categories, no auth required
 export interface PublicCategory {
   categoryId: number;
