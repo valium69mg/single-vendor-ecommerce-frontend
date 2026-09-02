@@ -86,7 +86,12 @@ src/
 /login                          → LoginPage (public)
 /                               → HomePage (public, no role guard)
 /carrito                        → CartPage (public) — full cart, subtotal, empty state
-/product/:productId             → ProductDetailPage (public) — minimal: variant select + add-to-cart
+/product/:slug                  → ProductDetailPage (public) — resolved by slug, 200/301/404
+/category/:slug                 → CategoryDetailPage (public) — name heading + product grid
+/brand/:slug                    → BrandDetailPage (public) — name heading + product grid
+/categories                     → CategoriesListPage (public) — names linking to /category/:slug
+/brands                         → BrandsListPage (public) — names linking to /brand/:slug
+*                               → NotFoundPage (public) — catch-all
 /admin                          → AdminHomePage (ADMIN) — layout with AdminSideBar + <Outlet />
   /admin/products               → AdminProductsPage
   /admin/categories             → AdminCategoriesPage
@@ -102,7 +107,11 @@ Base URL: `VITE_API_URL` (default `http://localhost:8080/api/v1`)
 | POST | `/auth/login` | — | `loginRequest` |
 | GET | `/products` | — | `getProducts` |
 | GET | `/products/:productId` | — | `getPublicProduct` (single product + variants) |
-| GET | `/products/categories` | — | `getCategories` |
+| GET | `/products/by-slug/:slug` | — | `getPublicProductBySlug` (200/301/404) |
+| GET | `/products/categories` | — | `getCategories` (now carries `slug`) |
+| GET | `/products/categories/by-slug/:slug` | — | `getCategoryBySlug` (200/301/404) |
+| GET | `/products/brands` | — | `getBrands` (public brand list, carries `slug`) |
+| GET | `/products/brands/by-slug/:slug` | — | `getBrandBySlug` (200/301/404) |
 | GET | `/cart` | JWT | `getCart` |
 | POST | `/cart/items` | JWT | `addCartItem` |
 | PATCH | `/cart/items/:cartItemId` | JWT | `updateCartItem` |
