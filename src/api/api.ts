@@ -1,4 +1,4 @@
-import { apiFetch, apiFetchFile, ApiError } from "./apiFetch";
+import { apiFetch, apiFetchFile, ApiError, ApiMovedError } from "./apiFetch";
 
 export const API_BASE_URL =
   import.meta.env.VITE_API_URL || "http://localhost:8080/api/v1";
@@ -63,12 +63,13 @@ export interface PageResponse<T> {
 // Storefront — public products, no auth required
 export interface PublicProduct {
   productId: string;
+  slug: string;
   name: string;
   shortDescription: string | null;
   featured: boolean;
   status: string;
-  category: { categoryId: number; name: string } | null;
-  brand: { brandId: number; name: string } | null;
+  category: { categoryId: number; name: string; slug: string } | null;
+  brand: { brandId: number; name: string; slug: string } | null;
   imageUrl: string | null;
   mediumThumbnailUrl: string | null;
   smallThumbnailUrl: string | null;
@@ -83,12 +84,17 @@ export async function getProducts(
   size: number,
   featured?: boolean,
   createdAtStart?: string,
+  filters?: { categoryId?: number; brandId?: number },
 ): Promise<PageResponse<PublicProduct>> {
   const query = new URLSearchParams();
   query.set("page", String(page));
   query.set("size", String(size));
   if (featured !== undefined) query.set("featured", String(featured));
   if (createdAtStart) query.set("createdAtStart", createdAtStart);
+  if (filters?.categoryId !== undefined)
+    query.set("categoryId", String(filters.categoryId));
+  if (filters?.brandId !== undefined)
+    query.set("brandId", String(filters.brandId));
 
   return apiFetch<PageResponse<PublicProduct>>(
     `${API_BASE_URL}/products?${query.toString()}`,
@@ -115,12 +121,13 @@ export interface PublicProductVariant {
 
 export interface PublicProductById {
   productId: string;
+  slug: string;
   name: string;
   shortDescription: string | null;
   longDescription: string | null;
   featured: boolean;
-  category: { categoryId: number; name: string } | null;
-  brand: { brandId: number; name: string } | null;
+  category: { categoryId: number; name: string; slug: string } | null;
+  brand: { brandId: number; name: string; slug: string } | null;
   imageUrl: string | null;
   mediumThumbnailUrl: string | null;
   smallThumbnailUrl: string | null;
@@ -141,6 +148,30 @@ export async function getPublicProduct(
       headers: { "Content-Type": "application/json" },
     },
   );
+}
+
+// Storefront — resolve a product by its slug. The backend answers 200 with the
+// canonical DTO, a real HTTP 301 for a superseded slug, or 404. `fetch` follows
+// the 301 transparently in the browser, but when the redirect status reaches the
+// client (`ApiMovedError`) we re-fetch the canonical slug so the caller always
+// ends on the current product. See `src/api/apiFetch.spike.test.ts`.
+export async function getPublicProductBySlug(
+  slug: string,
+): Promise<PublicProductById> {
+  const request = (target: string) =>
+    apiFetch<PublicProductById>(`${API_BASE_URL}/products/by-slug/${target}`, {
+      method: "GET",
+      headers: { "Content-Type": "application/json" },
+    });
+
+  try {
+    return await request(slug);
+  } catch (err) {
+    if (err instanceof ApiMovedError) {
+      return request(err.canonicalSlug);
+    }
+    throw err;
+  }
 }
 
 // Storefront — public categories, no auth required

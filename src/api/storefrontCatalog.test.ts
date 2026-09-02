@@ -83,6 +83,29 @@ describe("getProducts", () => {
 
     await expect(getProducts(0, 12)).resolves.toEqual(body);
   });
+
+  it("forwards categoryId and brandId filters when provided", async () => {
+    vi.mocked(fetch).mockResolvedValue(mockResponse(200, PAGE));
+
+    await getProducts(0, 24, undefined, undefined, {
+      categoryId: 5,
+      brandId: 8,
+    });
+
+    const { query } = lastCall();
+    expect(query.get("categoryId")).toBe("5");
+    expect(query.get("brandId")).toBe("8");
+  });
+
+  it("omits categoryId and brandId when the filter object is absent", async () => {
+    vi.mocked(fetch).mockResolvedValue(mockResponse(200, PAGE));
+
+    await getProducts(0, 24);
+
+    const { query } = lastCall();
+    expect(query.has("categoryId")).toBe(false);
+    expect(query.has("brandId")).toBe(false);
+  });
 });
 
 describe("getCategories", () => {

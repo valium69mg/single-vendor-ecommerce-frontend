@@ -29,6 +29,7 @@ function renderWithClient(ui: React.ReactElement) {
 function fakeProduct(overrides: Partial<PublicProductById>): PublicProductById {
   return {
     productId: "abc-123",
+    slug: "anillo-de-compromiso",
     name: "Anillo de Compromiso",
     shortDescription: null,
     longDescription: null,

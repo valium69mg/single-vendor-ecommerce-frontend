@@ -18,6 +18,7 @@ const mockedUseCart = vi.mocked(useCart);
 
 const product: api.PublicProductById = {
   productId: "abc-123",
+  slug: "anillo-de-plata",
   name: "Anillo de plata",
   shortDescription: "Pieza artesanal",
   longDescription: null,
