@@ -30,6 +30,11 @@
 **Root cause:** The hook's `throwOnError` function calls `handleError` then returns `false`, which suppresses re-throw.
 **How to avoid:** Always destructure `{ throwOnError }` from `useApiErrorHandler()` and pass that function, never the literal `true`.
 
+## Backend 301 (superseded slug) is followed transparently by `fetch` — reconcile the URL from the DTO
+**What happened:** The by-slug endpoints (`/products/by-slug/{slug}` etc.) return a real HTTP 301 + `Location` when a slug moved to history. `apiFetch` calls `fetch` with no `redirect` option, so it defaults to `redirect: "follow"`: in the browser and under undici/jsdom the GET 301 is followed transparently and `apiFetch` only sees the final 200 + canonical DTO. A `fetch` redirect does NOT update the browser address bar, so a stale `/product/<old-slug>` stays in the URL.
+**Root cause:** `fetch` redirect-follow is invisible to the caller; only navigations change the address bar.
+**How to avoid:** Primary path (works whether or not the redirect is followed): every by-slug DTO carries the canonical `slug`; the page compares `data.slug !== slugParam` and calls `navigate('/<route>/' + data.slug, { replace: true })`. Secondary/defensive path: `apiFetch` has an early `if (res.status === 301 || res.status === 308)` branch that reads `body.canonicalSlug` and throws `ApiMovedError`; the by-slug wrappers catch it and re-fetch the canonical URL. Spike test: `src/api/apiFetch.spike.test.ts` — a stubbed 301 is surfaced to `apiFetch`, never unwrapped as success, so the defensive branch is reachable and ships regardless.
+
 ## shadcn/ui components must not be edited manually
 **What happened:** Manually editing files in `src/components/ui/` breaks on the next `npx shadcn add` or regeneration.
 **Root cause:** shadcn CLI overwrites these files.
