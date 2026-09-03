@@ -8,9 +8,16 @@ export const API_FILE_URL =
 
 const FALLBACK_IMAGE = "/images/landscape-placeholder.svg";
 
+// Multipart field name for image uploads. Must match the backend
+// `@RequestParam("file")` on the product/category image endpoints. Passed
+// explicitly at each call site so the contract is pinned by assertion.
+export const IMAGE_UPLOAD_FIELD = "file";
+
 export function getFileUrl(key: string | null | undefined): string {
   if (!key) return FALLBACK_IMAGE;
-  return API_FILE_URL + key;
+  // API_FILE_URL ends in `?key=`; percent-encode so a key with reserved
+  // characters (`&`, `#`, `=`, `+`, space) cannot corrupt the query string.
+  return API_FILE_URL + encodeURIComponent(key);
 }
 
 export interface StandardResponse {
@@ -48,7 +55,15 @@ export async function loginRequest(data: {
     throw new Error("auth.loginFailed");
   }
 
-  return res.json();
+  // Separate guard from the `fetch` try/catch above (which maps transport
+  // failure to `auth.networkError`). A 200 whose body is not valid JSON must
+  // surface as a localizable key, not a raw SyntaxError. `await` is required so
+  // the rejected `res.json()` promise is caught here.
+  try {
+    return await res.json();
+  } catch {
+    throw new Error("auth.loginFailed");
+  }
 }
 
 export interface PageResponse<T> {
@@ -349,6 +364,18 @@ export async function getAdminCategory(
   );
 }
 
+/**
+ * Delete an admin category.
+ *
+ * Contract is 204-only: the backend category DELETE endpoint returns HTTP 204
+ * with no body, which `apiFetch` maps to `undefined`. This wrapper keeps the
+ * `Promise<void>` signature.
+ *
+ * Backend dependency: a `200`-with-empty-body response would make `apiFetch`
+ * attempt to parse an empty body and throw an unmapped `SyntaxError`. That is
+ * intentional — it surfaces as a RED in the pinned test so a contract change is
+ * noticed rather than silently swallowed.
+ */
 export async function deleteCategory(
   categoryId: number,
   token: string,
@@ -551,6 +578,7 @@ export async function uploadCategoryImage({
     `${API_BASE_URL}/admin/products/categories/${categoryId}/image`,
     file,
     token,
+    IMAGE_UPLOAD_FIELD, // backend @RequestParam("file")
   );
 }
 
@@ -602,7 +630,7 @@ export async function getAdminAttributesPage(
   size: number,
   token: string,
 ): Promise<PageResponse<AdminAttribute>> {
-  const list = await apiFetch<AdminAttribute[]>(
+  const body = (await apiFetch<unknown>(
     `${API_BASE_URL}/admin/products/attributes?page=${page}&size=${size}`,
     {
       method: "GET",
@@ -611,12 +639,23 @@ export async function getAdminAttributesPage(
         Authorization: `Bearer ${token}`,
       },
     },
-  );
-  // The backend returns a bare array, not a PageResponse, so exact totals and a
-  // reliable `last` for an exactly-full page are not knowable frontend-only.
-  // Derive honest lower bounds and keep the array-length `last` heuristic; the
-  // residual (an exactly-full non-final page still reports last:false, costing
-  // one wasted page+1 request) is tracked in ticket T7 / F3-backend.
+  )) as AdminAttribute[] | { content?: AdminAttribute[] } | null | undefined;
+
+  // The backend endpoint (AdminProductsController.getAttributes) returns a bare
+  // `AdminAttribute[]` and ignores the `page`/`size` query params entirely, so
+  // this wrapper synthesizes a PageResponse. Coerce any unexpected shape (null,
+  // `{ content: [...] }`, or a non-array object) to an array so the synthetic
+  // page below can never throw on `.length` nor infinite-page
+  // (`undefined < size === false` => `last: false` forever).
+  //
+  // F3-backend residual (unchanged, doc-only): with a bare array an exactly-full
+  // non-final page is indistinguishable from a full final page, so it reports
+  // `last: false` and costs one wasted `page+1` request that returns `[]`.
+  // `totalElements`/`totalPages` are cumulative lower bounds, not exact counts.
+  // This adapter is removed when a real `PageResponse` endpoint ships.
+  const raw = Array.isArray(body) ? body : body?.content;
+  const list: AdminAttribute[] = Array.isArray(raw) ? raw : [];
+
   const last = list.length < size; // 0-indexed page param (initialPageParam: 0)
   return {
     content: list,
@@ -677,6 +716,7 @@ export async function uploadProductImage(
     `${API_BASE_URL}/admin/products/${productId}/image`,
     file,
     token,
+    IMAGE_UPLOAD_FIELD, // backend @RequestParam("file")
   );
 }
 

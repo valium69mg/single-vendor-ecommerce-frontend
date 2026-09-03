@@ -46,6 +46,10 @@ export default defineConfig({
       // lines/statements/functions/branches, `all: true` + src/** include in
       // effect: api.ts 98.73/97.72/100/86.84. Whole-file floor added below at
       // measured actual minus 2, floored to an integer.
+      // Measured 2026-09-02 (frontend-api-followups, T7) — order
+      // lines/statements/functions/branches: api.ts 99.09/98.37/100/90.38.
+      // Branch coverage rose (>= 86 with >= 2 pts headroom) and every metric
+      // stays above its current floor, so all four api.ts floors are held.
       thresholds: {
         "src/api/api.ts": {
           lines: 96,

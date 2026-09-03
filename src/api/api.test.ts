@@ -20,6 +20,16 @@ describe("getFileUrl", () => {
   it("returns full file URL when key has a value", () => {
     expect(getFileUrl("abc123")).toBe(API_FILE_URL + "abc123");
   });
+
+  it("percent-encodes a key containing reserved characters (F10)", () => {
+    const key = "a b&c=d#x+y";
+    const url = getFileUrl(key);
+
+    expect(url).toBe(API_FILE_URL + encodeURIComponent(key));
+
+    const queryPart = url.slice(API_FILE_URL.length);
+    expect(queryPart).not.toMatch(/[ &#=+]/);
+  });
 });
 
 function mockResponse(status: number, body?: unknown): Response {
@@ -38,6 +48,15 @@ const creds = { email: "a@b.c", password: "secret12" };
 describe("loginRequest", () => {
   beforeEach(() => {
     vi.stubGlobal("fetch", vi.fn());
+  });
+
+  it("rejects with the generic login-failure i18n key when the 200 body is not JSON (F11)", async () => {
+    vi.mocked(fetch).mockResolvedValue(mockResponse(200));
+
+    const err = await loginRequest(creds).catch((e: Error) => e);
+    expect(err).toBeInstanceOf(Error);
+    expect((err as Error).message).toBe("auth.loginFailed");
+    expect((err as Error).name).not.toBe("SyntaxError");
   });
 
   it("resolves the parsed LoginResponse body on 200", async () => {

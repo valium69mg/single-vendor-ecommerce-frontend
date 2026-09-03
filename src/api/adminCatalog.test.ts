@@ -139,6 +139,26 @@ describe("getAdminAttributesPage — array to PageResponse adaptation", () => {
     expect(res.last).toBe(false);
   });
 
+  it("tolerates a null body without a TypeError and resolves an empty terminal page (F4)", async () => {
+    vi.mocked(fetch).mockResolvedValue(mockResponse(200, null));
+
+    const res = await getAdminAttributesPage(0, 20, "t");
+
+    expect(res.content).toEqual([]);
+    expect(res.last).toBe(true);
+    expect(res.page).toBe(0);
+  });
+
+  it("derives the list from a wrapped { content: [...] } body without infinite paging (F4)", async () => {
+    vi.mocked(fetch).mockResolvedValue(mockResponse(200, { content: [attr(1)] }));
+
+    const res = await getAdminAttributesPage(0, 20, "t");
+
+    expect(res.content).toHaveLength(1);
+    expect(res.content[0].attributeId).toBe(1);
+    expect(res.last).toBe(true);
+  });
+
   it("reports honest pagination bounds instead of type-lie sentinels (F3)", async () => {
     const list = Array.from({ length: 20 }, (_, i) => attr(i + 1));
     vi.mocked(fetch).mockResolvedValue(mockResponse(200, list));

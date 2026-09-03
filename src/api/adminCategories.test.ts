@@ -113,6 +113,21 @@ describe("admin category wrappers — Bearer auth", () => {
     expect(init.headers).toMatchObject({ Authorization: "Bearer t123" });
   });
 
+  it("pins the 204-only DELETE contract: no-body 204 resolves undefined (F6)", async () => {
+    // Backend dependency: category DELETE returns HTTP 204 with no body. If the
+    // backend ever switched to 200-with-empty-body, `apiFetch` would throw an
+    // unmapped SyntaxError parsing the empty body — this pinned test would then
+    // fail as an intentional RED signalling the contract change.
+    vi.mocked(fetch).mockResolvedValue(mockResponse(204));
+
+    const result = await deleteCategory(5, "t123");
+
+    expect(result).toBeUndefined();
+    const { init } = lastCall();
+    expect(init.method).toBe("DELETE");
+    expect(init.headers).toMatchObject({ Authorization: "Bearer t123" });
+  });
+
   it("restoreCategory PATCHes the /restore path with no body", async () => {
     vi.mocked(fetch).mockResolvedValue(mockResponse(200, OK));
 

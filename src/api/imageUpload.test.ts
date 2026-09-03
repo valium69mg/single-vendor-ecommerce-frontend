@@ -1,5 +1,10 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
-import { uploadProductImage, uploadCategoryImage, API_BASE_URL } from "./api";
+import {
+  uploadProductImage,
+  uploadCategoryImage,
+  API_BASE_URL,
+  IMAGE_UPLOAD_FIELD,
+} from "./api";
 
 function mockResponse(status: number, body?: unknown): Response {
   return {
@@ -41,6 +46,21 @@ describe("uploadProductImage", () => {
     expect(init.headers).toMatchObject({ Authorization: "Bearer t" });
   });
 
+  it("sends the multipart part under IMAGE_UPLOAD_FIELD holding the File (F8)", async () => {
+    // Pinned to the backend @RequestParam("file") contract.
+    expect(IMAGE_UPLOAD_FIELD).toBe("file");
+    vi.mocked(fetch).mockResolvedValue(mockResponse(200, OK));
+
+    const f = file();
+    await uploadProductImage("p1", f, "t");
+
+    const { init } = lastCall();
+    const body = init.body as FormData;
+    expect(body).toBeInstanceOf(FormData);
+    expect(body.get(IMAGE_UPLOAD_FIELD)).toBeInstanceOf(File);
+    expect((body.get(IMAGE_UPLOAD_FIELD) as File).name).toBe(f.name);
+  });
+
   it("does not set a Content-Type header (browser sets the multipart boundary)", async () => {
     vi.mocked(fetch).mockResolvedValue(mockResponse(200, OK));
 
@@ -62,14 +82,16 @@ describe("uploadCategoryImage", () => {
     expect(init.method).toBe("POST");
   });
 
-  it("sends a FormData body with the 'file' part and no Content-Type header", async () => {
+  it("sends a FormData body with the IMAGE_UPLOAD_FIELD part and no Content-Type header (F8)", async () => {
+    // Pinned to the backend @RequestParam("file") contract.
+    expect(IMAGE_UPLOAD_FIELD).toBe("file");
     vi.mocked(fetch).mockResolvedValue(mockResponse(200, OK));
 
     await uploadCategoryImage({ categoryId: 9, file: file(), token: "t" });
 
     const { init } = lastCall();
     expect(init.body).toBeInstanceOf(FormData);
-    expect((init.body as FormData).get("file")).toBeInstanceOf(File);
+    expect((init.body as FormData).get(IMAGE_UPLOAD_FIELD)).toBeInstanceOf(File);
     expect(init.headers).not.toHaveProperty("Content-Type");
     expect(init.headers).toMatchObject({ Authorization: "Bearer t" });
   });
