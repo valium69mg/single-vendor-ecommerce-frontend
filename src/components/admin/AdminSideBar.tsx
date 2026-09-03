@@ -39,7 +39,7 @@ export default function AdminSideBar() {
       id: "brands",
       name: t("brands"),
       icon: <IconWrapper icon={IoLayersOutline} size={18} />,
-      url: "/admin/products",
+      url: "/admin/brands",
     },
     {
       id: "materials",

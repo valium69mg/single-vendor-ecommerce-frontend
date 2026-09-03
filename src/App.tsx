@@ -9,6 +9,8 @@ import ProtectedRoute from "./components/auth/ProtectedRoute";
 import { ROLES } from "@/constants/roles";
 import AdminCategoriesPage from "./pages/AdminCategoriesPage";
 import AdminCategoryDetailPage from "./pages/AdminCategoryDetailPage";
+import AdminBrandsPage from "./pages/AdminBrandsPage";
+import AdminBrandDetailPage from "./pages/AdminBrandDetailPage";
 import CartPage from "./pages/CartPage";
 import ProductDetailPage from "./pages/ProductDetailPage";
 import CategoryDetailPage from "./pages/CategoryDetailPage";
@@ -48,6 +50,8 @@ export function AppRoutes() {
         <Route path="products" element={<AdminProductsPage />} />
         <Route path="categories" element={<AdminCategoriesPage />} />
         <Route path="categories/:categoryId" element={<AdminCategoryDetailPage />} />
+        <Route path="brands" element={<AdminBrandsPage />} />
+        <Route path="brands/:brandId" element={<AdminBrandDetailPage />} />
       </Route>
 
       <Route path="*" element={<NotFoundPage />} />

@@ -445,6 +445,31 @@ export interface AdminBrand {
   name: string;
 }
 
+// `getAdminBrand` (by id) additionally returns the read-only `slug`. Kept as a
+// separate type so `AdminBrand` (used by the list and the product-form select)
+// stays minimal.
+export interface AdminBrandById {
+  brandId: number;
+  name: string;
+  slug: string;
+}
+
+export interface CreateBrandMutationVariables {
+  data: { name: string };
+  token: string;
+}
+
+export interface EditBrandMutationVariables {
+  data: { name: string };
+  brandId: number;
+  token: string;
+}
+
+export interface RestoreBrandVariables {
+  brandId: number;
+  token: string;
+}
+
 export async function getAdminBrands(
   page: number,
   size: number,
@@ -466,6 +491,87 @@ export async function getAdminBrands(
       },
     },
   );
+}
+
+export async function getAdminBrand(
+  brandId: number,
+  token: string,
+): Promise<AdminBrandById> {
+  return apiFetch<AdminBrandById>(
+    `${API_BASE_URL}/admin/products/brands/${brandId}`,
+    {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    },
+  );
+}
+
+export async function createBrand({
+  data,
+  token,
+}: CreateBrandMutationVariables): Promise<StandardResponse> {
+  return apiFetch<StandardResponse>(`${API_BASE_URL}/admin/products/brands`, {
+    method: "POST",
+    body: JSON.stringify(data),
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+  });
+}
+
+export async function editBrand({
+  data,
+  brandId,
+  token,
+}: EditBrandMutationVariables): Promise<StandardResponse> {
+  return apiFetch<StandardResponse>(
+    `${API_BASE_URL}/admin/products/brands/${brandId}`,
+    {
+      method: "PATCH",
+      body: JSON.stringify(data),
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    },
+  );
+}
+
+export async function restoreBrand({
+  brandId,
+  token,
+}: RestoreBrandVariables): Promise<StandardResponse> {
+  return apiFetch<StandardResponse>(
+    `${API_BASE_URL}/admin/products/brands/${brandId}/restore`,
+    {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    },
+  );
+}
+
+/**
+ * Delete an admin brand. 204-only contract, mirroring `deleteCategory`: the
+ * backend returns HTTP 204 with no body, which `apiFetch` maps to `undefined`.
+ */
+export async function deleteBrand(
+  brandId: number,
+  token: string,
+): Promise<void> {
+  await apiFetch<void>(`${API_BASE_URL}/admin/products/brands/${brandId}`, {
+    method: "DELETE",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+  });
 }
 
 // ─── Admin Products ───────────────────────────────────────────────────────────

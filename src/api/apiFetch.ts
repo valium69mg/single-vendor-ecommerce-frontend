@@ -2,9 +2,11 @@ import { API_ERRORS } from "@/constants/apiErrors";
 
 export class ApiConflictError extends Error {
   categoryId: number;
-  constructor(message: string, categoryId: number) {
+  brandId?: number;
+  constructor(message: string, categoryId: number, brandId?: number) {
     super(message);
     this.categoryId = categoryId;
+    this.brandId = brandId;
   }
 }
 
@@ -64,7 +66,11 @@ export async function apiFetch<T>(
 
   if (res.status === 409) {
     const errorData = await res.json().catch(() => null);
-    throw new ApiConflictError(errorData?.error || "Conflict", errorData?.categoryId);
+    throw new ApiConflictError(
+      errorData?.error || "Conflict",
+      errorData?.categoryId,
+      errorData?.brandId,
+    );
   }
 
   if (!res.ok) {

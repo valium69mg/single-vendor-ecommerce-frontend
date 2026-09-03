@@ -60,6 +60,16 @@ describe("apiFetch", () => {
     expect(err.categoryId).toBe(7);
   });
 
+  it("throws ApiConflictError with brandId on 409 when the body carries brandId", async () => {
+    vi.mocked(fetch).mockResolvedValue(
+      mockResponse(409, { status: 409, error: "brand_exists_deleted", brandId: 3 }),
+    );
+    const err = (await apiFetch("/url", {}).catch((e) => e)) as ApiConflictError;
+    expect(err).toBeInstanceOf(ApiConflictError);
+    expect(err.message).toBe("brand_exists_deleted");
+    expect(err.brandId).toBe(3);
+  });
+
   it("throws ApiConflictError with 'Conflict' when 409 body is unparseable", async () => {
     vi.mocked(fetch).mockResolvedValue(mockResponse(409));
     const err = await apiFetch("/url", {}).catch((e) => e) as ApiConflictError;
