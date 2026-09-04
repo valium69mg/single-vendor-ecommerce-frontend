@@ -50,12 +50,15 @@ export default defineConfig({
       // lines/statements/functions/branches: api.ts 99.09/98.37/100/90.38.
       // Branch coverage rose (>= 86 with >= 2 pts headroom) and every metric
       // stays above its current floor, so all four api.ts floors are held.
+      // Measured 2026-09-03 (frontend-admin-api-integration, T6) — order
+      // lines/statements/functions/branches: api.ts 99.13/98.43/100/90.38.
+      // Floors raised to measured actual minus 2, floored to an integer.
       thresholds: {
         "src/api/api.ts": {
-          lines: 96,
-          statements: 95,
+          lines: 97,
+          statements: 96,
           functions: 98,
-          branches: 84,
+          branches: 88,
         },
         "src/api/apiFetch.ts": {
           lines: 98,
