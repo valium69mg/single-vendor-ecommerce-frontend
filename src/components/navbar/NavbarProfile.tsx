@@ -50,7 +50,7 @@ export default function NavbarProfile() {
     {
       name: t("register"),
       icon: <IconWrapper icon={LuUserPlus} size={18} />,
-      onClick: () => navigate("/register"),
+      onClick: () => navigate("/registro"),
     },
   ];
 

@@ -39,6 +39,7 @@ beforeEach(() => {
       name: "Ada",
       token: "jwt-123",
       role: "USER",
+      isVerified: true,
     },
     setUser: vi.fn(),
     logout,

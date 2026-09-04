@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { UserProvider } from "./providers/UserProvider";
 import { CartProvider } from "./providers/CartProvider";
 import LoginPage from "./pages/LoginPage";
+import RegisterPage from "./pages/RegisterPage";
 import HomePage from "./pages/HomePage";
 import AdminHomePage from "./pages/AdminHomePage";
 import AdminProductsPage from "./pages/AdminProductsPage";
@@ -24,6 +25,7 @@ export function AppRoutes() {
   return (
     <Routes>
       <Route path="/login" element={<LoginPage />} />
+      <Route path="/registro" element={<RegisterPage />} />
 
       <Route
         path="/"

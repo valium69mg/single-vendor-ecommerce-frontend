@@ -31,6 +31,7 @@ export interface LoginResponse {
   name: string;
   token: string;
   role: string;
+  isVerified: boolean;
 }
 
 export async function loginRequest(data: {
@@ -63,6 +64,113 @@ export async function loginRequest(data: {
     return await res.json();
   } catch {
     throw new Error("auth.loginFailed");
+  }
+}
+
+export async function registerRequest(data: {
+  email: string;
+  password: string;
+}): Promise<void> {
+  let res: Response;
+  try {
+    res = await fetch(`${API_BASE_URL}/users/register`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data),
+    });
+  } catch {
+    throw new Error("auth.networkError");
+  }
+
+  if (!res.ok) {
+    // Pre-auth endpoint: bespoke fetch (not `apiFetch`) so a 4xx here never
+    // drives the global logout path. Only duplicate email is a realistic
+    // runtime 400 (client-side Zod validation already blocks policy
+    // failures), so 400 maps to the specific i18n key and every other
+    // non-ok status maps to the generic one.
+    if (res.status === 400) throw new Error("auth.register.emailExists");
+    throw new Error("auth.register.failed");
+  }
+}
+
+// Backend keys from `GlobalExceptionHandler`'s `{status, error, ...metadata}`
+// body (see `ApiServiceException(status, key)` in the design doc). Both
+// "wrong code" and "attempts exhausted" share HTTP 400, so the body's
+// `error` key — not the status alone — is the primary discriminator.
+const VERIFY_ERROR_CODE_MAP: Record<string, string> = {
+  verification_code_invalid: "auth.verify.codeRejected",
+  verification_code_expired: "auth.verify.codeExpired",
+  verification_code_attempts_exceeded: "auth.verify.attemptsExceeded",
+  verification_code_rate_limited: "auth.verify.tooManyCodes",
+  account_already_verified: "auth.verify.alreadyVerified",
+};
+
+// Status-only fallback, used when the body carries no recognized `error`
+// key (e.g. malformed/empty body). Kept separate from the map above because
+// HTTP 400 alone cannot distinguish invalid vs attempts-exceeded.
+function verifyStatusFallback(status: number): string {
+  if (status === 410) return "auth.verify.codeExpired";
+  if (status === 429) return "auth.verify.tooManyCodes";
+  if (status === 409) return "auth.verify.alreadyVerified";
+  if (status === 400) return "auth.verify.codeRejected";
+  return "auth.verify.failed";
+}
+
+function resendStatusFallback(status: number): string {
+  if (status === 429) return "auth.verify.tooManyCodes";
+  if (status === 409) return "auth.verify.alreadyVerified";
+  return "auth.verify.resendFailed";
+}
+
+export async function verifyRequest(data: {
+  email: string;
+  code: string;
+}): Promise<void> {
+  let res: Response;
+  try {
+    res = await fetch(`${API_BASE_URL}/users/verify`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data),
+    });
+  } catch {
+    throw new Error("auth.networkError");
+  }
+
+  if (!res.ok) {
+    // Pre-auth-adjacent endpoint: bespoke fetch (not `apiFetch`) so a 401 or
+    // 429 here never drives the global logout path.
+    const body = await res.json().catch(() => null);
+    const errorCode = body?.error as string | undefined;
+    throw new Error(
+      (errorCode && VERIFY_ERROR_CODE_MAP[errorCode]) ||
+        verifyStatusFallback(res.status),
+    );
+  }
+}
+
+export async function resendCodeRequest(data: {
+  email: string;
+}): Promise<void> {
+  let res: Response;
+  try {
+    res = await fetch(`${API_BASE_URL}/users/verify/resend`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data),
+    });
+  } catch {
+    throw new Error("auth.networkError");
+  }
+
+  if (!res.ok) {
+    // Same bespoke-fetch reasoning as verifyRequest above.
+    const body = await res.json().catch(() => null);
+    const errorCode = body?.error as string | undefined;
+    throw new Error(
+      (errorCode && VERIFY_ERROR_CODE_MAP[errorCode]) ||
+        resendStatusFallback(res.status),
+    );
   }
 }
 
