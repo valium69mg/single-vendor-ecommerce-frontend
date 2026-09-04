@@ -172,6 +172,13 @@ i18n.use(initReactI18next).init({
             haveAccount: "¿Ya tienes una cuenta?",
           },
           verify: {
+            title: "Verifica tu correo electrónico",
+            description: "Ingresa el código de 6 dígitos que enviamos a {{email}}",
+            codeLabel: "Código de verificación",
+            submit: "Verificar",
+            resend: "Reenviar código",
+            resent: "Código reenviado",
+            success: "Cuenta verificada correctamente",
             codeRejected: "El código ingresado es incorrecto",
             codeExpired: "El código ha expirado. Solicita uno nuevo",
             attemptsExceeded:
