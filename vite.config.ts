@@ -62,6 +62,12 @@ export default defineConfig({
       // lines/statements/functions/branches: RegisterForm.tsx 100/100/100/100,
       // RegisterPage.tsx 100/100/100/100. Floors added, mirroring
       // LoginForm.tsx/LoginPage.tsx.
+      // Measured 2026-09-04 (FE5b-1 verify form slice) — order
+      // lines/statements/functions/branches: VerifyEmailForm.tsx
+      // 100/100/100/75 (the `user` guards are defensive — the component is
+      // only ever mounted once a session exists — so the null branch is
+      // intentionally unexercised). Floor added at measured actual minus 2,
+      // floored to an integer.
       thresholds: {
         "src/api/api.ts": {
           lines: 97,
@@ -140,6 +146,12 @@ export default defineConfig({
           statements: 98,
           functions: 98,
           branches: 98,
+        },
+        "src/components/auth/VerifyEmailForm.tsx": {
+          lines: 98,
+          statements: 98,
+          functions: 98,
+          branches: 73,
         },
         "src/components/auth/ProtectedRoute.tsx": {
           lines: 98,
