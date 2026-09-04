@@ -12,6 +12,8 @@ import AdminCategoriesPage from "./pages/AdminCategoriesPage";
 import AdminCategoryDetailPage from "./pages/AdminCategoryDetailPage";
 import AdminBrandsPage from "./pages/AdminBrandsPage";
 import AdminBrandDetailPage from "./pages/AdminBrandDetailPage";
+import AdminMaterialsPage from "./pages/AdminMaterialsPage";
+import AdminMaterialDetailPage from "./pages/AdminMaterialDetailPage";
 import CartPage from "./pages/CartPage";
 import ProductDetailPage from "./pages/ProductDetailPage";
 import CategoryDetailPage from "./pages/CategoryDetailPage";
@@ -54,6 +56,11 @@ export function AppRoutes() {
         <Route path="categories/:categoryId" element={<AdminCategoryDetailPage />} />
         <Route path="brands" element={<AdminBrandsPage />} />
         <Route path="brands/:brandId" element={<AdminBrandDetailPage />} />
+        <Route path="materials" element={<AdminMaterialsPage />} />
+        <Route
+          path="materials/:materialId"
+          element={<AdminMaterialDetailPage />}
+        />
       </Route>
 
       <Route path="*" element={<NotFoundPage />} />

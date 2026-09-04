@@ -45,7 +45,7 @@ export default function AdminSideBar() {
       id: "materials",
       name: t("materials"),
       icon: <IconWrapper icon={TbHammer} size={18} />,
-      url: "/admin/products",
+      url: "/admin/materials",
     },
   ];
 
