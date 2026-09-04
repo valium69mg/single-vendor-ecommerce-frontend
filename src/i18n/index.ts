@@ -159,10 +159,36 @@ i18n.use(initReactI18next).init({
           networkError:
             "No pudimos conectar con el servidor. Revisa tu conexión.",
           register: {
+            title: "Crear cuenta",
+            description: "Completa tus datos para registrarte",
+            confirmPasswordLabel: "Confirmar contraseña",
+            termsLabel: "Acepto los términos y condiciones",
+            submit: "Registrarse",
+            success: "Cuenta creada con éxito",
             emailExists: "El correo electrónico ya está registrado",
             failed: "No fue posible completar el registro. Inténtalo de nuevo.",
             passwordMismatch: "Las contraseñas no coinciden",
             termsRequired: "Debes aceptar los términos y condiciones",
+            haveAccount: "¿Ya tienes una cuenta?",
+          },
+          verify: {
+            title: "Verifica tu correo electrónico",
+            description: "Ingresa el código de 6 dígitos que enviamos a {{email}}",
+            codeLabel: "Código de verificación",
+            submit: "Verificar",
+            resend: "Reenviar código",
+            resent: "Código reenviado",
+            success: "Cuenta verificada correctamente",
+            codeRejected: "El código ingresado es incorrecto",
+            codeExpired: "El código ha expirado. Solicita uno nuevo",
+            attemptsExceeded:
+              "Superaste el número máximo de intentos. Solicita un nuevo código",
+            tooManyCodes:
+              "Solicitaste demasiados códigos. Inténtalo de nuevo más tarde",
+            alreadyVerified: "Esta cuenta ya fue verificada",
+            failed: "No fue posible verificar el código. Inténtalo de nuevo.",
+            resendFailed:
+              "No fue posible reenviar el código. Inténtalo de nuevo.",
           },
         },
         cart: {

@@ -58,6 +58,21 @@ export default defineConfig({
       // 99.18/98.51/100/91.07; register.schema.ts 100/100/100/100. api.ts
       // branches floor raised; register.schema.ts floor added, both at
       // measured actual minus 2, floored to an integer.
+      // Measured 2026-09-04 (FE4b register form/page slice) — order
+      // lines/statements/functions/branches: RegisterForm.tsx 100/100/100/100,
+      // RegisterPage.tsx 100/100/100/100. Floors added, mirroring
+      // LoginForm.tsx/LoginPage.tsx.
+      // Measured 2026-09-04 (FE5b-1 verify form slice) — order
+      // lines/statements/functions/branches: VerifyEmailForm.tsx
+      // 100/100/100/75 (the `user` guards are defensive — the component is
+      // only ever mounted once a session exists — so the null branch is
+      // intentionally unexercised). Floor added at measured actual minus 2,
+      // floored to an integer.
+      // Measured 2026-09-04 (FE5b-2 register flow wiring slice) — order
+      // lines/statements/functions/branches: useRegisterFlow.ts
+      // 100/100/100/100. Floor added, mirroring useCart.tsx. RegisterForm.tsx
+      // and RegisterPage.tsx re-measured at 100/100/100/100 after the
+      // onRegistered/step-machine rewrite; existing floors held unchanged.
       thresholds: {
         "src/api/api.ts": {
           lines: 97,
@@ -120,6 +135,30 @@ export default defineConfig({
           branches: 69,
         },
         "src/components/auth/LoginForm.tsx": {
+          lines: 98,
+          statements: 98,
+          functions: 98,
+          branches: 98,
+        },
+        "src/components/auth/RegisterForm.tsx": {
+          lines: 98,
+          statements: 98,
+          functions: 98,
+          branches: 98,
+        },
+        "src/pages/RegisterPage.tsx": {
+          lines: 98,
+          statements: 98,
+          functions: 98,
+          branches: 98,
+        },
+        "src/components/auth/VerifyEmailForm.tsx": {
+          lines: 98,
+          statements: 98,
+          functions: 98,
+          branches: 73,
+        },
+        "src/hooks/useRegisterFlow.ts": {
           lines: 98,
           statements: 98,
           functions: 98,
