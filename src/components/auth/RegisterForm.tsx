@@ -10,7 +10,6 @@ import type { RegisterFormValues } from "./register.schema";
 import { useMutation } from "@tanstack/react-query";
 import { registerRequest } from "../../api/api";
 import type { UseMutationResult } from "@tanstack/react-query";
-import { useNavigate } from "react-router-dom";
 import { useToast } from "@/hooks/useToast";
 
 interface RegisterFormContentProps {
@@ -94,9 +93,12 @@ function RegisterFormFooterContent({
   );
 }
 
-export default function RegisterForm() {
+interface RegisterFormProps {
+  onRegistered: (email: string, password: string) => void;
+}
+
+export default function RegisterForm({ onRegistered }: RegisterFormProps) {
   const { t } = useTranslation();
-  const navigate = useNavigate();
   const { success } = useToast();
   const {
     register,
@@ -109,12 +111,12 @@ export default function RegisterForm() {
   const mutation = useMutation<void, Error, RegisterFormValues>({
     mutationFn: (data) =>
       registerRequest({ email: data.email, password: data.password }),
-    onSuccess: () => {
-      // TODO(FE5): replace this redirect with a background login + branch to
-      // the verify screen when `isVerified` is false. This slice only ships
-      // the register step; the verify flow lands in FE5.
+    onSuccess: (_data, variables) => {
+      // Hands off to `useRegisterFlow`, which performs a background login
+      // and branches to the verify screen or the logged-in landing based on
+      // `isVerified` (see `RegisterPage`).
       success(t("auth.register.success"));
-      navigate("/login");
+      onRegistered(variables.email, variables.password);
     },
   });
 

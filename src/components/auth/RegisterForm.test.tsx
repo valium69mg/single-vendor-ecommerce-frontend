@@ -3,12 +3,9 @@ import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import type { ReactNode } from "react";
 
-const navigate = vi.fn();
 const toastSuccess = vi.fn();
+const onRegistered = vi.fn();
 
-vi.mock("react-router-dom", () => ({
-  useNavigate: () => navigate,
-}));
 vi.mock("@/hooks/useToast", () => ({
   useToast: () => ({ success: toastSuccess }),
 }));
@@ -27,7 +24,7 @@ function renderForm() {
   const wrapper = ({ children }: { children: ReactNode }) => (
     <QueryClientProvider client={client}>{children}</QueryClientProvider>
   );
-  return render(<RegisterForm />, { wrapper });
+  return render(<RegisterForm onRegistered={onRegistered} />, { wrapper });
 }
 
 const VALID_PASSWORD = "Secret12!";
@@ -120,7 +117,7 @@ describe("RegisterForm validation", () => {
 });
 
 describe("RegisterForm success path", () => {
-  it("calls registerRequest, shows a success toast, and redirects to /login", async () => {
+  it("calls registerRequest, shows a success toast, and hands off to onRegistered", async () => {
     vi.mocked(api.registerRequest).mockResolvedValue(undefined);
 
     renderForm();
@@ -133,7 +130,12 @@ describe("RegisterForm success path", () => {
         password: VALID_PASSWORD,
       }),
     );
-    await waitFor(() => expect(navigate).toHaveBeenCalledWith("/login"));
+    await waitFor(() =>
+      expect(onRegistered).toHaveBeenCalledWith(
+        "user@example.com",
+        VALID_PASSWORD,
+      ),
+    );
     expect(toastSuccess).toHaveBeenCalledWith("Cuenta creada con éxito");
   });
 
@@ -165,6 +167,6 @@ describe("RegisterForm error path", () => {
     expect(
       await screen.findByText("El correo electrónico ya está registrado"),
     ).toBeInTheDocument();
-    expect(navigate).not.toHaveBeenCalledWith("/login");
+    expect(onRegistered).not.toHaveBeenCalled();
   });
 });
