@@ -158,6 +158,12 @@ i18n.use(initReactI18next).init({
           loginFailed: "No fue posible iniciar sesión. Inténtalo de nuevo.",
           networkError:
             "No pudimos conectar con el servidor. Revisa tu conexión.",
+          register: {
+            emailExists: "El correo electrónico ya está registrado",
+            failed: "No fue posible completar el registro. Inténtalo de nuevo.",
+            passwordMismatch: "Las contraseñas no coinciden",
+            termsRequired: "Debes aceptar los términos y condiciones",
+          },
         },
         cart: {
           title: "Carrito",

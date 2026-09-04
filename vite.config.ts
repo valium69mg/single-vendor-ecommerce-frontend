@@ -53,12 +53,23 @@ export default defineConfig({
       // Measured 2026-09-03 (frontend-admin-api-integration, T6) — order
       // lines/statements/functions/branches: api.ts 99.13/98.43/100/90.38.
       // Floors raised to measured actual minus 2, floored to an integer.
+      // Measured 2026-09-04 (FE4a register API + schema slice) — order
+      // lines/statements/functions/branches: api.ts (registerRequest added)
+      // 99.18/98.51/100/91.07; register.schema.ts 100/100/100/100. api.ts
+      // branches floor raised; register.schema.ts floor added, both at
+      // measured actual minus 2, floored to an integer.
       thresholds: {
         "src/api/api.ts": {
           lines: 97,
           statements: 96,
           functions: 98,
-          branches: 88,
+          branches: 89,
+        },
+        "src/components/auth/register.schema.ts": {
+          lines: 98,
+          statements: 98,
+          functions: 98,
+          branches: 98,
         },
         "src/api/apiFetch.ts": {
           lines: 98,

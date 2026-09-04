@@ -32,6 +32,7 @@ const authedUser = {
   name: "Ada",
   token: "jwt-123",
   role: "CUSTOMER",
+  isVerified: true,
 };
 
 function asGuest() {

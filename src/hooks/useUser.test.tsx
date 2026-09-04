@@ -11,6 +11,7 @@ const session: LoginResponse = {
   name: "Ada",
   token: "jwt-123",
   role: "USER",
+  isVerified: true,
 };
 
 beforeEach(() => localStorage.clear());

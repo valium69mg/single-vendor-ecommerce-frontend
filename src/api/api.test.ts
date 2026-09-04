@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
-import { getFileUrl, API_FILE_URL, loginRequest } from "./api";
+import { getFileUrl, API_FILE_URL, loginRequest, registerRequest } from "./api";
 import { API_ERRORS } from "@/constants/apiErrors";
 
 const FALLBACK = "/images/landscape-placeholder.svg";
@@ -94,6 +94,63 @@ describe("loginRequest", () => {
     vi.mocked(fetch).mockResolvedValue(mockResponse(401, {}));
 
     const err = await loginRequest(creds).catch((e: Error) => e);
+    expect((err as Error).message).not.toBe(API_ERRORS.UNAUTHORIZED);
+  });
+});
+
+describe("registerRequest", () => {
+  beforeEach(() => {
+    vi.stubGlobal("fetch", vi.fn());
+  });
+
+  it("posts to /users/register and resolves on 200", async () => {
+    vi.mocked(fetch).mockResolvedValue(mockResponse(200, {}));
+
+    await expect(registerRequest(creds)).resolves.toBeUndefined();
+    expect(fetch).toHaveBeenCalledWith(
+      expect.stringContaining("/users/register"),
+      expect.objectContaining({
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(creds),
+      }),
+    );
+  });
+
+  it("resolves on 201 as well (created)", async () => {
+    vi.mocked(fetch).mockResolvedValue(mockResponse(201, {}));
+
+    await expect(registerRequest(creds)).resolves.toBeUndefined();
+  });
+
+  it("throws the duplicate-email i18n key on 400", async () => {
+    vi.mocked(fetch).mockResolvedValue(
+      mockResponse(400, { error: "El email ya está registrado" }),
+    );
+
+    await expect(registerRequest(creds)).rejects.toThrow(
+      "auth.register.emailExists",
+    );
+  });
+
+  it("throws the generic register-failure i18n key on any other non-ok status", async () => {
+    vi.mocked(fetch).mockResolvedValue(mockResponse(500, { error: "boom" }));
+
+    await expect(registerRequest(creds)).rejects.toThrow(
+      "auth.register.failed",
+    );
+  });
+
+  it("throws the network-error i18n key when fetch itself rejects", async () => {
+    vi.mocked(fetch).mockRejectedValue(new TypeError("Failed to fetch"));
+
+    await expect(registerRequest(creds)).rejects.toThrow("auth.networkError");
+  });
+
+  it("never emits API_ERRORS.UNAUTHORIZED (registerRequest is pre-auth)", async () => {
+    vi.mocked(fetch).mockResolvedValue(mockResponse(401, {}));
+
+    const err = await registerRequest(creds).catch((e: Error) => e);
     expect((err as Error).message).not.toBe(API_ERRORS.UNAUTHORIZED);
   });
 });

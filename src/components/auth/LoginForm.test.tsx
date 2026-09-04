@@ -22,6 +22,7 @@ const session: LoginResponse = {
   email: "user@example.com",
   name: "Ada",
   token: "jwt-abc",
+  isVerified: true,
   role: "USER",
 };
 

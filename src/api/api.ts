@@ -31,6 +31,7 @@ export interface LoginResponse {
   name: string;
   token: string;
   role: string;
+  isVerified: boolean;
 }
 
 export async function loginRequest(data: {
@@ -63,6 +64,32 @@ export async function loginRequest(data: {
     return await res.json();
   } catch {
     throw new Error("auth.loginFailed");
+  }
+}
+
+export async function registerRequest(data: {
+  email: string;
+  password: string;
+}): Promise<void> {
+  let res: Response;
+  try {
+    res = await fetch(`${API_BASE_URL}/users/register`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data),
+    });
+  } catch {
+    throw new Error("auth.networkError");
+  }
+
+  if (!res.ok) {
+    // Pre-auth endpoint: bespoke fetch (not `apiFetch`) so a 4xx here never
+    // drives the global logout path. Only duplicate email is a realistic
+    // runtime 400 (client-side Zod validation already blocks policy
+    // failures), so 400 maps to the specific i18n key and every other
+    // non-ok status maps to the generic one.
+    if (res.status === 400) throw new Error("auth.register.emailExists");
+    throw new Error("auth.register.failed");
   }
 }
 

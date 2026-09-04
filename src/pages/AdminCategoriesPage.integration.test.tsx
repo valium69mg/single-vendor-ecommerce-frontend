@@ -27,6 +27,7 @@ const ADMIN_SESSION: LoginResponse = {
   email: "admin@example.com",
   name: "Admin",
   token: "admin-token",
+  isVerified: true,
   role: "ADMIN",
 };
 
