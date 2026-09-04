@@ -171,6 +171,18 @@ i18n.use(initReactI18next).init({
             termsRequired: "Debes aceptar los términos y condiciones",
             haveAccount: "¿Ya tienes una cuenta?",
           },
+          verify: {
+            codeRejected: "El código ingresado es incorrecto",
+            codeExpired: "El código ha expirado. Solicita uno nuevo",
+            attemptsExceeded:
+              "Superaste el número máximo de intentos. Solicita un nuevo código",
+            tooManyCodes:
+              "Solicitaste demasiados códigos. Inténtalo de nuevo más tarde",
+            alreadyVerified: "Esta cuenta ya fue verificada",
+            failed: "No fue posible verificar el código. Inténtalo de nuevo.",
+            resendFailed:
+              "No fue posible reenviar el código. Inténtalo de nuevo.",
+          },
         },
         cart: {
           title: "Carrito",
