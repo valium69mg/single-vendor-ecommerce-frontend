@@ -4,6 +4,9 @@ import { MemoryRouter } from "react-router-dom";
 import { AppRoutes } from "./App";
 
 vi.mock("./pages/LoginPage", () => ({ default: () => <div>login page</div> }));
+vi.mock("./pages/RegisterPage", () => ({
+  default: () => <div>register page</div>,
+}));
 vi.mock("./pages/HomePage", () => ({ default: () => <div>home page</div> }));
 vi.mock("./pages/CartPage", () => ({ default: () => <div>cart page</div> }));
 vi.mock("./pages/ProductDetailPage", () => ({
@@ -82,5 +85,10 @@ describe("AppRoutes", () => {
   it("resolves the brands list route", () => {
     renderAt("/brands");
     expect(screen.getByText("brands list page")).toBeInTheDocument();
+  });
+
+  it("resolves the register route at /registro", () => {
+    renderAt("/registro");
+    expect(screen.getByText("register page")).toBeInTheDocument();
   });
 });

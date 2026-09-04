@@ -58,6 +58,10 @@ export default defineConfig({
       // 99.18/98.51/100/91.07; register.schema.ts 100/100/100/100. api.ts
       // branches floor raised; register.schema.ts floor added, both at
       // measured actual minus 2, floored to an integer.
+      // Measured 2026-09-04 (FE4b register form/page slice) — order
+      // lines/statements/functions/branches: RegisterForm.tsx 100/100/100/100,
+      // RegisterPage.tsx 100/100/100/100. Floors added, mirroring
+      // LoginForm.tsx/LoginPage.tsx.
       thresholds: {
         "src/api/api.ts": {
           lines: 97,
@@ -120,6 +124,18 @@ export default defineConfig({
           branches: 69,
         },
         "src/components/auth/LoginForm.tsx": {
+          lines: 98,
+          statements: 98,
+          functions: 98,
+          branches: 98,
+        },
+        "src/components/auth/RegisterForm.tsx": {
+          lines: 98,
+          statements: 98,
+          functions: 98,
+          branches: 98,
+        },
+        "src/pages/RegisterPage.tsx": {
           lines: 98,
           statements: 98,
           functions: 98,

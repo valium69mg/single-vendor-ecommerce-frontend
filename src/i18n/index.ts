@@ -159,10 +159,17 @@ i18n.use(initReactI18next).init({
           networkError:
             "No pudimos conectar con el servidor. Revisa tu conexión.",
           register: {
+            title: "Crear cuenta",
+            description: "Completa tus datos para registrarte",
+            confirmPasswordLabel: "Confirmar contraseña",
+            termsLabel: "Acepto los términos y condiciones",
+            submit: "Registrarse",
+            success: "Cuenta creada con éxito",
             emailExists: "El correo electrónico ya está registrado",
             failed: "No fue posible completar el registro. Inténtalo de nuevo.",
             passwordMismatch: "Las contraseñas no coinciden",
             termsRequired: "Debes aceptar los términos y condiciones",
+            haveAccount: "¿Ya tienes una cuenta?",
           },
         },
         cart: {
