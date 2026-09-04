@@ -68,6 +68,11 @@ export default defineConfig({
       // only ever mounted once a session exists — so the null branch is
       // intentionally unexercised). Floor added at measured actual minus 2,
       // floored to an integer.
+      // Measured 2026-09-04 (FE5b-2 register flow wiring slice) — order
+      // lines/statements/functions/branches: useRegisterFlow.ts
+      // 100/100/100/100. Floor added, mirroring useCart.tsx. RegisterForm.tsx
+      // and RegisterPage.tsx re-measured at 100/100/100/100 after the
+      // onRegistered/step-machine rewrite; existing floors held unchanged.
       thresholds: {
         "src/api/api.ts": {
           lines: 97,
@@ -152,6 +157,12 @@ export default defineConfig({
           statements: 98,
           functions: 98,
           branches: 73,
+        },
+        "src/hooks/useRegisterFlow.ts": {
+          lines: 98,
+          statements: 98,
+          functions: 98,
+          branches: 98,
         },
         "src/components/auth/ProtectedRoute.tsx": {
           lines: 98,
