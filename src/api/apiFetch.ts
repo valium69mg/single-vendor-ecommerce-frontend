@@ -3,10 +3,17 @@ import { API_ERRORS } from "@/constants/apiErrors";
 export class ApiConflictError extends Error {
   categoryId: number;
   brandId?: number;
-  constructor(message: string, categoryId: number, brandId?: number) {
+  materialId?: number;
+  constructor(
+    message: string,
+    categoryId: number,
+    brandId?: number,
+    materialId?: number,
+  ) {
     super(message);
     this.categoryId = categoryId;
     this.brandId = brandId;
+    this.materialId = materialId;
   }
 }
 
@@ -70,6 +77,7 @@ export async function apiFetch<T>(
       errorData?.error || "Conflict",
       errorData?.categoryId,
       errorData?.brandId,
+      errorData?.materialId,
     );
   }
 

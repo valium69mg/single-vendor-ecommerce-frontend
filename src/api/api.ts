@@ -803,6 +803,22 @@ export interface AdminMaterial {
   name: string;
 }
 
+export interface CreateMaterialMutationVariables {
+  data: { name: string };
+  token: string;
+}
+
+export interface EditMaterialMutationVariables {
+  data: { name: string };
+  materialId: number;
+  token: string;
+}
+
+export interface RestoreMaterialVariables {
+  materialId: number;
+  token: string;
+}
+
 export async function getAdminMaterials(
   page: number,
   size: number,
@@ -818,6 +834,93 @@ export async function getAdminMaterials(
     `${API_BASE_URL}/admin/products/materials?${query.toString()}`,
     {
       method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    },
+  );
+}
+
+export async function getAdminMaterial(
+  materialId: number,
+  token: string,
+): Promise<AdminMaterial> {
+  return apiFetch<AdminMaterial>(
+    `${API_BASE_URL}/admin/products/materials/${materialId}`,
+    {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    },
+  );
+}
+
+export async function createMaterial({
+  data,
+  token,
+}: CreateMaterialMutationVariables): Promise<StandardResponse> {
+  return apiFetch<StandardResponse>(
+    `${API_BASE_URL}/admin/products/materials`,
+    {
+      method: "POST",
+      body: JSON.stringify(data),
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    },
+  );
+}
+
+export async function editMaterial({
+  data,
+  materialId,
+  token,
+}: EditMaterialMutationVariables): Promise<StandardResponse> {
+  return apiFetch<StandardResponse>(
+    `${API_BASE_URL}/admin/products/materials/${materialId}`,
+    {
+      method: "PATCH",
+      body: JSON.stringify(data),
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    },
+  );
+}
+
+export async function restoreMaterial({
+  materialId,
+  token,
+}: RestoreMaterialVariables): Promise<StandardResponse> {
+  return apiFetch<StandardResponse>(
+    `${API_BASE_URL}/admin/products/materials/${materialId}/restore`,
+    {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    },
+  );
+}
+
+/**
+ * Delete an admin material. 204-only contract, mirroring `deleteBrand`: the
+ * backend returns HTTP 204 with no body, which `apiFetch` maps to `undefined`.
+ */
+export async function deleteMaterial(
+  materialId: number,
+  token: string,
+): Promise<void> {
+  await apiFetch<void>(
+    `${API_BASE_URL}/admin/products/materials/${materialId}`,
+    {
+      method: "DELETE",
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
