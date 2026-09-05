@@ -225,6 +225,12 @@ i18n.use(initReactI18next).init({
           openCart: "Abrir carrito",
           selectVariant: "Selecciona una opción",
           outOfStock: "Sin stock",
+          merged: {
+            adjusted:
+              "Se ajustó la cantidad de {{count}} artículo(s) de tu carrito de invitado por disponibilidad de stock",
+            skipped:
+              "{{count}} artículo(s) de tu carrito de invitado ya no están disponibles y no se agregaron",
+          },
         },
         validation: {
           required: "Este campo es obligatorio",
