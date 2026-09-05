@@ -4,16 +4,26 @@ export class ApiConflictError extends Error {
   categoryId: number;
   brandId?: number;
   materialId?: number;
+  /**
+   * The full parsed 409 response body. `categoryId`/`brandId`/`materialId`
+   * above cover the original category/brand/material duplicate-conflict
+   * shape; callers with a different 409 contract (e.g. checkout's
+   * `conflicts` array) read it directly from here instead of adding more
+   * named fields to this class.
+   */
+  body?: unknown;
   constructor(
     message: string,
     categoryId: number,
     brandId?: number,
     materialId?: number,
+    body?: unknown,
   ) {
     super(message);
     this.categoryId = categoryId;
     this.brandId = brandId;
     this.materialId = materialId;
+    this.body = body;
   }
 }
 
@@ -78,6 +88,7 @@ export async function apiFetch<T>(
       errorData?.categoryId,
       errorData?.brandId,
       errorData?.materialId,
+      errorData,
     );
   }
 

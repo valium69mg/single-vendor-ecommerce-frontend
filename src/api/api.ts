@@ -1,4 +1,10 @@
-import { apiFetch, apiFetchFile, ApiError, ApiMovedError } from "./apiFetch";
+import {
+  apiFetch,
+  apiFetchFile,
+  ApiError,
+  ApiConflictError,
+  ApiMovedError,
+} from "./apiFetch";
 
 export const API_BASE_URL =
   import.meta.env.VITE_API_URL || "http://localhost:8080/api/v1";
@@ -1198,4 +1204,134 @@ export async function mergeCart(
     headers: cartHeaders(token),
     body: JSON.stringify({ items }),
   });
+}
+
+// ─── Orders / checkout (authenticated) ─────────────────────────────────────
+// Backend contract: base path `/orders`, JWT required. `POST /orders` creates
+// an order from the caller's current cart (HTTP 201) or rejects with 400
+// (`order_cart_empty`) or 409 (stock/availability conflicts, `conflicts[]`).
+// `GET /orders` lists the caller's own orders, most recent first. `GET
+// /orders/{orderNumber}` returns detail, 404 (`order_not_found`) if unknown
+// or not owned by the caller.
+
+export interface ShippingAddress {
+  recipient: string;
+  line1: string;
+  line2?: string | null;
+  city: string;
+  state: string;
+  postalCode: string;
+  country: string;
+  phone: string;
+}
+
+export interface CreateOrderRequest {
+  shippingAddress: ShippingAddress;
+}
+
+export interface OrderItemResponse {
+  orderItemId: number;
+  productVariantId: number;
+  productName: string;
+  variantLabel: string | null;
+  sku: string;
+  unitPrice: number;
+  quantity: number;
+  lineTotal: number;
+}
+
+export interface OrderResponse {
+  orderId: number;
+  orderNumber: string;
+  status: string;
+  subtotal: number;
+  shippingCost: number;
+  total: number;
+  shippingAddress: ShippingAddress;
+  items: OrderItemResponse[];
+  createdAt: string;
+}
+
+export interface OrderSummaryResponse {
+  orderNumber: string;
+  status: string;
+  total: number;
+  totalItems: number;
+  createdAt: string;
+}
+
+export type StockConflictType = "STOCK_INSUFFICIENT" | "PRODUCT_UNAVAILABLE";
+
+export interface StockConflict {
+  productVariantId: number;
+  type: StockConflictType;
+  requestedQuantity: number;
+  availableStock: number;
+}
+
+/**
+ * Raised when checkout is rejected with HTTP 409 because one or more lines
+ * exceed available stock or reference a now-unavailable product. Unlike
+ * `CartStockError` (a single `availableStock` scalar), checkout needs every
+ * offending line in one round trip so `/checkout` can clamp all of them
+ * inline without a redirect — hence the `conflicts` list.
+ */
+export class CheckoutStockConflictError extends Error {
+  conflicts: StockConflict[];
+  constructor(message: string, conflicts: StockConflict[]) {
+    super(message);
+    this.name = "CheckoutStockConflictError";
+    this.conflicts = conflicts;
+  }
+}
+
+function mapCheckoutConflictError(error: unknown): unknown {
+  if (error instanceof ApiConflictError) {
+    const body = error.body as Record<string, unknown> | null;
+    const conflicts = body?.conflicts;
+    if (Array.isArray(conflicts)) {
+      return new CheckoutStockConflictError(
+        error.message,
+        conflicts as StockConflict[],
+      );
+    }
+  }
+  return error;
+}
+
+export async function createOrder(
+  payload: CreateOrderRequest,
+  token: string,
+): Promise<OrderResponse> {
+  try {
+    return await apiFetch<OrderResponse>(`${API_BASE_URL}/orders`, {
+      method: "POST",
+      headers: cartHeaders(token),
+      body: JSON.stringify(payload),
+    });
+  } catch (error) {
+    throw mapCheckoutConflictError(error);
+  }
+}
+
+export async function getMyOrders(
+  token: string,
+): Promise<OrderSummaryResponse[]> {
+  return apiFetch<OrderSummaryResponse[]>(`${API_BASE_URL}/orders`, {
+    method: "GET",
+    headers: cartHeaders(token),
+  });
+}
+
+export async function getOrder(
+  orderNumber: string,
+  token: string,
+): Promise<OrderResponse> {
+  return apiFetch<OrderResponse>(
+    `${API_BASE_URL}/orders/${orderNumber}`,
+    {
+      method: "GET",
+      headers: cartHeaders(token),
+    },
+  );
 }
