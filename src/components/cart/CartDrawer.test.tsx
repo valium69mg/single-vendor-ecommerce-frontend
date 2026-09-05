@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { render, screen, fireEvent } from "@testing-library/react";
-import { MemoryRouter } from "react-router-dom";
+import { MemoryRouter, Route, Routes } from "react-router-dom";
 import type { CartLine } from "@/providers/cartReducer";
 import type { CartContextValue } from "@/context/CartContext";
 import { useCart } from "@/hooks/useCart";
@@ -47,7 +47,10 @@ function setCart(value: Partial<CartContextValue>) {
 function renderDrawer() {
   return render(
     <MemoryRouter>
-      <CartDrawer />
+      <Routes>
+        <Route path="/" element={<CartDrawer />} />
+        <Route path="/checkout" element={<div>checkout page</div>} />
+      </Routes>
     </MemoryRouter>,
   );
 }
@@ -132,5 +135,23 @@ describe("CartDrawer", () => {
     renderDrawer();
 
     expect(screen.getByRole("alert")).toBeInTheDocument();
+  });
+
+  it("closes the drawer and navigates to /checkout when 'Finalizar compra' is clicked", () => {
+    const closeDrawer = vi.fn();
+    setCart({
+      items: [makeLine({})],
+      subtotal: 100,
+      totalItems: 1,
+      closeDrawer,
+    });
+    renderDrawer();
+
+    const cta = screen.getByRole("button", { name: "Finalizar compra" });
+    expect(cta).not.toBeDisabled();
+    fireEvent.click(cta);
+
+    expect(closeDrawer).toHaveBeenCalled();
+    expect(screen.getByText("checkout page")).toBeInTheDocument();
   });
 });

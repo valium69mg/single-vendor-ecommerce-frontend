@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import Navbar from "@/components/navbar/Navbar";
 import { CartItemRow } from "@/components/cart/CartItemRow";
@@ -8,6 +8,7 @@ import { formatMXN } from "@/lib/format";
 
 export default function CartPage() {
   const { t } = useTranslation();
+  const navigate = useNavigate();
   const { items, subtotal, error, updateQty, removeItem } = useCart();
 
   return (
@@ -69,8 +70,9 @@ export default function CartPage() {
               </div>
               <button
                 type="button"
-                disabled
-                className="w-full bg-stone-900 py-2 font-store-body text-sm text-white opacity-50"
+                disabled={items.length === 0}
+                onClick={() => navigate("/checkout")}
+                className="w-full bg-stone-900 py-2 font-store-body text-sm text-white transition-colors hover:bg-stone-800 disabled:opacity-50 disabled:hover:bg-stone-900"
               >
                 {t("cart.checkout")}
               </button>

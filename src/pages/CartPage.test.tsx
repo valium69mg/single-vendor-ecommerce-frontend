@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { render, screen, fireEvent } from "@testing-library/react";
-import { MemoryRouter } from "react-router-dom";
+import { MemoryRouter, Route, Routes } from "react-router-dom";
 import type { CartLine } from "@/providers/cartReducer";
 import type { CartContextValue } from "@/context/CartContext";
 import { useCart } from "@/hooks/useCart";
@@ -48,7 +48,10 @@ function setCart(value: Partial<CartContextValue>) {
 function renderPage() {
   return render(
     <MemoryRouter>
-      <CartPage />
+      <Routes>
+        <Route path="/" element={<CartPage />} />
+        <Route path="/checkout" element={<div>checkout page</div>} />
+      </Routes>
     </MemoryRouter>,
   );
 }
@@ -113,5 +116,20 @@ describe("CartPage", () => {
 
     fireEvent.click(screen.getByRole("button", { name: "Eliminar" }));
     expect(removeItem).toHaveBeenCalledWith(5);
+  });
+
+  it("navigates to /checkout when 'Finalizar compra' is clicked with a non-empty cart", () => {
+    setCart({
+      items: [makeLine({ productVariantId: 5 })],
+      subtotal: 100,
+      totalItems: 1,
+    });
+    renderPage();
+
+    const cta = screen.getByRole("button", { name: "Finalizar compra" });
+    expect(cta).not.toBeDisabled();
+    fireEvent.click(cta);
+
+    expect(screen.getByText("checkout page")).toBeInTheDocument();
   });
 });

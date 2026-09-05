@@ -9,6 +9,15 @@ vi.mock("./pages/RegisterPage", () => ({
 }));
 vi.mock("./pages/HomePage", () => ({ default: () => <div>home page</div> }));
 vi.mock("./pages/CartPage", () => ({ default: () => <div>cart page</div> }));
+vi.mock("./pages/CheckoutPage", () => ({
+  default: () => <div>checkout page</div>,
+}));
+vi.mock("./pages/OrdersListPage", () => ({
+  default: () => <div>orders list page</div>,
+}));
+vi.mock("./pages/OrderDetailPage", () => ({
+  default: () => <div>order detail page</div>,
+}));
 vi.mock("./pages/ProductDetailPage", () => ({
   default: () => <div>product detail page</div>,
 }));
@@ -90,5 +99,20 @@ describe("AppRoutes", () => {
   it("resolves the register route at /registro", () => {
     renderAt("/registro");
     expect(screen.getByText("register page")).toBeInTheDocument();
+  });
+
+  it("resolves the protected checkout route at /checkout", () => {
+    renderAt("/checkout");
+    expect(screen.getByText("checkout page")).toBeInTheDocument();
+  });
+
+  it("resolves the protected order history route at /pedidos", () => {
+    renderAt("/pedidos");
+    expect(screen.getByText("orders list page")).toBeInTheDocument();
+  });
+
+  it("resolves the protected order detail route at /pedido/:orderNumber", () => {
+    renderAt("/pedido/ORD-20260101-1");
+    expect(screen.getByText("order detail page")).toBeInTheDocument();
   });
 });

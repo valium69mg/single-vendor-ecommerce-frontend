@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import {
   Sheet,
@@ -13,6 +13,7 @@ import { CartItemRow } from "./CartItemRow";
 
 export function CartDrawer() {
   const { t } = useTranslation();
+  const navigate = useNavigate();
   const {
     items,
     subtotal,
@@ -78,8 +79,12 @@ export function CartDrawer() {
               </Link>
               <button
                 type="button"
-                disabled
-                className="w-full bg-stone-900 py-2 font-store-body text-sm text-white opacity-50"
+                disabled={items.length === 0}
+                onClick={() => {
+                  closeDrawer();
+                  navigate("/checkout");
+                }}
+                className="w-full bg-stone-900 py-2 font-store-body text-sm text-white transition-colors hover:bg-stone-800 disabled:opacity-50 disabled:hover:bg-stone-900"
               >
                 {t("cart.checkout")}
               </button>

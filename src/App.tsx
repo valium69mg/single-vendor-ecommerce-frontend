@@ -15,6 +15,9 @@ import AdminBrandDetailPage from "./pages/AdminBrandDetailPage";
 import AdminMaterialsPage from "./pages/AdminMaterialsPage";
 import AdminMaterialDetailPage from "./pages/AdminMaterialDetailPage";
 import CartPage from "./pages/CartPage";
+import CheckoutPage from "./pages/CheckoutPage";
+import OrdersListPage from "./pages/OrdersListPage";
+import OrderDetailPage from "./pages/OrderDetailPage";
 import ProductDetailPage from "./pages/ProductDetailPage";
 import CategoryDetailPage from "./pages/CategoryDetailPage";
 import BrandDetailPage from "./pages/BrandDetailPage";
@@ -37,6 +40,30 @@ export function AppRoutes() {
       />
 
       <Route path="/carrito" element={<CartPage />} />
+      <Route
+        path="/checkout"
+        element={
+          <ProtectedRoute>
+            <CheckoutPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/pedidos"
+        element={
+          <ProtectedRoute>
+            <OrdersListPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/pedido/:orderNumber"
+        element={
+          <ProtectedRoute>
+            <OrderDetailPage />
+          </ProtectedRoute>
+        }
+      />
       <Route path="/product/:slug" element={<ProductDetailPage />} />
       <Route path="/category/:slug" element={<CategoryDetailPage />} />
       <Route path="/brand/:slug" element={<BrandDetailPage />} />
