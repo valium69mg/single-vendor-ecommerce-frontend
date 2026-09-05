@@ -11,8 +11,13 @@ vi.mock("@/api/api", async (importOriginal) => {
     addCartItem: vi.fn(),
     updateCartItem: vi.fn(),
     removeCartItem: vi.fn(),
+    mergeCart: vi.fn(),
   };
 });
+const toastInfo = vi.fn();
+vi.mock("@/hooks/useToast", () => ({
+  useToast: () => ({ info: toastInfo }),
+}));
 
 import { useUser } from "@/hooks/useUser";
 import * as api from "@/api/api";
@@ -90,10 +95,10 @@ describe("useCart", () => {
     expect(second.result.current.subtotal).toBe(200);
   });
 
-  it("keeps the guest localStorage cart intact after a user logs in", async () => {
-    const guest = renderHook(() => useCart(), { wrapper });
+  it("merges the guest cart into the server on login and clears localStorage on success", async () => {
+    const { result, rerender } = renderHook(() => useCart(), { wrapper });
     await act(async () => {
-      await guest.result.current.addItem({
+      await result.current.addItem({
         productVariantId: 1,
         quantity: 2,
         productName: "Ring",
@@ -101,19 +106,248 @@ describe("useCart", () => {
         availableStock: 10,
       });
     });
-    guest.unmount();
+
+    const server: CartResponse = {
+      cartId: 5,
+      items: [
+        {
+          cartItemId: 20,
+          productVariantId: 1,
+          productId: "p1",
+          productName: "Ring",
+          sku: "R-1",
+          imageUrl: null,
+          unitPrice: 100,
+          discountPrice: null,
+          quantity: 2,
+          availableStock: 10,
+          lineTotal: 200,
+        },
+      ],
+      subtotal: 200,
+      totalItems: 2,
+    };
+    vi.mocked(api.mergeCart).mockResolvedValue({
+      cart: server,
+      adjustedLines: [],
+      skippedLines: [],
+    });
 
     asAuthenticated();
-    const server: CartResponse = { cartId: 5, items: [], subtotal: 0, totalItems: 0 };
-    vi.mocked(api.getCart).mockResolvedValue(server);
+    await act(async () => {
+      rerender();
+    });
+    await waitFor(() => expect(api.mergeCart).toHaveBeenCalledTimes(1));
 
-    const authed = renderHook(() => useCart(), { wrapper });
+    expect(api.mergeCart).toHaveBeenCalledWith(
+      [{ productVariantId: 1, quantity: 2 }],
+      "jwt-123",
+    );
+    expect(api.getCart).not.toHaveBeenCalled();
+    await waitFor(() => expect(localStorage.getItem("cart")).toBeNull());
+    await waitFor(() => expect(result.current.items).toHaveLength(1));
+    expect(result.current.items[0].productVariantId).toBe(1);
+  });
+
+  it("does not send a merge request when the guest cart is empty at login", async () => {
+    asAuthenticated();
+    vi.mocked(api.getCart).mockResolvedValue({
+      cartId: 5,
+      items: [],
+      subtotal: 0,
+      totalItems: 0,
+    });
+
+    renderHook(() => useCart(), { wrapper });
     await waitFor(() => expect(api.getCart).toHaveBeenCalled());
 
-    const stored = JSON.parse(localStorage.getItem("cart") as string);
-    expect(stored.items).toHaveLength(1);
-    expect(stored.items[0].productVariantId).toBe(1);
-    void authed;
+    expect(api.mergeCart).not.toHaveBeenCalled();
+  });
+
+  it("shows a toast for adjusted and skipped lines after a successful merge", async () => {
+    const { result, rerender } = renderHook(() => useCart(), { wrapper });
+    await act(async () => {
+      await result.current.addItem({
+        productVariantId: 1,
+        quantity: 5,
+        productName: "Ring",
+        unitPrice: 100,
+        availableStock: 10,
+      });
+    });
+
+    const server: CartResponse = { cartId: 5, items: [], subtotal: 0, totalItems: 0 };
+    vi.mocked(api.mergeCart).mockResolvedValue({
+      cart: server,
+      adjustedLines: [{ productVariantId: 1, requestedQuantity: 5, finalQuantity: 3 }],
+      skippedLines: [{ productVariantId: 2, reason: "not found" }],
+    });
+
+    asAuthenticated();
+    await act(async () => {
+      rerender();
+    });
+    await waitFor(() => expect(api.mergeCart).toHaveBeenCalledTimes(1));
+    await waitFor(() => expect(toastInfo).toHaveBeenCalledTimes(2));
+
+    expect(toastInfo).toHaveBeenCalledWith(
+      expect.stringContaining("stock"),
+    );
+  });
+
+  it("does not show a toast when a successful merge has no adjustments or skips", async () => {
+    const { result, rerender } = renderHook(() => useCart(), { wrapper });
+    await act(async () => {
+      await result.current.addItem({
+        productVariantId: 1,
+        quantity: 2,
+        productName: "Ring",
+        unitPrice: 100,
+        availableStock: 10,
+      });
+    });
+
+    vi.mocked(api.mergeCart).mockResolvedValue({
+      cart: { cartId: 5, items: [], subtotal: 0, totalItems: 0 },
+      adjustedLines: [],
+      skippedLines: [],
+    });
+
+    asAuthenticated();
+    await act(async () => {
+      rerender();
+    });
+    await waitFor(() => expect(api.mergeCart).toHaveBeenCalledTimes(1));
+
+    expect(toastInfo).not.toHaveBeenCalled();
+  });
+
+  it("preserves the guest cart in localStorage and does not surface an error when merge fails", async () => {
+    const { result, rerender } = renderHook(() => useCart(), { wrapper });
+    await act(async () => {
+      await result.current.addItem({
+        productVariantId: 1,
+        quantity: 2,
+        productName: "Ring",
+        unitPrice: 100,
+        availableStock: 10,
+      });
+    });
+
+    const before = localStorage.getItem("cart");
+
+    vi.mocked(api.mergeCart).mockRejectedValue(new Error("network error"));
+
+    asAuthenticated();
+    await act(async () => {
+      rerender();
+    });
+    await waitFor(() => expect(api.mergeCart).toHaveBeenCalledTimes(1));
+
+    expect(localStorage.getItem("cart")).toBe(before);
+    expect(result.current.error).toBeNull();
+    expect(api.mergeCart).toHaveBeenCalledTimes(1);
+  });
+
+  it("does not re-merge on an authenticated page reload even with a stale guest cart key", async () => {
+    localStorage.setItem(
+      "cart",
+      JSON.stringify({
+        cartId: null,
+        items: [
+          {
+            cartItemId: null,
+            productVariantId: 1,
+            productId: null,
+            productName: "Stale Ring",
+            sku: null,
+            imageUrl: null,
+            unitPrice: 100,
+            discountPrice: null,
+            quantity: 1,
+            availableStock: 10,
+          },
+        ],
+      }),
+    );
+
+    asAuthenticated();
+    vi.mocked(api.getCart).mockResolvedValue({
+      cartId: 5,
+      items: [],
+      subtotal: 0,
+      totalItems: 0,
+    });
+
+    renderHook(() => useCart(), { wrapper });
+    await waitFor(() => expect(api.getCart).toHaveBeenCalled());
+
+    expect(api.mergeCart).not.toHaveBeenCalled();
+  });
+
+  it("survives the merge effect being torn down and re-run before settling, merging exactly once", async () => {
+    // Simulates a React 18/19 dev-mode StrictMode double-invoke: the effect's
+    // cleanup fires (e.g. because an unrelated dependency like `logout`
+    // changes identity) before the in-flight mergeCart call has settled. The
+    // previousTokenRef must be rolled back on that aborted cleanup, or the
+    // real second invocation would see the ref already flipped to the token
+    // and silently take the getCart branch instead of merging.
+    const { result, rerender } = renderHook(() => useCart(), { wrapper });
+    await act(async () => {
+      await result.current.addItem({
+        productVariantId: 1,
+        quantity: 2,
+        productName: "Ring",
+        unitPrice: 100,
+        availableStock: 10,
+      });
+    });
+
+    const server: CartResponse = {
+      cartId: 5,
+      items: [
+        {
+          cartItemId: 20,
+          productVariantId: 1,
+          productId: "p1",
+          productName: "Ring",
+          sku: "R-1",
+          imageUrl: null,
+          unitPrice: 100,
+          discountPrice: null,
+          quantity: 2,
+          availableStock: 10,
+          lineTotal: 200,
+        },
+      ],
+      subtotal: 200,
+      totalItems: 2,
+    };
+    vi.mocked(api.mergeCart).mockResolvedValue({
+      cart: server,
+      adjustedLines: [],
+      skippedLines: [],
+    });
+
+    // First invocation: token flips null -> "jwt-123", schedules the
+    // (microtask-deferred) mergeCart call, but does not get a chance to
+    // resolve before the next synchronous render below tears it down.
+    asAuthenticated();
+    act(() => {
+      rerender();
+    });
+
+    // Second invocation, synchronously right after (no await in between, so
+    // no microtask has flushed yet): a fresh `logout` reference forces the
+    // effect to clean up and re-run for the same authenticated token.
+    asAuthenticated();
+    act(() => {
+      rerender();
+    });
+
+    await waitFor(() => expect(api.mergeCart).toHaveBeenCalledTimes(1));
+    await waitFor(() => expect(result.current.items).toHaveLength(1));
+    expect(result.current.items[0].productVariantId).toBe(1);
   });
 
   it("hydrates cart state from GET /cart when a user is authenticated", async () => {
