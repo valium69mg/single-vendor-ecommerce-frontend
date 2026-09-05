@@ -73,6 +73,12 @@ export default defineConfig({
       // 100/100/100/100. Floor added, mirroring useCart.tsx. RegisterForm.tsx
       // and RegisterPage.tsx re-measured at 100/100/100/100 after the
       // onRegistered/step-machine rewrite; existing floors held unchanged.
+      // Measured 2026-09-05 (admin-form-unit-tests, slice 1 - brand) - order
+      // lines/statements/functions/branches: CreateBrandForm.tsx
+      // 80/74.07/60/81.25, EditBrandForm.tsx 83.87/78.78/66.66/81.25,
+      // RestoreBrandDialog.tsx 100/100/100/83.33, create-brand.schema.ts
+      // 100/100/100/100, edit-brand.schema.ts 100/100/100/100. Floors added at
+      // measured actual minus 2, floored to an integer.
       thresholds: {
         "src/api/api.ts": {
           lines: 97,
@@ -195,6 +201,36 @@ export default defineConfig({
           branches: 98,
         },
         "src/hooks/useUser.tsx": {
+          lines: 98,
+          statements: 98,
+          functions: 98,
+          branches: 98,
+        },
+        "src/components/brands/CreateBrandForm.tsx": {
+          lines: 78,
+          statements: 72,
+          functions: 58,
+          branches: 79,
+        },
+        "src/components/brands/EditBrandForm.tsx": {
+          lines: 81,
+          statements: 76,
+          functions: 64,
+          branches: 79,
+        },
+        "src/components/brands/RestoreBrandDialog.tsx": {
+          lines: 98,
+          statements: 98,
+          functions: 98,
+          branches: 81,
+        },
+        "src/components/auth/create-brand.schema.ts": {
+          lines: 98,
+          statements: 98,
+          functions: 98,
+          branches: 98,
+        },
+        "src/components/auth/edit-brand.schema.ts": {
           lines: 98,
           statements: 98,
           functions: 98,
