@@ -1056,3 +1056,43 @@ export async function removeCartItem(
     headers: cartHeaders(token),
   });
 }
+
+// ─── Cart merge (guest → authenticated transition) ─────────────────────────
+// Backend clamps quantities to stock and skips invalid variants server-side
+// instead of rejecting, so `mergeCart` intentionally does NOT wrap errors with
+// `mapCartStockError` — a thrown error here only means a genuine transport/
+// auth/500 failure, which the caller treats as "merge failed, preserve
+// localStorage".
+
+export interface MergeCartLineRequest {
+  productVariantId: number;
+  quantity: number;
+}
+
+export interface MergeCartAdjustment {
+  productVariantId: number;
+  requestedQuantity: number;
+  finalQuantity: number;
+}
+
+export interface MergeCartSkip {
+  productVariantId: number;
+  reason: string;
+}
+
+export interface MergeCartResponse {
+  cart: CartResponse;
+  adjustedLines: MergeCartAdjustment[];
+  skippedLines: MergeCartSkip[];
+}
+
+export async function mergeCart(
+  items: MergeCartLineRequest[],
+  token: string,
+): Promise<MergeCartResponse> {
+  return apiFetch<MergeCartResponse>(`${API_BASE_URL}/cart/merge`, {
+    method: "POST",
+    headers: cartHeaders(token),
+    body: JSON.stringify({ items }),
+  });
+}
