@@ -79,6 +79,20 @@ export default defineConfig({
       // RestoreBrandDialog.tsx 100/100/100/83.33, create-brand.schema.ts
       // 100/100/100/100, edit-brand.schema.ts 100/100/100/100. Floors added at
       // measured actual minus 2, floored to an integer.
+      // Measured 2026-09-05 (admin-form-unit-tests, slice 5 - final
+      // reconciliation: categories + materials + products + hooks) - order
+      // lines/statements/functions/branches: CreateCategoryForm.tsx
+      // 80/74.07/60/78.57, EditCategoryForm.tsx 83.87/78.78/66.66/78.57,
+      // RestoreCategoryDialog.tsx 100/100/100/83.33, create-category.schema.ts
+      // 100/100/100/100, edit-category.schema.ts 100/100/100/100,
+      // CreateMaterialForm.tsx 80/74.07/60/81.25, EditMaterialForm.tsx
+      // 83.87/78.78/66.66/81.25, RestoreMaterialDialog.tsx 100/100/100/83.33,
+      // create-material.schema.ts 100/100/100/100, edit-material.schema.ts
+      // 100/100/100/100, CreateProductForm.tsx 54.81/53.03/32.35/56.05,
+      // ProductStatusBadge.tsx 100/100/100/100, create-product.schema.ts
+      // 100/100/100/100, useDebounce.tsx 100/100/100/100, use-mobile.tsx
+      // 100/100/100/100. Floors added at measured actual minus 2, floored to an
+      // integer. No pre-existing floor lowered.
       thresholds: {
         "src/api/api.ts": {
           lines: 97,
@@ -231,6 +245,96 @@ export default defineConfig({
           branches: 98,
         },
         "src/components/auth/edit-brand.schema.ts": {
+          lines: 98,
+          statements: 98,
+          functions: 98,
+          branches: 98,
+        },
+        "src/components/categories/CreateCategoryForm.tsx": {
+          lines: 78,
+          statements: 72,
+          functions: 58,
+          branches: 76,
+        },
+        "src/components/categories/EditCategoryForm.tsx": {
+          lines: 81,
+          statements: 76,
+          functions: 64,
+          branches: 76,
+        },
+        "src/components/categories/RestoreCategoryDialog.tsx": {
+          lines: 98,
+          statements: 98,
+          functions: 98,
+          branches: 81,
+        },
+        "src/components/auth/create-category.schema.ts": {
+          lines: 98,
+          statements: 98,
+          functions: 98,
+          branches: 98,
+        },
+        "src/components/auth/edit-category.schema.ts": {
+          lines: 98,
+          statements: 98,
+          functions: 98,
+          branches: 98,
+        },
+        "src/components/materials/CreateMaterialForm.tsx": {
+          lines: 78,
+          statements: 72,
+          functions: 58,
+          branches: 79,
+        },
+        "src/components/materials/EditMaterialForm.tsx": {
+          lines: 81,
+          statements: 76,
+          functions: 64,
+          branches: 79,
+        },
+        "src/components/materials/RestoreMaterialDialog.tsx": {
+          lines: 98,
+          statements: 98,
+          functions: 98,
+          branches: 81,
+        },
+        "src/components/auth/create-material.schema.ts": {
+          lines: 98,
+          statements: 98,
+          functions: 98,
+          branches: 98,
+        },
+        "src/components/auth/edit-material.schema.ts": {
+          lines: 98,
+          statements: 98,
+          functions: 98,
+          branches: 98,
+        },
+        "src/components/products/CreateProductForm.tsx": {
+          lines: 52,
+          statements: 51,
+          functions: 30,
+          branches: 54,
+        },
+        "src/components/products/ProductStatusBadge.tsx": {
+          lines: 98,
+          statements: 98,
+          functions: 98,
+          branches: 98,
+        },
+        "src/components/auth/create-product.schema.ts": {
+          lines: 98,
+          statements: 98,
+          functions: 98,
+          branches: 98,
+        },
+        "src/hooks/useDebounce.tsx": {
+          lines: 98,
+          statements: 98,
+          functions: 98,
+          branches: 98,
+        },
+        "src/hooks/use-mobile.tsx": {
           lines: 98,
           statements: 98,
           functions: 98,
