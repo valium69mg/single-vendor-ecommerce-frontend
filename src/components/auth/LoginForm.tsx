@@ -96,7 +96,10 @@ export default function LoginForm() {
   const onSubmit = (data: LoginFormValues) => mutation.mutate(data);
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
+    <form
+      onSubmit={handleSubmit(onSubmit)}
+      className="w-full max-w-sm sm:max-w-md lg:max-w-lg"
+    >
       <Form
         title={t("welcome")}
         description={t("loginFormDescription")}

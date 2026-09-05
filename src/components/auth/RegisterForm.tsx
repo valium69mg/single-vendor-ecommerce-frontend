@@ -123,7 +123,10 @@ export default function RegisterForm({ onRegistered }: RegisterFormProps) {
   const onSubmit = (data: RegisterFormValues) => mutation.mutate(data);
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
+    <form
+      onSubmit={handleSubmit(onSubmit)}
+      className="w-full max-w-sm sm:max-w-md lg:max-w-lg"
+    >
       <Form
         title={t("auth.register.title")}
         description={t("auth.register.description")}
