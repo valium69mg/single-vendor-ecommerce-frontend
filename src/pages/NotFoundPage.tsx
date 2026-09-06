@@ -6,7 +6,7 @@ export default function NotFoundPage() {
   const { t } = useTranslation();
 
   return (
-    <div className="flex min-h-screen flex-col bg-stone-50">
+    <div className="flex min-h-dvh flex-col bg-stone-50">
       <Navbar />
       <main className="mx-auto flex w-full max-w-3xl flex-1 flex-col items-center justify-center px-4 py-20 text-center">
         <h1 className="font-store-heading text-4xl text-stone-900">

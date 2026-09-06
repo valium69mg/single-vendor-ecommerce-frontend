@@ -35,7 +35,7 @@ export default function OrderDetailPage() {
   });
 
   return (
-    <div className="min-h-screen flex flex-col bg-stone-50">
+    <div className="min-h-dvh flex flex-col bg-stone-50">
       <Navbar />
       <main className="mx-auto w-full max-w-3xl flex-1 px-4 py-10 sm:px-6 lg:px-8">
         {isLoading ? (

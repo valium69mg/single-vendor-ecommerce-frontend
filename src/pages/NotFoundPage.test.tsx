@@ -46,4 +46,11 @@ describe("NotFoundPage", () => {
       screen.getByRole("heading", { name: "Página no encontrada" }),
     ).toHaveClass("font-store-heading");
   });
+
+  it("wraps the page in a dynamic-viewport-height shell", () => {
+    const { container } = renderPage();
+    expect((container.firstChild as HTMLElement).className).toContain(
+      "min-h-dvh",
+    );
+  });
 });

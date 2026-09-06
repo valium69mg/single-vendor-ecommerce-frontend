@@ -22,7 +22,7 @@ export default function LoginPage() {
   }, [user, navigate]);
 
   return (
-    <div className="min-h-screen w-full bg-stone-950 flex flex-col items-center justify-center px-4 sm:px-6 gap-8">
+    <div className="min-h-dvh w-full bg-stone-950 flex flex-col items-center justify-center px-4 sm:px-6 gap-8">
       {/* Brand mark */}
       <div className="flex flex-col items-center gap-3">
         <div className="h-12 w-12 bg-amber-700 flex items-center justify-center">

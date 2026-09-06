@@ -7,7 +7,7 @@ function AdminContent() {
   const { toggleSidebar } = useSidebar();
 
   return (
-    <div className="flex h-screen w-full">
+    <div data-context="admin" className="flex h-dvh w-full">
       <AdminSideBar />
       <main className="flex-1 p-4 sm:p-6 lg:p-8 overflow-auto bg-stone-50">
         <div className="flex items-center mb-4 lg:hidden">

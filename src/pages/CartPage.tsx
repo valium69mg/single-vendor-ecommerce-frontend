@@ -12,7 +12,7 @@ export default function CartPage() {
   const { items, subtotal, error, updateQty, removeItem } = useCart();
 
   return (
-    <div className="min-h-screen flex flex-col bg-stone-50">
+    <div className="min-h-dvh flex flex-col bg-stone-50">
       <Navbar />
       <main className="mx-auto w-full max-w-5xl flex-1 px-4 py-10 sm:px-6 lg:px-8">
         <h1 className="mb-6 font-store-heading text-2xl text-stone-900">

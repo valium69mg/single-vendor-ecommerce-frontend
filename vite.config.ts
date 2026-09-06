@@ -93,7 +93,17 @@ export default defineConfig({
       // 100/100/100/100, useDebounce.tsx 100/100/100/100, use-mobile.tsx
       // 100/100/100/100. Floors added at measured actual minus 2, floored to an
       // integer. No pre-existing floor lowered.
+      // Measured 2026-09-06 (ui-foundation-tokens) — order
+      // lines/statements/functions/branches: AdminHomePage.tsx 100/100/100/100
+      // (data-context="admin" + h-dvh shell edit). Floor added at measured
+      // actual minus 2, floored to an integer.
       thresholds: {
+        "src/pages/AdminHomePage.tsx": {
+          lines: 98,
+          statements: 98,
+          functions: 98,
+          branches: 98,
+        },
         "src/api/api.ts": {
           lines: 97,
           statements: 96,

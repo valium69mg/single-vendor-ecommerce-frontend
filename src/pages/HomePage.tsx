@@ -10,7 +10,7 @@ import HomeFooter from "@/components/home/HomeFooter";
 
 export default function HomePage() {
   return (
-    <div className="min-h-screen flex flex-col bg-stone-50">
+    <div className="min-h-dvh flex flex-col bg-stone-50">
       <Navbar />
       <main className="flex-1">
         <HeroBanner />

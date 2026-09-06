@@ -18,7 +18,7 @@ export default function CategoriesListPage() {
   const categories = data?.content ?? [];
 
   return (
-    <div className="flex min-h-screen flex-col bg-stone-50">
+    <div className="flex min-h-dvh flex-col bg-stone-50">
       <Navbar />
       <main className="mx-auto w-full max-w-6xl flex-1 px-4 py-10 sm:px-6 lg:px-8">
         <h1 className="font-store-heading text-3xl text-stone-900">

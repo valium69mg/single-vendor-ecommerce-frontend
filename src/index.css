@@ -28,8 +28,7 @@
     --chart-3: 197 37% 24%;
     --chart-4: 43 74% 66%;
     --chart-5: 27 87% 67%;
-    --radius: 0.5rem
-  ;
+    --radius: 0;
     --sidebar-background: 60 9% 98%;
     --sidebar-foreground: 24 6% 28%;
     --sidebar-primary: 30 60% 45%;
@@ -37,49 +36,46 @@
     --sidebar-accent: 60 5% 94%;
     --sidebar-accent-foreground: 24 6% 28%;
     --sidebar-border: 20 6% 90%;
-    --sidebar-ring: 30 60% 45%}
-  .dark {
-    --background: 0 0% 3.9%;
-    --foreground: 0 0% 98%;
-    --card: 0 0% 3.9%;
-    --card-foreground: 0 0% 98%;
-    --popover: 0 0% 3.9%;
-    --popover-foreground: 0 0% 98%;
-    --primary: 0 0% 98%;
-    --primary-foreground: 0 0% 9%;
-    --secondary: 0 0% 14.9%;
-    --secondary-foreground: 0 0% 98%;
-    --muted: 0 0% 14.9%;
-    --muted-foreground: 0 0% 63.9%;
-    --accent: 0 0% 14.9%;
-    --accent-foreground: 0 0% 98%;
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 0 0% 98%;
-    --border: 0 0% 14.9%;
-    --input: 0 0% 14.9%;
-    --ring: 0 0% 83.1%;
-    --chart-1: 220 70% 50%;
-    --chart-2: 160 60% 45%;
-    --chart-3: 30 80% 55%;
-    --chart-4: 280 65% 60%;
-    --chart-5: 340 75% 55%
-  ;
-    --sidebar-background: 240 5.9% 10%;
-    --sidebar-foreground: 240 4.8% 95.9%;
-    --sidebar-primary: 224.3 76.3% 48%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 240 3.7% 15.9%;
-    --sidebar-accent-foreground: 240 4.8% 95.9%;
-    --sidebar-border: 240 3.7% 15.9%;
-    --sidebar-ring: 217.2 91.2% 59.8%}
+    --sidebar-ring: 30 60% 45%;
+
+    /* === Semantic tokens — FRONTEND-STANDARD §1.1 === */
+    --surface-page: 60 9.1% 97.8%;
+    --surface-raised: 0 0% 100%;
+    --surface-inverse: 20 14.3% 4.1%;
+    --border-default: 20 5.9% 90%;
+    --border-strong: 33.3 5.5% 32.4%;
+    --text-primary: 24 9.8% 10%;
+    --text-secondary: 33.3 5.5% 32.4%;
+    --text-tertiary: 25 5.3% 44.7%;
+    --brand: 26 90.5% 37.1%;
+    --brand-hover: 32.1 94.6% 43.7%;
+    --danger: 0 73.7% 41.8%;
+    --success: 142.4 71.8% 29.2%;
+    --warning: 26 90.5% 37.1%;
+
+    /* Motion duration tokens — FRONTEND-STANDARD §4 */
+    --motion-fast: 150ms;
+    --motion-base: 250ms;
+    --motion-slow: 400ms;
+  }
+
+  [data-context="admin"] {
+    --brand: 24 9.8% 10%;
+    --brand-hover: 12 6.5% 15.1%;
+  }
 }
 
 @layer base {
   * {
     @apply border-border;
   }
+  h1,
+  h2,
+  h3 {
+    @apply font-store-heading;
+  }
   body {
-    @apply bg-background text-foreground font-store-body;
+    @apply bg-surface-page text-foreground font-store-body;
   }
 }
 
@@ -87,4 +83,15 @@
 input[type="password"]::-ms-reveal,
 input[type="password"]::-ms-clear {
   display: none;
+}
+
+/* Respect the user's reduced-motion preference — FRONTEND-STANDARD §4 */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }

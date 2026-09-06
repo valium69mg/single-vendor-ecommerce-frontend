@@ -18,6 +18,25 @@ export default {
   			sm: 'calc(var(--radius) - 4px)'
   		},
   		colors: {
+  			'surface-page': 'hsl(var(--surface-page))',
+  			'surface-raised': 'hsl(var(--surface-raised))',
+  			'surface-inverse': 'hsl(var(--surface-inverse))',
+  			line: {
+  				DEFAULT: 'hsl(var(--border-default))',
+  				strong: 'hsl(var(--border-strong))'
+  			},
+  			fg: {
+  				DEFAULT: 'hsl(var(--text-primary))',
+  				muted: 'hsl(var(--text-secondary))',
+  				subtle: 'hsl(var(--text-tertiary))'
+  			},
+  			brand: {
+  				DEFAULT: 'hsl(var(--brand))',
+  				hover: 'hsl(var(--brand-hover))'
+  			},
+  			danger: 'hsl(var(--danger))',
+  			success: 'hsl(var(--success))',
+  			warning: 'hsl(var(--warning))',
   			background: 'hsl(var(--background))',
   			foreground: 'hsl(var(--foreground))',
   			card: {
