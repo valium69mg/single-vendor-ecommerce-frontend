@@ -36,3 +36,24 @@ describe("NavbarProfile guest menu", () => {
     expect(navigate).toHaveBeenCalledWith("/registro");
   });
 });
+
+describe("NavbarProfile authenticated menu", () => {
+  beforeEach(() => {
+    vi.mocked(useUser).mockReturnValue({
+      user: { email: "shopper@test.com", role: "USER" } as never,
+      setUser: vi.fn(),
+      logout: vi.fn(),
+    });
+  });
+
+  it("points 'Mi Perfil' at the /mi-cuenta/perfil account route", () => {
+    render(<NavbarProfile />);
+    fireEvent.click(screen.getByText("Mi Perfil"));
+    expect(navigate).toHaveBeenCalledWith("/mi-cuenta/perfil");
+  });
+
+  it("no longer renders a 'Configuración' item", () => {
+    render(<NavbarProfile />);
+    expect(screen.queryByText("Configuración")).not.toBeInTheDocument();
+  });
+});

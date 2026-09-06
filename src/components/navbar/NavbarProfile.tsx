@@ -1,4 +1,3 @@
-import { IoSettingsOutline } from "react-icons/io5";
 import { FaRegUser } from "react-icons/fa";
 import { LuLogOut, LuLogIn, LuUserPlus } from "react-icons/lu";
 import { RxDashboard } from "react-icons/rx";
@@ -18,7 +17,7 @@ export default function NavbarProfile() {
     {
       name: t("myProfile"),
       icon: <IconWrapper icon={FaRegUser} size={18} />,
-      onClick: () => navigate("/profile"),
+      onClick: () => navigate("/mi-cuenta/perfil"),
     },
     ...(user?.role === ROLES.ADMIN
       ? [
@@ -29,11 +28,6 @@ export default function NavbarProfile() {
           },
         ]
       : []),
-    {
-      name: t("settings"),
-      icon: <IconWrapper icon={IoSettingsOutline} size={18} />,
-      onClick: () => navigate("/settings"),
-    },
     {
       name: t("logout"),
       icon: <IconWrapper icon={LuLogOut} size={18} />,

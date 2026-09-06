@@ -1335,3 +1335,57 @@ export async function getOrder(
     },
   );
 }
+
+// ─── Account: profile (authenticated) ──────────────────────────────────────
+// Backend contract: `GET /users/me` returns `UserProfile`; `PATCH /users/me`
+// updates only the 3 name parts + phone and returns `StandardResponse`
+// (email/username in the body are silently ignored); `POST
+// /users/me/profile-image` is multipart and returns the updated `UserProfile`.
+
+export interface UserProfile {
+  firstName: string | null;
+  paternalLastName: string | null;
+  maternalLastName: string | null;
+  phone: string | null;
+  email: string;
+  username: string;
+  profileImageUrl: string | null;
+  profileImageThumbnailUrl: string | null;
+}
+
+export interface UpdateProfilePayload {
+  firstName?: string;
+  paternalLastName?: string;
+  maternalLastName?: string;
+  phone?: string;
+}
+
+export async function getMe(token: string): Promise<UserProfile> {
+  return apiFetch<UserProfile>(`${API_BASE_URL}/users/me`, {
+    method: "GET",
+    headers: cartHeaders(token),
+  });
+}
+
+export async function updateMe(
+  payload: UpdateProfilePayload,
+  token: string,
+): Promise<StandardResponse> {
+  return apiFetch<StandardResponse>(`${API_BASE_URL}/users/me`, {
+    method: "PATCH",
+    headers: cartHeaders(token),
+    body: JSON.stringify(payload),
+  });
+}
+
+export async function uploadProfileImage(
+  file: File,
+  token: string,
+): Promise<UserProfile> {
+  return apiFetchFile<UserProfile>(
+    `${API_BASE_URL}/users/me/profile-image`,
+    file,
+    token,
+    IMAGE_UPLOAD_FIELD, // backend @RequestParam("file")
+  );
+}

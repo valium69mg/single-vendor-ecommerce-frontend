@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { UserProvider } from "./providers/UserProvider";
 import { CartProvider } from "./providers/CartProvider";
 import LoginPage from "./pages/LoginPage";
@@ -18,6 +18,9 @@ import CartPage from "./pages/CartPage";
 import CheckoutPage from "./pages/CheckoutPage";
 import OrdersListPage from "./pages/OrdersListPage";
 import OrderDetailPage from "./pages/OrderDetailPage";
+import AccountLayout from "./pages/AccountLayout";
+import ProfilePage from "./pages/ProfilePage";
+import AddressesPage from "./pages/AddressesPage";
 import ProductDetailPage from "./pages/ProductDetailPage";
 import CategoryDetailPage from "./pages/CategoryDetailPage";
 import BrandDetailPage from "./pages/BrandDetailPage";
@@ -64,6 +67,19 @@ export function AppRoutes() {
           </ProtectedRoute>
         }
       />
+      <Route
+        path="/mi-cuenta"
+        element={
+          <ProtectedRoute>
+            <AccountLayout />
+          </ProtectedRoute>
+        }
+      >
+        <Route index element={<Navigate to="perfil" replace />} />
+        <Route path="perfil" element={<ProfilePage />} />
+        <Route path="direcciones" element={<AddressesPage />} />
+      </Route>
+
       <Route path="/product/:slug" element={<ProductDetailPage />} />
       <Route path="/category/:slug" element={<CategoryDetailPage />} />
       <Route path="/brand/:slug" element={<BrandDetailPage />} />
