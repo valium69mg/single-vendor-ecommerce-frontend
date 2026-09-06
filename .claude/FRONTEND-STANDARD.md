@@ -331,9 +331,13 @@ families with different stroke weights and corner styles.
 
 - Migrate all icons to Phosphor. Fall back to Heroicons only if Phosphor lacks a glyph,
   matched to the same weight.
-- Icon sizes are tokens: `icon-sm` 16 · `icon-md` 20 · `icon-me` 24. No arbitrary
-  `h-3.5 w-3.5` / `size={18}` mix.
+- Size via Phosphor's `size` prop, from a shared `ICON` constant — the only allowed
+  values: `sm` 16 · `md` 20 · `lg` 24 · `xl` 32 · `2xl` 48. `md` (20) is the default
+  for inline/content icons, `sm` (16) for dense UI, `lg` (24) for touch controls,
+  `xl`/`2xl` for decorative (empty states, 404, hero). No arbitrary `h-3.5 w-3.5` /
+  `size={18}` mix. Snap existing `size={18}` to `md`.
 - Consistent weight per layer (`regular` for nav/content, `bold` for emphasis).
+- `IconWrapper` is retired — it only force-sized icons; use `<Icon size={ICON.md} />`.
 - Decorative icon next to visible text → `aria-hidden="true"`. `[icon-context]`
 - Icon-only control → `aria-label` (localized via `t()`, not a hardcoded string like
   `AdminHomePage`'s `"Abrir menú"`). `[aria-labels]`
