@@ -4,6 +4,7 @@ import { http, HttpResponse } from "msw";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { server } from "@/mocks/server";
 import ProfilePage from "./ProfilePage";
+import AddressForm from "@/components/account/AddressForm";
 
 vi.mock("@/hooks/useUser", () => ({
   useUser: () => ({ user: { token: "test-token" }, setUser: vi.fn(), logout: vi.fn() }),
@@ -82,5 +83,63 @@ describe("account integration (profile + photo)", () => {
     const part = receivedFile as unknown as Blob;
     expect(part.type).toBe("image/png");
     expect(typeof part.arrayBuffer).toBe("function");
+  });
+});
+
+describe("address form postal-code lookup (MSW integration)", () => {
+  function renderForm() {
+    const client = new QueryClient({ defaultOptions: { queries: { retry: false } } });
+    return render(
+      <QueryClientProvider client={client}>
+        <AddressForm mode="create" onClose={vi.fn()} />
+      </QueryClientProvider>,
+    );
+  }
+
+  it("fills and locks the geo fields when the catalog knows the postal code", async () => {
+    server.use(
+      http.get("*/api/v1/catalog/postal-codes/:cp", ({ params }) =>
+        HttpResponse.json({
+          cp: String(params.cp),
+          state: "Jalisco",
+          municipality: "Guadalajara",
+          city: "Guadalajara",
+          colonias: ["Centro", "Americana"],
+        }),
+      ),
+    );
+
+    renderForm();
+    fireEvent.change(document.getElementById("addr-postal") as HTMLElement, {
+      target: { value: "44100" },
+    });
+
+    await waitFor(
+      () =>
+        expect(
+          (document.getElementById("addr-state") as HTMLInputElement).value,
+        ).toBe("Jalisco"),
+      { timeout: 2000 },
+    );
+    expect(document.getElementById("addr-state")).toHaveAttribute("readonly");
+    expect(document.getElementById("addr-neighborhood")?.tagName).toBe("SELECT");
+  });
+
+  it("falls back to a soft warning when the catalog returns 404", async () => {
+    server.use(
+      http.get("*/api/v1/catalog/postal-codes/:cp", () =>
+        HttpResponse.json({ status: 404, error: "postal_code_not_found" }, { status: 404 }),
+      ),
+    );
+
+    renderForm();
+    fireEvent.change(document.getElementById("addr-postal") as HTMLElement, {
+      target: { value: "99999" },
+    });
+
+    await waitFor(() => expect(screen.getByRole("alert")).toBeInTheDocument(), {
+      timeout: 2000,
+    });
+    expect(document.getElementById("addr-state")).not.toHaveAttribute("readonly");
   });
 });

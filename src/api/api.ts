@@ -1389,3 +1389,117 @@ export async function uploadProfileImage(
     IMAGE_UPLOAD_FIELD, // backend @RequestParam("file")
   );
 }
+
+// ─── Account: shipping addresses (authenticated) ───────────────────────────
+// Backend contract: base path `/users/me/addresses`, JWT required. Mutations
+// return `StandardResponse`; `DELETE` returns 204. The postal-code trust
+// boundary is server-side — the client just sends its best guess for
+// state/municipality/city and the server overrides them on a catalog hit.
+
+export interface Address {
+  addressId: number;
+  recipientName: string;
+  street: string;
+  exteriorNumber: string;
+  interiorNumber: string | null;
+  neighborhood: string;
+  postalCode: string;
+  city: string | null;
+  state: string;
+  municipality: string;
+  phone: string;
+  referenceNotes: string | null;
+  isDefault: boolean;
+  cpVerified: boolean;
+  coloniaVerified: boolean;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface AddressInput {
+  recipientName: string;
+  street: string;
+  exteriorNumber: string;
+  interiorNumber?: string;
+  neighborhood: string;
+  postalCode: string;
+  city?: string;
+  state: string;
+  municipality: string;
+  phone: string;
+  referenceNotes?: string;
+  isDefault?: boolean;
+}
+
+export interface PostalCodeLookup {
+  cp: string;
+  state: string;
+  municipality: string;
+  city: string | null;
+  colonias: string[];
+}
+
+export async function listAddresses(token: string): Promise<Address[]> {
+  return apiFetch<Address[]>(`${API_BASE_URL}/users/me/addresses`, {
+    method: "GET",
+    headers: cartHeaders(token),
+  });
+}
+
+export async function createAddress(
+  input: AddressInput,
+  token: string,
+): Promise<StandardResponse> {
+  return apiFetch<StandardResponse>(`${API_BASE_URL}/users/me/addresses`, {
+    method: "POST",
+    headers: cartHeaders(token),
+    body: JSON.stringify(input),
+  });
+}
+
+export async function updateAddress(
+  id: number,
+  input: AddressInput,
+  token: string,
+): Promise<StandardResponse> {
+  return apiFetch<StandardResponse>(`${API_BASE_URL}/users/me/addresses/${id}`, {
+    method: "PATCH",
+    headers: cartHeaders(token),
+    body: JSON.stringify(input),
+  });
+}
+
+export async function deleteAddress(id: number, token: string): Promise<void> {
+  await apiFetch<void>(`${API_BASE_URL}/users/me/addresses/${id}`, {
+    method: "DELETE",
+    headers: cartHeaders(token),
+  });
+}
+
+export async function setDefaultAddress(
+  id: number,
+  token: string,
+): Promise<StandardResponse> {
+  return apiFetch<StandardResponse>(
+    `${API_BASE_URL}/users/me/addresses/${id}/default`,
+    {
+      method: "PATCH",
+      headers: cartHeaders(token),
+    },
+  );
+}
+
+/**
+ * Public SEPOMEX lookup — NO Authorization header (the endpoint is whitelisted).
+ * Callers treat `ApiError.status === 404` as the soft path (genuine catalog
+ * miss), NOT `ApiConflictError`.
+ */
+export async function lookupPostalCode(cp: string): Promise<PostalCodeLookup> {
+  return apiFetch<PostalCodeLookup>(
+    `${API_BASE_URL}/catalog/postal-codes/${cp}`,
+    {
+      method: "GET",
+      headers: { "Content-Type": "application/json" },
+    },
+  );
+}
