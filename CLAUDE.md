@@ -47,6 +47,13 @@ React 19, TypeScript, Vite, Tailwind CSS v3, shadcn/ui (Radix UI primitives), Ta
 
 ## Design system — rules that apply to every file
 
+> **Authoritative standard:** [`.claude/FRONTEND-STANDARD.md`](.claude/FRONTEND-STANDARD.md) — the
+> enforceable UI/UX contract (tokens, shape, spacing scale, type ramp, buttons, focus & keyboard,
+> forms/autofill, loading, empty states, breadcrumbs, icons, motion, responsive; WCAG 2.2 AA).
+> Made binding by `requerimientos-ecommerce-joyeria.md` §3.13. Adoption is tracked by the
+> `UI-*` ticket track (`tickets/README.md` § UI/UX Standard track). Paste the §8 per-view
+> checklist into every UI PR. The quick rules below are the summary; the standard wins on any conflict.
+
 This is a luxury jewelry store. Two visual contexts share one codebase: **Store** (warm stone + amber) and **Admin** (neutral stone).
 
 **Shape:** `rounded-none` everywhere — never `rounded`, `rounded-md`, or any shadcn radius variant.
