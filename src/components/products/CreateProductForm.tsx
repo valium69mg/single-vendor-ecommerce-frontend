@@ -4,7 +4,8 @@ import { useForm, useFieldArray } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useTranslation } from "react-i18next";
 import { useMutation, useQueryClient, useInfiniteQuery } from "@tanstack/react-query";
-import { Plus, Trash2, ChevronDown, Check } from "lucide-react";
+import { CaretDown, Check, Plus, Trash } from "@phosphor-icons/react";
+import { ICON } from "@/lib/icons";
 import { cn } from "@/lib/utils";
 import { useUser } from "@/hooks/useUser";
 import { useApiErrorHandler } from "@/hooks/useApiErrorHandler";
@@ -53,7 +54,7 @@ function StepIndicator({ step, labels }: { step: number; labels: string[] }) {
                   !done && !active && "bg-white border-stone-300 text-stone-400",
                 )}
               >
-                {done ? <Check className="h-3.5 w-3.5" /> : n}
+                {done ? <Check size={ICON.sm} aria-hidden /> : n}
               </div>
               <span
                 className={cn(
@@ -253,7 +254,7 @@ function AttributeValueAdder({
                     >
                       <span className="truncate">{attr.name}</span>
                       {selectedAttr?.attributeId === attr.attributeId && (
-                        <Check className="h-3.5 w-3.5 text-stone-600 shrink-0" />
+                        <Check size={ICON.sm} className="text-stone-600 shrink-0" aria-hidden />
                       )}
                     </button>
                   ))}
@@ -299,7 +300,7 @@ function AttributeValueAdder({
                           <span className="truncate">{val.value}</span>
                           {selectedValue?.attributeValueId ===
                             val.attributeValueId && (
-                            <Check className="h-3.5 w-3.5 text-stone-600 shrink-0" />
+                            <Check size={ICON.sm} className="text-stone-600 shrink-0" aria-hidden />
                           )}
                         </button>
                       );
@@ -363,11 +364,13 @@ function AttributeValueAdder({
             open && "border-stone-600 bg-stone-50",
           )}
         >
-          <Plus className="h-3 w-3" />
+          <Plus size={ICON.sm} aria-hidden />
           {t("addAttributeValue")}
-          <ChevronDown
+          <CaretDown
+            size={ICON.sm}
+            aria-hidden
             className={cn(
-              "h-3 w-3 text-stone-400 transition-transform",
+              "text-stone-400 transition-transform",
               open && "rotate-180",
             )}
           />
@@ -419,7 +422,7 @@ function VariantRow({
             className="text-stone-400 hover:text-red-500 transition-colors"
             title={t("removeVariant")}
           >
-            <Trash2 className="h-4 w-4" />
+            <Trash size={ICON.sm} aria-hidden />
           </button>
         )}
       </div>
@@ -929,7 +932,7 @@ export default function CreateProductForm({ onClose }: CreateProductFormProps) {
                 onClick={handleAddVariant}
                 className="flex items-center gap-2 h-9 px-4 border border-dashed border-stone-300 text-stone-600 text-sm font-store-body hover:border-stone-500 hover:text-stone-800 transition-colors w-full justify-center rounded-none"
               >
-                <Plus className="h-4 w-4" />
+                <Plus size={ICON.sm} aria-hidden />
                 {t("addVariant")}
               </button>
             </div>

@@ -1,4 +1,5 @@
-import { Truck, ShieldCheck, RotateCcw, Lock } from "lucide-react";
+import { ArrowCounterClockwise, Lock, ShieldCheck, Truck } from "@phosphor-icons/react";
+import { ICON } from "@/lib/icons";
 
 const TRUST_ITEMS = [
   {
@@ -12,7 +13,7 @@ const TRUST_ITEMS = [
     subtitle: "Certificado incluido",
   },
   {
-    icon: RotateCcw,
+    icon: ArrowCounterClockwise,
     title: "Devoluciones en 30 días",
     subtitle: "Sin complicaciones",
   },
@@ -34,7 +35,7 @@ export default function TrustBar() {
               className="flex items-center gap-3 py-4 px-4 sm:px-6"
             >
               <div className="shrink-0 h-10 w-10 rounded-full bg-amber-50 flex items-center justify-center">
-                <Icon className="h-5 w-5 text-amber-700" />
+                <Icon size={ICON.md} className="text-amber-700" aria-hidden />
               </div>
               <div>
                 <p className="font-store-body text-xs font-semibold text-stone-800 leading-tight">

@@ -6,18 +6,20 @@ import {
 import { Separator } from "@/components/ui/separator";
 import AdminSideBarHeader from "../admin/AdminSideBarHeader";
 import AdminSideBarFooter from "./AdminSideBarFooter";
-import IconWrapper from "../common/IconWrapper";
-import { RxDashboard } from "react-icons/rx";
-import { BsBoxSeam } from "react-icons/bs";
-import { CgNotes } from "react-icons/cg";
-import { TbUsers } from "react-icons/tb";
-import { BsTags } from "react-icons/bs";
-import { IoLayersOutline } from "react-icons/io5";
-import { TbHammer } from "react-icons/tb";
+import {
+  Hammer,
+  Notepad,
+  Package,
+  SquaresFour,
+  StackSimple,
+  Storefront,
+  Tag,
+  Users,
+} from "@phosphor-icons/react";
+import { ICON } from "@/lib/icons";
 import SideBarItem from "../sidebar/SideBarItem";
 import SideBarAccordion from "../sidebar/SideBarAccordion";
 import { useTranslation } from "react-i18next";
-import { IoStorefrontOutline } from "react-icons/io5";
 
 export default function AdminSideBar() {
   const { t } = useTranslation();
@@ -26,25 +28,25 @@ export default function AdminSideBar() {
     {
       id: "products",
       name: t("products"),
-      icon: <IconWrapper icon={BsBoxSeam} size={18} />,
+      icon: <Package size={ICON.md} aria-hidden />,
       url: "/admin/products",
     },
     {
       id: "categories",
       name: t("categories"),
-      icon: <IconWrapper icon={BsTags} size={18} />,
+      icon: <Tag size={ICON.md} aria-hidden />,
       url: "/admin/categories",
     },
     {
       id: "brands",
       name: t("brands"),
-      icon: <IconWrapper icon={IoLayersOutline} size={18} />,
+      icon: <StackSimple size={ICON.md} aria-hidden />,
       url: "/admin/brands",
     },
     {
       id: "materials",
       name: t("materials"),
-      icon: <IconWrapper icon={TbHammer} size={18} />,
+      icon: <Hammer size={ICON.md} aria-hidden />,
       url: "/admin/materials",
     },
   ];
@@ -66,13 +68,13 @@ export default function AdminSideBar() {
           <SideBarItem
             title={t("dashboard")}
             href="/admin/dashboard"
-            icon={<IconWrapper icon={RxDashboard} size={18} />}
+            icon={<SquaresFour size={ICON.md} aria-hidden />}
           />
 
           {/* Products Accordion */}
           <SideBarAccordion
             title={t("products")}
-            icon={<IconWrapper icon={BsBoxSeam} size={18} />}
+            icon={<Package size={ICON.md} aria-hidden />}
             options={productOptions}
           />
 
@@ -80,21 +82,21 @@ export default function AdminSideBar() {
           <SideBarItem
             title={t("orders")}
             href="/admin/orders"
-            icon={<IconWrapper icon={CgNotes} size={18} />}
+            icon={<Notepad size={ICON.md} aria-hidden />}
           />
 
           {/* Users */}
           <SideBarItem
             title={t("users")}
             href="/admin/users"
-            icon={<IconWrapper icon={TbUsers} size={18} />}
+            icon={<Users size={ICON.md} aria-hidden />}
           />
 
           {/* Store */}
           <SideBarItem
             title={t("store")}
             href="/"
-            icon={<IconWrapper icon={IoStorefrontOutline} size={18} />}
+            icon={<Storefront size={ICON.md} aria-hidden />}
           />
         </SidebarGroupContent>
       </SidebarGroup>

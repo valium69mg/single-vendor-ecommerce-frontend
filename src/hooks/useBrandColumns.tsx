@@ -5,7 +5,8 @@ import DestructiveActionButton from "@/components/common/DestructiveActionButton
 import Modal from "@/components/common/Modal";
 import EditBrandForm from "@/components/brands/EditBrandForm";
 import { Link } from "react-router-dom";
-import { Pencil } from "lucide-react";
+import { PencilSimple } from "@phosphor-icons/react";
+import { ICON } from "@/lib/icons";
 
 export function useBrandColumns(
   onDelete: (brand: AdminBrand) => void,
@@ -38,7 +39,7 @@ export function useBrandColumns(
         return (
           <div className="flex gap-1.5">
             <Modal
-              buttonName={<Pencil className="h-3.5 w-3.5" />}
+              buttonName={<PencilSimple size={ICON.sm} aria-hidden />}
               content={(onClose) => (
                 <EditBrandForm brandId={brand.brandId} onClose={onClose} />
               )}

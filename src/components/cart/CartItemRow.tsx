@@ -1,4 +1,5 @@
-import { Trash2 } from "lucide-react";
+import { Trash } from "@phosphor-icons/react";
+import { ICON } from "@/lib/icons";
 import { useTranslation } from "react-i18next";
 import ImageWithFallback from "@/components/common/ImageWithFallback";
 import { getFileUrl } from "@/api/api";
@@ -40,7 +41,7 @@ export function CartItemRow({ line, onQtyChange, onRemove }: CartItemRowProps) {
             className="text-stone-400 transition-colors hover:text-red-600"
             onClick={onRemove}
           >
-            <Trash2 className="h-4 w-4" />
+            <Trash size={ICON.sm} aria-hidden />
           </button>
         </div>
 

@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight } from "@phosphor-icons/react";
+import { ICON } from "@/lib/icons";
 
 interface SectionHeaderProps {
   title: string;
@@ -32,7 +33,7 @@ export default function SectionHeader({
           className="flex items-center gap-1.5 text-sm font-medium text-amber-700 hover:text-amber-900 transition-colors font-store-body shrink-0 ml-8"
         >
           {actionLabel}
-          <ArrowRight className="h-4 w-4" />
+          <ArrowRight size={ICON.sm} aria-hidden />
         </Link>
       )}
     </div>

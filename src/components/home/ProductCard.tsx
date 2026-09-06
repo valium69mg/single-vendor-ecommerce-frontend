@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
-import { Star } from "lucide-react";
+import { Star } from "@phosphor-icons/react";
+import { ICON } from "@/lib/icons";
 import { cn } from "@/lib/utils";
 import type { MockProduct } from "@/mocks/home";
 
@@ -19,17 +20,18 @@ function StarRating({ rating }: { rating: number }) {
       className="flex items-center gap-0.5"
       aria-label={`${rating} de 5 estrellas`}
     >
-      {[1, 2, 3, 4, 5].map((n) => (
-        <Star
-          key={n}
-          className={cn(
-            "h-3 w-3",
-            n <= Math.round(rating)
-              ? "fill-amber-400 text-amber-400"
-              : "fill-stone-200 text-stone-200",
-          )}
-        />
-      ))}
+      {[1, 2, 3, 4, 5].map((n) => {
+        const filled = n <= Math.round(rating);
+        return (
+          <Star
+            key={n}
+            size={ICON.sm}
+            weight={filled ? "fill" : "regular"}
+            className={cn(filled ? "text-amber-400" : "text-stone-200")}
+            aria-hidden
+          />
+        );
+      })}
     </div>
   );
 }

@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach, vi } from "vitest";
-import { render } from "@testing-library/react";
+import { render, screen } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
 import { stubMatchMedia } from "@/test/adminFormHelpers";
 import AdminHomePage from "./AdminHomePage";
@@ -32,5 +32,11 @@ describe("AdminHomePage shell", () => {
     const shell = container.querySelector('[data-context="admin"]') as HTMLElement;
     expect(shell.className).toContain("h-dvh");
     expect(shell.className).not.toContain("h-screen");
+  });
+
+  it("labels the mobile menu toggle from the localized i18n key, not a hardcoded string", () => {
+    renderPage();
+    const toggle = screen.getByRole("button", { name: "Abrir menú" });
+    expect(toggle).toBeInTheDocument();
   });
 });

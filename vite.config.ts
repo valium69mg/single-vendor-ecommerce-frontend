@@ -97,7 +97,20 @@ export default defineConfig({
       // lines/statements/functions/branches: AdminHomePage.tsx 100/100/100/100
       // (data-context="admin" + h-dvh shell edit). Floor added at measured
       // actual minus 2, floored to an integer.
+      // Measured 2026-09-06 (ui-foundation-icons) — order
+      // lines/statements/functions/branches: icons.ts 100/100/100/100 (new
+      // ICON size constant). AdminHomePage.tsx re-measured 100/100/100/100 and
+      // CreateProductForm.tsx re-measured 54.81/53.03/32.35/56.05 after the
+      // Phosphor migration — both stay above their existing floors, held
+      // unchanged. icons.ts floor added at measured actual minus 2, floored to
+      // an integer.
       thresholds: {
+        "src/lib/icons.ts": {
+          lines: 98,
+          statements: 98,
+          functions: 98,
+          branches: 98,
+        },
         "src/pages/AdminHomePage.tsx": {
           lines: 98,
           statements: 98,

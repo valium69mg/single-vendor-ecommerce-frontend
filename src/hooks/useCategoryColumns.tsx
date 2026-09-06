@@ -10,7 +10,8 @@ import EditCategoryForm from "@/components/categories/EditCategoryForm";
 import ImageModal from "@/components/common/ImageModal";
 import EditImageForm from "@/components/common/EditImageForm";
 import { Link } from "react-router-dom";
-import { Pencil } from "lucide-react";
+import { PencilSimple } from "@phosphor-icons/react";
+import { ICON } from "@/lib/icons";
 import { formatDate } from "@/lib/formatDate";
 
 export function useCategoryColumns(
@@ -142,7 +143,7 @@ export function useCategoryColumns(
         return (
           <div className="flex gap-1.5">
             <Modal
-              buttonName={<Pencil className="h-3.5 w-3.5" />}
+              buttonName={<PencilSimple size={ICON.sm} aria-hidden />}
               content={(onClose) => (
                 <EditCategoryForm
                   categoryId={category.categoryId}

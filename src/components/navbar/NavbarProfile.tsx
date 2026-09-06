@@ -1,7 +1,5 @@
-import { FaRegUser } from "react-icons/fa";
-import { LuLogOut, LuLogIn, LuUserPlus } from "react-icons/lu";
-import { RxDashboard } from "react-icons/rx";
-import IconWrapper from "../common/IconWrapper";
+import { SignIn, SignOut, SquaresFour, User, UserPlus } from "@phosphor-icons/react";
+import { ICON } from "@/lib/icons";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useUser } from "@/hooks/useUser";
@@ -16,21 +14,21 @@ export default function NavbarProfile() {
   const authItems = [
     {
       name: t("myProfile"),
-      icon: <IconWrapper icon={FaRegUser} size={18} />,
+      icon: <User size={ICON.md} aria-hidden />,
       onClick: () => navigate("/mi-cuenta/perfil"),
     },
     ...(user?.role === ROLES.ADMIN
       ? [
           {
             name: t("adminPanel"),
-            icon: <IconWrapper icon={RxDashboard} size={18} />,
+            icon: <SquaresFour size={ICON.md} aria-hidden />,
             onClick: () => navigate("/admin"),
           },
         ]
       : []),
     {
       name: t("logout"),
-      icon: <IconWrapper icon={LuLogOut} size={18} />,
+      icon: <SignOut size={ICON.md} aria-hidden />,
       onClick: logout,
     },
   ];
@@ -38,12 +36,12 @@ export default function NavbarProfile() {
   const guestItems = [
     {
       name: t("login"),
-      icon: <IconWrapper icon={LuLogIn} size={18} />,
+      icon: <SignIn size={ICON.md} aria-hidden />,
       onClick: () => navigate("/login"),
     },
     {
       name: t("register"),
-      icon: <IconWrapper icon={LuUserPlus} size={18} />,
+      icon: <UserPlus size={ICON.md} aria-hidden />,
       onClick: () => navigate("/registro"),
     },
   ];

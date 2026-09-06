@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
-import { ArrowRight, Sparkles } from "lucide-react";
+import { ArrowRight, Sparkle } from "@phosphor-icons/react";
+import { ICON } from "@/lib/icons";
 
 export default function HeroBanner() {
   return (
@@ -21,7 +22,7 @@ export default function HeroBanner() {
         <div className="max-w-2xl">
           {/* Eyebrow */}
           <div className="flex items-center gap-2 mb-6">
-            <Sparkles className="h-4 w-4 text-amber-400" />
+            <Sparkle size={ICON.sm} className="text-amber-400" aria-hidden />
             <span className="font-store-body text-amber-400 text-xs font-medium tracking-[0.25em] uppercase">
               Joyería artesanal premium
             </span>
@@ -47,7 +48,7 @@ export default function HeroBanner() {
               className="inline-flex items-center gap-2 bg-amber-700 hover:bg-amber-600 text-white font-store-body font-medium px-8 py-3.5 text-sm tracking-wide transition-colors duration-200"
             >
               Explorar Colección
-              <ArrowRight className="h-4 w-4" />
+              <ArrowRight size={ICON.sm} aria-hidden />
             </Link>
             <Link
               to="/categories"

@@ -4,14 +4,13 @@ import {
   SidebarMenu,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
-import { IoSettingsOutline } from "react-icons/io5";
-import { LuLogOut } from "react-icons/lu";
+import { Gear, SignOut } from "@phosphor-icons/react";
+import { ICON } from "@/lib/icons";
 import { useTranslation } from "react-i18next";
 import { UserContext } from "../../context/UserContext";
 import { useContext } from "react";
 import GenericDropdownMenu from "../sidebar/SidebarDropdownMenu";
 import { useNavigate } from "react-router-dom";
-import IconWrapper from "../common/IconWrapper";
 
 interface AdminSideBarFooterProps {
   side?: "top" | "bottom" | "left" | "right";
@@ -33,12 +32,12 @@ export default function AdminSideBarFooter({
   const items = [
     {
       name: t("settings"),
-      icon: <IconWrapper icon={IoSettingsOutline} size={18}/>,
+      icon: <Gear size={ICON.md} aria-hidden />,
       onClick: () => navigate("/"),
     },
     {
       name: t("logout"),
-      icon: <IconWrapper icon={LuLogOut} size={18} />,
+      icon: <SignOut size={ICON.md} aria-hidden />,
       onClick: logout,
     },
     

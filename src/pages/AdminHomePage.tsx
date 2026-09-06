@@ -1,10 +1,13 @@
 import { SidebarProvider, useSidebar } from "@/components/ui/sidebar";
 import AdminSideBar from "@/components/admin/AdminSideBar";
 import { Outlet } from "react-router-dom";
-import { Menu } from "lucide-react";
+import { useTranslation } from "react-i18next";
+import { List } from "@phosphor-icons/react";
+import { ICON } from "@/lib/icons";
 
 function AdminContent() {
   const { toggleSidebar } = useSidebar();
+  const { t } = useTranslation();
 
   return (
     <div data-context="admin" className="flex h-dvh w-full">
@@ -14,9 +17,9 @@ function AdminContent() {
           <button
             onClick={toggleSidebar}
             className="p-1.5 text-stone-600 hover:text-stone-900 transition-colors"
-            aria-label="Abrir menú"
+            aria-label={t("adminMenuOpen")}
           >
-            <Menu className="h-5 w-5" />
+            <List size={ICON.md} aria-hidden />
           </button>
         </div>
         <Outlet />

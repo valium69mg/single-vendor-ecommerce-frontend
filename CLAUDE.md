@@ -78,7 +78,6 @@ This is a luxury jewelry store. Two visual contexts share one codebase: **Store*
 | `Form` | Card shell for modal forms |
 | `FormField` | Labeled input wrapper for RHF |
 | `GenericButton` | Submit button with loading spinner |
-| `IconWrapper` | Consistent icon sizing |
 | `ImageModal` | Dialog triggered by clicking an image |
 | `ImageWithFallback` | `<img>` with fallback to `/images/landscape-placeholder.svg` |
 | `InfiniteScrollSelect` | Single-select with infinite-scroll and search |

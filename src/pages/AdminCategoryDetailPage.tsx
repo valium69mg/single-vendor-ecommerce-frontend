@@ -3,7 +3,8 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
 import { useMemo } from "react";
 import type { ColumnDef } from "@tanstack/react-table";
-import { ArrowLeft, AlertTriangle, Pencil } from "lucide-react";
+import { ArrowLeft, PencilSimple, Warning } from "@phosphor-icons/react";
+import { ICON } from "@/lib/icons";
 import { useUser } from "@/hooks/useUser";
 import { getAdminCategory, deleteCategory, getFileUrl } from "@/api/api";
 import { useApiErrorHandler } from "@/hooks/useApiErrorHandler";
@@ -71,7 +72,7 @@ function StatCard({ label, value, warning, warningLabel }: StatCardProps) {
       </span>
       {warning && warningLabel && (
         <span className="flex items-center gap-1 font-store-body text-xs text-amber-700">
-          <AlertTriangle className="h-3 w-3" />
+          <Warning size={ICON.sm} aria-hidden />
           {warningLabel}
         </span>
       )}
@@ -173,7 +174,7 @@ export default function AdminCategoryDetailPage() {
           onClick={() => navigate("/admin/categories")}
           className="flex items-center gap-2 -ml-2"
         >
-          <ArrowLeft size={16} />
+          <ArrowLeft size={ICON.sm} aria-hidden />
           {t("back")}
         </Button>
         <p className="text-muted-foreground">{t("categoryNotFound")}</p>
@@ -194,7 +195,7 @@ export default function AdminCategoryDetailPage() {
         onClick={() => navigate("/admin/categories")}
         className="flex items-center gap-2 -ml-2"
       >
-        <ArrowLeft size={16} />
+        <ArrowLeft size={ICON.sm} aria-hidden />
         {t("back")}
       </Button>
 
@@ -280,7 +281,7 @@ export default function AdminCategoryDetailPage() {
       {data && (
         <div className="flex justify-end gap-3">
           <Modal
-            buttonName={<Pencil className="h-3.5 w-3.5" />}
+            buttonName={<PencilSimple size={ICON.sm} aria-hidden />}
             triggerClassName="h-8 w-8 p-0 text-stone-600 hover:text-stone-900 hover:border-stone-400"
             content={(onClose) => (
               <EditCategoryForm categoryId={data.categoryId} onClose={onClose} />

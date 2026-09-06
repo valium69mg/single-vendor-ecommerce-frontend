@@ -5,11 +5,11 @@ import {
   DropdownMenuItem,
 } from "@/components/ui/dropdown-menu";
 import { SidebarMenuItem, SidebarMenuButton } from "@/components/ui/sidebar";
-import { IoIosArrowDown } from "react-icons/io";
+import { CaretDown } from "@phosphor-icons/react";
+import { ICON } from "@/lib/icons";
 import type { ReactNode } from "react";
 import { useNavigate } from "react-router-dom";
 import { useSidebar } from "@/components/ui/sidebar";
-import IconWrapper from "../common/IconWrapper";
 
 interface AccordionItemProps {
   name: string;
@@ -58,7 +58,7 @@ export default function SideBarAccordion({
           <SidebarMenuButton className="flex items-center gap-2 text-sm lg:text-base">
             {icon}
             <span>{title}</span>
-            <IconWrapper icon={IoIosArrowDown} size={16} className="ml-auto"/>
+            <CaretDown size={ICON.sm} className="ml-auto" aria-hidden />
           </SidebarMenuButton>
         </DropdownMenuTrigger>
         <DropdownMenuContent className="w-[--radix-popper-anchor-width] rounded-none border-sidebar-border p-0">

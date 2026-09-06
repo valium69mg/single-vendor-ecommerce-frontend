@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
-import { Instagram, Facebook, Twitter } from "lucide-react";
+import { FacebookLogo, InstagramLogo, XLogo } from "@phosphor-icons/react";
+import { ICON } from "@/lib/icons";
 
 const COLLECTIONS = [
   { label: "Anillos", href: "/products/rings" },
@@ -18,9 +19,9 @@ const COMPANY = [
 ];
 
 const SOCIAL = [
-  { icon: Instagram, label: "Instagram", href: "#" },
-  { icon: Facebook, label: "Facebook", href: "#" },
-  { icon: Twitter, label: "Twitter / X", href: "#" },
+  { icon: InstagramLogo, label: "Instagram", href: "#" },
+  { icon: FacebookLogo, label: "Facebook", href: "#" },
+  { icon: XLogo, label: "Twitter / X", href: "#" },
 ];
 
 export default function HomeFooter() {
@@ -52,7 +53,7 @@ export default function HomeFooter() {
                   aria-label={label}
                   className="h-9 w-9 border border-stone-700 flex items-center justify-center hover:border-amber-700 hover:text-amber-400 transition-colors duration-200"
                 >
-                  <Icon className="h-4 w-4" />
+                  <Icon size={ICON.sm} aria-hidden />
                 </a>
               ))}
             </div>

@@ -11,7 +11,8 @@ import {
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
 import { useTranslation } from "react-i18next";
-import { Trash2 } from "lucide-react";
+import { Trash } from "@phosphor-icons/react";
+import { ICON } from "@/lib/icons";
 import { cn } from "@/lib/utils";
 
 interface DestructiveActionButtonProps {
@@ -35,9 +36,9 @@ export default function DestructiveActionButton({
           className={cn(!label && "h-8 w-8 p-0 rounded-none")}
         >
           {label ? (
-            <><Trash2 className="h-4 w-4" />{label}</>
+            <><Trash size={ICON.sm} aria-hidden />{label}</>
           ) : (
-            <Trash2 className="h-3.5 w-3.5" />
+            <Trash size={ICON.sm} aria-hidden />
           )}
         </Button>
       </AlertDialogTrigger>

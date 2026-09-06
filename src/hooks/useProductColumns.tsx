@@ -5,7 +5,8 @@ import ImageWithFallback from "@/components/common/ImageWithFallback";
 import ProductStatusBadge from "@/components/products/ProductStatusBadge";
 import { useTranslation } from "react-i18next";
 import { cn } from "@/lib/utils";
-import { Pencil, Trash2 } from "lucide-react";
+import { PencilSimple, Trash } from "@phosphor-icons/react";
+import { ICON } from "@/lib/icons";
 import { formatDate } from "@/lib/formatDate";
 
 export function useProductColumns(): ColumnDef<AdminProduct>[] {
@@ -145,7 +146,7 @@ export function useProductColumns(): ColumnDef<AdminProduct>[] {
             title={t("comingSoon")}
             className="h-8 w-8 p-0 border border-stone-200 rounded-none opacity-40 cursor-not-allowed flex items-center justify-center"
           >
-            <Pencil className="h-3.5 w-3.5 text-stone-500" />
+            <PencilSimple size={ICON.sm} className="text-stone-500" aria-hidden />
           </button>
           <button
             type="button"
@@ -153,7 +154,7 @@ export function useProductColumns(): ColumnDef<AdminProduct>[] {
             title={t("comingSoon")}
             className="h-8 w-8 p-0 border border-red-200 bg-red-50 rounded-none opacity-40 cursor-not-allowed flex items-center justify-center"
           >
-            <Trash2 className="h-3.5 w-3.5 text-red-400" />
+            <Trash size={ICON.sm} className="text-red-400" aria-hidden />
           </button>
         </div>
       ),

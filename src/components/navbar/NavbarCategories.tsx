@@ -1,4 +1,5 @@
-import { ChevronDown } from "lucide-react";
+import { CaretDown } from "@phosphor-icons/react";
+import { ICON } from "@/lib/icons";
 import {
   DropdownMenu,
   DropdownMenuTrigger,
@@ -36,7 +37,7 @@ export default function NavbarCategories() {
       <DropdownMenuTrigger asChild>
         <button className="hidden md:flex items-center gap-1 font-store-body text-sm text-stone-700 hover:text-amber-700 transition-colors duration-150 shrink-0 outline-none">
           Categorías
-          <ChevronDown className="h-3.5 w-3.5" />
+          <CaretDown size={ICON.sm} aria-hidden />
         </button>
       </DropdownMenuTrigger>
       <DropdownMenuContent

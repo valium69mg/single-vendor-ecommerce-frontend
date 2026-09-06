@@ -1,20 +1,21 @@
-import { Gem, BadgeCheck, PackageCheck, Handshake } from "lucide-react";
+import { Diamond, Handshake, Package, SealCheck } from "@phosphor-icons/react";
+import { ICON } from "@/lib/icons";
 
 const BENEFITS = [
   {
-    icon: Gem,
+    icon: Diamond,
     title: "Materiales Certificados",
     description:
       "Oro certificado, plata 925 y gemas naturales con certificación de origen garantizada.",
   },
   {
-    icon: BadgeCheck,
+    icon: SealCheck,
     title: "Garantía Extendida",
     description:
       "2 años de garantía contra defectos de fabricación y certificado de autenticidad incluido.",
   },
   {
-    icon: PackageCheck,
+    icon: Package,
     title: "Envío Seguro",
     description:
       "Empaque especial de lujo y seguro de envío incluido para que tu joya llegue perfecta.",
@@ -45,7 +46,7 @@ export default function BenefitsSection() {
           {BENEFITS.map(({ icon: Icon, title, description }) => (
             <div key={title} className="text-center">
               <div className="mx-auto mb-4 h-14 w-14 rounded-full bg-amber-700/20 border border-amber-700/30 flex items-center justify-center">
-                <Icon className="h-6 w-6 text-amber-400" />
+                <Icon size={ICON.lg} className="text-amber-400" aria-hidden />
               </div>
               <h3 className="font-store-body text-sm font-semibold text-white mb-2 tracking-wide">
                 {title}

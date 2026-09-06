@@ -1,4 +1,5 @@
-import { Minus, Plus } from "lucide-react";
+import { Minus, Plus } from "@phosphor-icons/react";
+import { ICON } from "@/lib/icons";
 import { useTranslation } from "react-i18next";
 import { cn } from "@/lib/utils";
 
@@ -33,7 +34,7 @@ export function QuantityStepper({
         disabled={!canDecrease}
         onClick={() => canDecrease && onChange(value - 1)}
       >
-        <Minus className="h-3.5 w-3.5" />
+        <Minus size={ICON.sm} aria-hidden />
       </button>
       <span
         className="min-w-8 select-none text-center font-store-body text-sm text-stone-900"
@@ -50,7 +51,7 @@ export function QuantityStepper({
         disabled={!canIncrease}
         onClick={() => canIncrease && onChange(value + 1)}
       >
-        <Plus className="h-3.5 w-3.5" />
+        <Plus size={ICON.sm} aria-hidden />
       </button>
     </div>
   );

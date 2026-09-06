@@ -88,6 +88,20 @@ describe("LoginForm validation", () => {
   });
 });
 
+describe("LoginForm password visibility toggle", () => {
+  it("exposes a localized accessible name and pressed state (icon-only control)", () => {
+    renderForm();
+
+    const toggle = screen.getByRole("button", { name: "Mostrar contraseña" });
+    expect(toggle).toHaveAttribute("aria-pressed", "false");
+
+    fireEvent.click(toggle);
+
+    const pressed = screen.getByRole("button", { name: "Ocultar contraseña" });
+    expect(pressed).toHaveAttribute("aria-pressed", "true");
+  });
+});
+
 describe("LoginForm success path", () => {
   it("calls setUser + queryClient.clear and writes no storage directly", async () => {
     const setItemSpy = vi.spyOn(Storage.prototype, "setItem");

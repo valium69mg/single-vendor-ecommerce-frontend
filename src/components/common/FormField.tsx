@@ -2,7 +2,8 @@ import { Label } from "@radix-ui/react-label";
 import { Input } from "../ui/input";
 import { useTranslation } from "react-i18next";
 import type { UseFormRegisterReturn } from "react-hook-form";
-import { FiEye, FiEyeOff } from "react-icons/fi";
+import { Eye, EyeSlash } from "@phosphor-icons/react";
+import { ICON } from "@/lib/icons";
 import { useState, type ReactNode } from "react";
 
 interface FormFieldProps {
@@ -57,9 +58,15 @@ export default function FormField({
           <button
             type="button"
             onClick={() => setShowPassword((prev) => !prev)}
-            className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-500 text-lg sm:text-xl"
+            aria-label={t(showPassword ? "hidePassword" : "showPassword")}
+            aria-pressed={showPassword}
+            className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-500"
           >
-            {showPassword ? <FiEyeOff /> : <FiEye />}
+            {showPassword ? (
+              <EyeSlash size={ICON.md} aria-hidden />
+            ) : (
+              <Eye size={ICON.md} aria-hidden />
+            )}
           </button>
         )}
       </div>

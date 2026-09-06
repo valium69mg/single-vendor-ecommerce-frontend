@@ -5,10 +5,10 @@ import {
   DropdownMenuTrigger,
   DropdownMenuContent,
 } from "@/components/ui/dropdown-menu";
-import { MdMoreVert } from "react-icons/md";
+import { DotsThreeVertical } from "@phosphor-icons/react";
+import { ICON } from "@/lib/icons";
 import type { SidebarDropDownMenuItemProps } from "../sidebar/SidebarDropdownMenuItem"
 import SidebarDropdownMenuItem from "../sidebar/SidebarDropdownMenuItem"
-import IconWrapper from "../common/IconWrapper";
 
 interface GenericDropdownMenuProps {
   side?: "top" | "bottom" | "left" | "right";
@@ -39,7 +39,7 @@ export default function GenericDropdownMenu({
           <span className="text-sm font-medium">{title}</span>
 
           {/* Trigger icon */}
-          <IconWrapper icon={MdMoreVert} size={18} className="ml-auto text-muted-foreground" />
+          <DotsThreeVertical size={ICON.md} className="ml-auto text-muted-foreground" aria-hidden />
         </SidebarMenuButton>
       </DropdownMenuTrigger>
 

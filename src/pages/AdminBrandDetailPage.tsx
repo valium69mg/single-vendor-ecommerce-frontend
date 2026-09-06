@@ -1,7 +1,8 @@
 import { useParams, useNavigate } from "react-router-dom";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
-import { ArrowLeft, Pencil } from "lucide-react";
+import { ArrowLeft, PencilSimple } from "@phosphor-icons/react";
+import { ICON } from "@/lib/icons";
 import { useUser } from "@/hooks/useUser";
 import { getAdminBrand, deleteBrand } from "@/api/api";
 import { useApiErrorHandler } from "@/hooks/useApiErrorHandler";
@@ -47,7 +48,7 @@ export default function AdminBrandDetailPage() {
       onClick={() => navigate("/admin/brands")}
       className="flex items-center gap-2 -ml-2"
     >
-      <ArrowLeft size={16} />
+      <ArrowLeft size={ICON.sm} aria-hidden />
       {t("back")}
     </Button>
   );
@@ -85,7 +86,7 @@ export default function AdminBrandDetailPage() {
 
       <div className="flex justify-end gap-3">
         <Modal
-          buttonName={<Pencil className="h-3.5 w-3.5" />}
+          buttonName={<PencilSimple size={ICON.sm} aria-hidden />}
           triggerClassName="h-8 w-8 p-0 text-stone-600 hover:text-stone-900 hover:border-stone-400"
           content={(onClose) => (
             <EditBrandForm brandId={data.brandId} onClose={onClose} />

@@ -1,7 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { useInfiniteQuery } from "@tanstack/react-query";
-import { ChevronDown, Check, X } from "lucide-react";
+import { CaretDown, Check, X } from "@phosphor-icons/react";
+import { ICON } from "@/lib/icons";
 import { cn } from "@/lib/utils";
 import useDebounce from "@/hooks/useDebounce";
 import { Input } from "@/components/ui/input";
@@ -172,7 +173,7 @@ export function InfiniteScrollMultiSelect<T>({
             >
               <span className="truncate">{lbl}</span>
               {isSelected && (
-                <Check className="h-3.5 w-3.5 shrink-0 text-stone-600" />
+                <Check size={ICON.sm} className="shrink-0 text-stone-600" aria-hidden />
               )}
             </button>
           );
@@ -212,9 +213,11 @@ export function InfiniteScrollMultiSelect<T>({
         )}
       >
         <span className="truncate text-left flex-1">{triggerLabel}</span>
-        <ChevronDown
+        <CaretDown
+          size={ICON.sm}
+          aria-hidden
           className={cn(
-            "h-3.5 w-3.5 text-stone-400 transition-transform duration-150 shrink-0",
+            "text-stone-400 transition-transform duration-150 shrink-0",
             open && "rotate-180",
           )}
         />
@@ -235,7 +238,7 @@ export function InfiniteScrollMultiSelect<T>({
                 onClick={() => handleRemoveTag(id)}
                 className="text-stone-400 hover:text-stone-700 transition-colors"
               >
-                <X className="h-2.5 w-2.5" />
+                <X size={ICON.sm} aria-hidden />
               </button>
             </span>
           ))}

@@ -1,7 +1,8 @@
 import { useCallback, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useQuery } from "@tanstack/react-query";
-import { SlidersHorizontal, X } from "lucide-react";
+import { SlidersHorizontal, X } from "@phosphor-icons/react";
+import { ICON } from "@/lib/icons";
 import { DataTable } from "@/components/common/DataTable";
 import SearchBar from "@/components/common/SearchBar";
 import { InfiniteScrollSelect } from "@/components/common/InfiniteScrollSelect";
@@ -210,7 +211,7 @@ export default function AdminProductsPage() {
               filtersOpen && "bg-stone-100",
             )}
           >
-            <SlidersHorizontal className="h-3.5 w-3.5" />
+            <SlidersHorizontal size={ICON.sm} aria-hidden />
             {t("filters")}
             {hasActiveFilters && (
               <span className="ml-1 h-2 w-2 rounded-full bg-amber-600 inline-block" />
@@ -223,7 +224,7 @@ export default function AdminProductsPage() {
               onClick={clearFilters}
               className="flex items-center gap-1 text-xs text-stone-500 hover:text-stone-800 font-store-body transition-colors"
             >
-              <X className="h-3 w-3" />
+              <X size={ICON.sm} aria-hidden />
               {t("clearFilters")}
             </button>
           )}
@@ -351,7 +352,7 @@ export default function AdminProductsPage() {
               onClick={clearFilters}
               className="h-9 flex items-center gap-1 text-xs text-stone-500 hover:text-stone-800 font-store-body transition-colors whitespace-nowrap px-1"
             >
-              <X className="h-3 w-3" />
+              <X size={ICON.sm} aria-hidden />
               {t("clearFilters")}
             </button>
           </div>

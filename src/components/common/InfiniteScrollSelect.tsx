@@ -1,7 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { useInfiniteQuery } from "@tanstack/react-query";
-import { ChevronDown, Check, X } from "lucide-react";
+import { CaretDown, Check, X } from "@phosphor-icons/react";
+import { ICON } from "@/lib/icons";
 import { cn } from "@/lib/utils";
 import useDebounce from "@/hooks/useDebounce";
 import { Input } from "@/components/ui/input";
@@ -187,7 +188,7 @@ export function InfiniteScrollSelect<T>({
             >
               <span className="truncate">{lbl}</span>
               {selectedId === id && (
-                <Check className="h-3.5 w-3.5 shrink-0 text-stone-600" />
+                <Check size={ICON.sm} className="shrink-0 text-stone-600" aria-hidden />
               )}
             </button>
           );
@@ -232,13 +233,16 @@ export function InfiniteScrollSelect<T>({
         <span className="flex items-center gap-1 shrink-0">
           {selectedId !== undefined && (
             <X
-              className="h-3 w-3 text-stone-400 hover:text-stone-700"
+              size={ICON.sm}
+              className="text-stone-400 hover:text-stone-700"
               onClick={handleClear}
             />
           )}
-          <ChevronDown
+          <CaretDown
+            size={ICON.sm}
+            aria-hidden
             className={cn(
-              "h-3.5 w-3.5 text-stone-400 transition-transform duration-150",
+              "text-stone-400 transition-transform duration-150",
               open && "rotate-180",
             )}
           />
